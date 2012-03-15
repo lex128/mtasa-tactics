@@ -1,0 +1,79 @@
+<def name="tactics">
+	<setting name="Interior" friendlyname="Map Interior" type="integer" description="Interior of map. [0-255]" default="0" required="true"/>
+	<element name="Anti_Rush_Point" friendlyname="Anti Rush Point" icon="edf/anti_rush_point.png">
+		<data name="position" type="coord3d" default="0,0,0" />
+		<object model="3380" />
+		<blip icon="0" size="1" color="#C00000FF" />
+	</element>
+	<element name="Bomb_Place" friendlyname="Bomb Place" icon="edf/bomb_place.png">
+		<data name="position" type="coord3d" default="0,0,0" />
+		<data name="size" type="number" default="20" />
+		<marker size="!size!" type="cylinder" color="#40C04040" />
+		<blip icon="31" />
+	</element>
+	<element name="Central_Marker" friendlyname="Central Marker" icon="edf/central_marker.png">
+		<data name="position" type="coord3d" default="0,0,0" />
+		<marker size="2" type="cylinder" color="#FF400080" />
+		<blip icon="19" />
+	</element>
+	<element name="Flag1" friendlyname="Flag 1" icon="edf/flag1.png">
+		<data name="position" type="coord3d" default="0,0,0" />
+		<marker size="1" type="checkpoint" color="#800000FF" />
+		<marker size="1" type="arrow" color="#800000FF" />
+		<blip icon="0" size="2" color="#800000FF" />
+	</element>
+	<element name="Flag2" friendlyname="Flag 2" icon="edf/flag2.png">
+		<data name="position" type="coord3d" default="0,0,0" />
+		<marker size="1" type="checkpoint" color="#000080FF" />
+		<marker size="1" type="arrow" color="#000080FF" />
+		<blip icon="0" size="2" color="#000080FF" />
+	</element>
+	<element name="Hostage" friendlyname="Hostage" icon="edf/hostage.png">
+		<data name="position" type="coord3d" default="0,0,0" />
+		<data name="model" type="number" default="70" />
+		<ped model="!model!" rotation="!rotation!"/>
+		<blip icon="58" />
+	</element>
+	<element name="racepickup" friendlyname="Racepickup" icon="edf/racepickup.png">
+		<data name="position" type="coord3d" default="0,0,0" />
+		<data name="type" type="selection:nitro,repair,vehiclechange,weapon" default="nitro" />
+		<data name="respawn" type="integer" default="0"  />
+		<data name="vehicle" type="vehicleID" default="522" required="false" />
+		<data name="weapon" type="weaponID" default="22" required="false" />
+		<object model="2221" />
+		<object model="1346" position="0,0,0" editorOnly="true"/>
+	</element>
+	<element name="Rescue_Vehicle" friendlyname="Rescue Vehicle" icon="edf/rescue_vehicle.png">
+		<data name="position" type="coord3d" default="0,0,0" />
+		<data name="rotation" type="coord3d" default="0,0,0" />
+		<data name="size" type="number" default="10" />
+		<vehicle model="427" rotation="!rotation!"/>
+		<marker size="!size!" type="cylinder" color="#40404040" />
+		<blip icon="51" />
+	</element>
+	<element name="Rescue_VIP" friendlyname="Rescue VIP" icon="edf/rescue_vip.png">
+		<data name="position" type="coord3d" default="0,0,0" />
+		<data name="rotation" type="coord3d" default="5,0,0" />
+		<vehicle model="563" rotation="!rotation!"/>
+		<blip icon="22" />
+	</element>
+	<element name="spawnpoint" friendlyname="Spawnpoint" icon="edf/spawnpoint.png">
+		<data name="position" type="coord3d" default="0,0,0" />
+		<ped model="0" rotation="!rotation!"/>
+		<blip icon="0" size="1" color="#FFFFFFFF" />
+		<marker size="2" type="corona" color="#FFFFFF20" />
+	</element>
+	<element name="Team1" friendlyname="Team 1" icon="edf/team1.png">
+		<data name="position" type="coord3d" default="0,0,0" />
+		<ped model="0" rotation="!rotation!"/>
+		<blip icon="0" size="1" color="#FF0000FF" />
+		<marker size="2" type="corona" color="#FF000020" />
+	</element>
+	<element name="Team2" friendlyname="Team 2" icon="edf/team2.png">
+		<data name="position" type="coord3d" default="0,0,0" />
+		<ped model="0" rotation="!rotation!"/>
+		<blip icon="0" size="1" color="#0000FFFF" />
+		<marker size="2" type="corona" color="#0000FF20" />
+	</element>
+	<script src="edf/edf_client.lua" type="client" />
+</def>
