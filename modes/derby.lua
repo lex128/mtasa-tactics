@@ -23,6 +23,10 @@ function DestructionDerby_onMapStopping(mapinfo)
 	removeEventHandler("onVehicleEnter",root,DestructionDerby_onVehicleEnter)
 	removeEventHandler("onVehicleStartExit",root,DestructionDerby_onVehicleStartExit)
 	removeEventHandler("onPauseToggle",root,DestructionDerby_onPauseToggle)
+	for vehicle,timer in pairs(vehicleTimer) do
+		if (isTimer(timer)) then killTimer(timer) end
+		vehicleTimer[vehicle] = nil
+	end
 end
 function DestructionDerby_onMapStarting(mapinfo)
 	if ((mapinfo.modename ~= "race" and mapinfo.modename ~= "derby") or #getElementsByType("checkpoint",getRoundMapRoot()) > 0) then return end
@@ -114,7 +118,7 @@ function DestructionDerby_onPlayersRanking()
 		setElementData(player,"Rank",#players)
 		local vehicle = getPedOccupiedVehicle(player)
 		if (not vehicle or (isElementInWater(vehicle) and getVehicleType(vehicle) ~= "Boat" and getElementModel(vehicle) ~= 460 and getElementModel(vehicle) ~= 447 and getElementModel(vehicle) ~= 417 and getElementModel(vehicle) ~= 539)) then
-			if (getTacticsData("modes","derby","firewater") == "true") then
+			if (getTacticsData("modes","derby","firewater") == "true" and vehicle) then
 				blowVehicle(vehicle)
 			else
 				killPed(player)
@@ -309,7 +313,7 @@ function DestructionDerby_onRoundTimesup()
 	return endRound('draw_round',{'time_over',""})
 end
 function DestructionDerby_onPlayerWasted(ammo,killer,weapon,bodypart,stealth)
-	if (getPlayerGameStatus(source) ~= "Play") then return end
+	if (getPlayerGameStatus(source) ~= "Play" or not getTacticsData("timestart")) then return end
 	if (playerVehicle[source]) then
 		if (isTimer(vehicleTimer[playerVehicle[source]])) then killTimer(vehicleTimer[playerVehicle[source]]) end
 		vehicleTimer[playerVehicle[source]] = setTimer(function(vehicle,player)
