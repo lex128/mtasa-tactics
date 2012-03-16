@@ -22,6 +22,10 @@ function RaceMatch_onMapStopping(mapinfo)
 	removeEventHandler("onVehicleEnter",root,RaceMatch_onVehicleEnter)
 	removeEventHandler("onVehicleStartExit",root,RaceMatch_onVehicleStartExit)
 	removeEventHandler("onPauseToggle",root,RaceMatch_onPauseToggle)
+	for vehicle,timer in pairs(vehicleTimer) do
+		if (isTimer(timer)) then killTimer(timer) end
+		vehicleTimer[vehicle] = nil
+	end
 end
 function RaceMatch_onMapStarting(mapinfo)
 	if (mapinfo.modename ~= "race" or #getElementsByType("checkpoint",getRoundMapRoot()) == 0) then return end
