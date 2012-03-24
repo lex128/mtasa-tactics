@@ -102,20 +102,21 @@ function DestructionDerby_onClientRender()
 			local x2,y2 = getScreenFromWorldPosition(x,y,z+1,0)
 			if (x2) then
 				if (getDistanceBetweenPoints3D(x,y,z,getCameraMatrix()) < 100) then
+					local pickuptext = ""
 					if (getElementData(racepickup,"type") == "vehiclechange") then
 						local model = tonumber(getElementData(racepickup,"vehicle"))
-						local vehname = getVehicleNameFromModel(model)
-						if (vehname) then
-							dxDrawText(vehname,x2 + 1,y2 + 1,x2 + 1,y2 + 1,blackC0,font1,"default","center","bottom")
-							dxDrawText(vehname,x2,y2,x2,y2,whiteC0,font1,"default","center","bottom")
-						end
+						pickuptext = getVehicleNameFromModel(model).."\n"
 					elseif (getElementData(racepickup,"type") == "repair") then
-						dxDrawText("Repair",x2 + 1,y2 + 1,x2 + 1,y2 + 1,blackC0,font1,"default","center","bottom")
-						dxDrawText("Repair",x2,y2,x2,y2,whiteC0,font1,"default","center","bottom")
+						-- pickuptext = "Repair\n"
 					elseif (getElementData(racepickup,"type") == "nitro") then
-						dxDrawText("Nitro",x2 + 1,y2 + 1,x2 + 1,y2 + 1,blackC0,font1,"default","center","bottom")
-						dxDrawText("Nitro",x2,y2,x2,y2,whiteC0,font1,"default","center","bottom")
+						-- pickuptext = "Nitro\n"
 					end
+					local respawn = getElementData(racepickup,"respawn")
+					if (respawn and tonumber(respawn) >= 1000) then
+						pickuptext = pickuptext..""..string.format("(%.0f sec)",tonumber(respawn)/1000)
+					end
+					dxDrawText(pickuptext,x2 + 1,y2 + 1,x2 + 1,y2 + 1,blackC0,font1,"default","center","bottom")
+					dxDrawText(pickuptext,x2,y2,x2,y2,whiteC0,font1,"default","center","bottom")
 				end
 			end
 		end
