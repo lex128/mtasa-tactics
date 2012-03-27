@@ -1,8 +1,11 @@
 function CaptureTheFlag_onClientMapStopping(mapinfo)
 	if (mapinfo.modename ~= "ctf") then return end
-	removeEventHandler("onClientElementColShapeHit",localPlayer,CaptureTheFlag_onClientElementColShapeHit)
 	removeEventHandler("onClientPlayerRoundSpawn",localPlayer,CaptureTheFlag_onClientPlayerRoundSpawn)
 	removeEventHandler("onClientPlayerBlipUpdate",localPlayer,CaptureTheFlag_onClientPlayerBlipUpdate)
+	removeEventHandler("onClientFlagDrop",root,CaptureTheFlag_onClientFlagDrop)
+	removeEventHandler("onClientFlagPickup",root,CaptureTheFlag_onClientFlagPickup)
+	removeEventHandler("onClientFlagReturn",root,CaptureTheFlag_onClientFlagReturn)
+	removeEventHandler("onClientFlagCapture",root,CaptureTheFlag_onClientFlagCapture)
 	showRoundHudComponent("timeleft",false)
 	showRoundHudComponent("teamlist",false)
 	setRoundHudComponent("teamlist")
@@ -23,80 +26,52 @@ function CaptureTheFlag_onClientMapStarting(mapinfo)
 	showRoundHudComponent("timeleft",true)
 	setRoundHudComponent("teamlist","images/flag.png",function(team) return tostring(getElementData(team,"Capture")) end)
 	showRoundHudComponent("teamlist",true)
-	addEventHandler("onClientElementColShapeHit",localPlayer,CaptureTheFlag_onClientElementColShapeHit)
 	addEventHandler("onClientPlayerRoundSpawn",localPlayer,CaptureTheFlag_onClientPlayerRoundSpawn)
 	addEventHandler("onClientPlayerBlipUpdate",localPlayer,CaptureTheFlag_onClientPlayerBlipUpdate)
+	addEventHandler("onClientFlagDrop",root,CaptureTheFlag_onClientFlagDrop)
+	addEventHandler("onClientFlagPickup",root,CaptureTheFlag_onClientFlagPickup)
+	addEventHandler("onClientFlagReturn",root,CaptureTheFlag_onClientFlagReturn)
+	addEventHandler("onClientFlagCapture",root,CaptureTheFlag_onClientFlagCapture)
 	addCommandHandler("gun",onClientWeaponShow,false)
-	for i,mark in ipairs(getElementsByType("marker")) do
-		if (getElementData(mark,"Team")) then
-			local x,y,z = getElementPosition(mark)
-			local colshape = createColTube(x,y,z - 2,3,4)
-			setElementParent(colshape,mark)
-			setElementData(mark,"Colshape",colshape,false)
-		end
-	end
 end
 function CaptureTheFlag_onClientPlayerRoundSpawn()
 	if (getRoundState() == "stopped") then setCameraPrepair() end
 end
-function CaptureTheFlag_onClientElementStreamIn()
-	if (getElementType(source) ~= "marker" or isElementAttached(marker)) then return end
-	local colshape = getElementData(source,"Colshape")
-	if (not isElement(colshape)) then
-		local x,y,z = getElementPosition(source)
-		colshape = createColTube(x,y,z - 2,3,4)
-		setElementParent(colshape,source)
-		setElementData(source,"Colshape",colshape,false)
+function CaptureTheFlag_onClientFlagPickup(player,isStolen)
+	if (isStolen) then
+		local team = getElementData(source,"Team")
+		local pteam = getPlayerTeam(player)
+		if (pteam == getPlayerTeam(localPlayer)) then
+			playVoice("audio/enemy_flag_stolen.mp3")
+		elseif (team == getPlayerTeam(localPlayer)) then
+			playVoice("audio/your_flag_stolen.mp3")
+		end
 	end
+	triggerEvent("onClientPlayerBlipUpdate",source)
 end
-function CaptureTheFlag_onClientElementColShapeHit(colshape,dimension)
-	if (not isElement(colshape)) then return end
-	local marker = getElementParent(colshape)
-	if (not marker or isElementAttached(marker) or getPlayerGameStatus(source) ~= "Play") then return end
-	callServerFunction("CaptureTheFlag_onElementFlagHit",marker,source)
+function CaptureTheFlag_onClientFlagDrop(player)
+	triggerEvent("onClientPlayerBlipUpdate",source)
 end
-function CaptureTheFlag_onClientFlagPickup(element,x,y,z)
-	local colshape = getElementData(element,"Colshape")
-	if (isElement(colshape)) then
-		destroyElement(colshape)
-		setElementData(element,"Colshape",nil,false)
-	end
-	triggerEvent("onClientPlayerBlipUpdate",localPlayer)
-end
-function CaptureTheFlag_onClientFlagDrop(element,x,y,z)
-	local colshape = getElementData(element,"Colshape")
-	if (isElement(colshape)) then
-		setElementPosition(colshape,x,y,z - 1)
-	else
-		colshape = createColTube(x,y,z - 1,3,4)
-		setElementParent(colshape,element)
-		setElementData(element,"Colshape",colshape,false)
-	end
-	triggerEvent("onClientPlayerBlipUpdate",localPlayer)
-end
-function CaptureTheFlag_stolenFlag(team,myteam)
-	if (myteam == getPlayerTeam(localPlayer)) then
-		playVoice("audio/enemy_flag_stolen.mp3")
-	elseif (team == getPlayerTeam(localPlayer)) then
-		playVoice("audio/your_flag_stolen.mp3")
-	end
-	triggerEvent("onClientPlayerBlipUpdate",localPlayer)
-end
-function CaptureTheFlag_returnFlag(team)
-	if (team == getPlayerTeam(localPlayer)) then
+function CaptureTheFlag_onClientFlagReturn(player,x,y,z)
+	local r,g,b = getMarkerColor(source)
+	fxAddGlass(x,y,z - 1,r,g,b,128,0.2,10)
+	if (player == getPlayerTeam(localPlayer) or getPlayerTeam(player) == getPlayerTeam(localPlayer)) then
 		playVoice("audio/your_flag_returned.mp3")
 	else
 		playVoice("audio/enemy_flag_returned.mp3")
 	end
-	triggerEvent("onClientPlayerBlipUpdate",localPlayer)
+	triggerEvent("onClientPlayerBlipUpdate",source)
 end
-function CaptureTheFlag_captureFlag(team)
+function CaptureTheFlag_onClientFlagCapture(player,x,y,z)
+	local r,g,b = getMarkerColor(source)
+	fxAddGlass(x,y,z - 1,r,g,b,128,0.2,10)
+	local team = getPlayerTeam(player)
 	if (team == getPlayerTeam(localPlayer)) then
 		playVoice("audio/your_capture_flag.mp3")
 	else
 		playVoice("audio/enemy_capture_flag.mp3")
 	end
-	triggerEvent("onClientPlayerBlipUpdate",localPlayer)
+	triggerEvent("onClientPlayerBlipUpdate",source)
 end
 function CaptureTheFlag_onClientPreviewMapCreating(modename,elements)
 	if (modename ~= "ctf") then return end
@@ -146,6 +121,10 @@ function CaptureTheFlag_onClientPlayerBlipUpdate()
 		end
 	end
 end
+addEvent("onClientFlagDrop",true)
+addEvent("onClientFlagPickup",true)
+addEvent("onClientFlagReturn",true)
+addEvent("onClientFlagCapture",true)
 addEventHandler("onClientMapStarting",root,CaptureTheFlag_onClientMapStarting)
 addEventHandler("onClientMapStopping",root,CaptureTheFlag_onClientMapStopping)
 addEventHandler("onClientPreviewMapCreating",root,CaptureTheFlag_onClientPreviewMapCreating)

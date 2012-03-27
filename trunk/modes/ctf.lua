@@ -1,6 +1,9 @@
 spawnCounter = {}
+local flagRespawn = {}
+local teamFlag = {}
+local playerFlag = {}
 function CaptureTheFlag_onResourceStart(resource)
-	createTacticsMode("ctf",{timelimit="10:00",respawn="true",respawn_lives="0",respawn_time="0:05",flag_speed="0.8"})
+	createTacticsMode("ctf",{timelimit="10:00",respawn="true",respawn_lives="0",respawn_time="0:05",flag_speed="0.8",flag_idle_respawn="1:00",flag_water_respawn="true"})
 end
 function CaptureTheFlag_onMapStopping(mapinfo)
 	if (mapinfo.modename ~= "ctf") then return end
@@ -13,12 +16,21 @@ function CaptureTheFlag_onMapStopping(mapinfo)
 	removeEventHandler("onRoundFinish",root,CaptureTheFlag_onRoundFinish)
 	removeEventHandler("onRoundTimesup",root,CaptureTheFlag_onRoundTimesup)
 	removeEventHandler("onWeaponDrop",root,CaptureTheFlag_onWeaponDrop)
+	removeEventHandler("onColShapeHit",root,CaptureTheFlag_onColShapeHit)
+	removeEventHandler("onFlagDrop",root,CaptureTheFlag_onFlagDrop)
+	removeEventHandler("onFlagPickup",root,CaptureTheFlag_onFlagPickup)
 	for i,player in ipairs(getElementsByType("player")) do
 		setPlayerProperty(player,"invulnerable",nil)
 		setPlayerProperty(player,"movespeed",nil)
 		setElementData(player,"Kills",getElementData(player,"Kills"))
 		setElementData(player,"Damage",getElementData(player,"Damage"))
 		setElementData(player,"Deaths",getElementData(player,"Deaths"))
+	end
+	for flag,timer in pairs(flagRespawn) do
+		if (isTimer(timer)) then
+			killTimer(timer)
+			flagRespawn[flag] = nil
+		end
 	end
 end
 function CaptureTheFlag_onMapStarting(mapinfo)
@@ -37,11 +49,16 @@ function CaptureTheFlag_onMapStarting(mapinfo)
 	addEventHandler("onRoundFinish",root,CaptureTheFlag_onRoundFinish)
 	addEventHandler("onRoundTimesup",root,CaptureTheFlag_onRoundTimesup)
 	addEventHandler("onWeaponDrop",root,CaptureTheFlag_onWeaponDrop)
+	addEventHandler("onColShapeHit",root,CaptureTheFlag_onColShapeHit)
+	addEventHandler("onFlagDrop",root,CaptureTheFlag_onFlagDrop)
+	addEventHandler("onFlagPickup",root,CaptureTheFlag_onFlagPickup)
 	for i,team in ipairs(getElementsByType("team")) do
 		if (i > 1) then
 			setElementData(team,"Capture",0)
 		end
 	end
+	teamFlag = {}
+	playerFlag = {}
 	local interior = getTacticsData("Interior")
 	local sides = getTacticsData("Sides")
 	for i,side in ipairs(sides) do
@@ -53,6 +70,7 @@ function CaptureTheFlag_onMapStarting(mapinfo)
 			setElementInterior(marker,interior)
 			setElementData(marker,"Team",side)
 			setElementParent(marker,flagpoint)
+			teamFlag[side] = marker
 			local blip = createBlipAttachedTo(marker,0,2,0,0,0,0,-1)
 			setElementInterior(blip,interior)
 			setElementData(marker,"Blip",blip)
@@ -61,6 +79,9 @@ function CaptureTheFlag_onMapStarting(mapinfo)
 			setElementInterior(base,interior)
 			setElementData(marker,"Base",base)
 			setElementParent(base,flagpoint)
+			local colshape = createColTube(x,y,z,3,4)
+			setElementParent(colshape,marker)
+			setElementData(marker,"Colshape",colshape)
 		end
 	end
 end
@@ -181,54 +202,59 @@ function CaptureTheFlag_onRoundTimesup()
 		endRound('draw_round',{'time_over',reason})
 	end
 end
-function CaptureTheFlag_onElementFlagHit(marker,player)
-	local source = getElementParent(source)
-	if (not marker or isElementAttached(marker) or getElementType(player) ~= "player" or getPlayerGameStatus(player) ~= "Play") then return end
-	local myteam = getPlayerTeam(player)
+function CaptureTheFlag_onColShapeHit(player,dim)
+	if (not dim or getElementType(player) ~= "player" or getPlayerGameStatus(player) ~= "Play") then return end
+	local marker = getElementParent(source)
+	if (not marker or isElementAttached(marker) or getElementType(marker) ~= "marker") then return end
+	local pteam = getPlayerTeam(player)
 	local team = getElementData(marker,"Team")
 	local base = getElementData(marker,"Base")
-	if (team == myteam) then
+	if (team == pteam) then
 		local parent = getElementParent(marker)
-		local x1,y1,z1 = getElementPosition(parent)
-		local attached = getAttachedElements(player)
-		local flag = false
-		if (attached) then
-			for i,m in ipairs(attached) do
-				if (getElementType(m) == "marker" and getElementData(m,"Team")) then
-					flag = m
-				end
+		local xbase,ybase,zbase = getElementPosition(parent)
+		if (not isElementWithinMarker(marker,base)) then
+			local x,y,z = getElementPosition(marker)
+			triggerClientEvent(root,"onClientFlagReturn",marker,player,x,y,z)
+			CaptureTheFlag_RespawnFlag(marker)
+		else
+			local flag = playerFlag[player]
+			if (flag and getElementAttachedTo(flag) == player) then
+				setPlayerProperty(player,"movespeed",nil)
+				setElementData(pteam,"Capture",getElementData(pteam,"Capture") + 1)
+				local x,y,z = getElementPosition(flag)
+				triggerClientEvent(root,"onClientFlagCapture",flag,player,x,y,z)
+				CaptureTheFlag_RespawnFlag(flag)
 			end
 		end
-		if (flag and isElementWithinMarker(marker,base)) then
-			local parent = getElementParent(flag)
-			local x,y,z = getElementPosition(parent)
-			detachElements(flag,player)
-			setPlayerProperty(player,"movespeed",nil)
-			local xfx,yfx,zfx = getElementPosition(marker)
-			local rfx,gfx,bfx = getMarkerColor(flag)
-			callClientFunction(root,"fxAddGlass",xfx,yfx,zfx - 1,rfx,gfx,bfx,128,0.2,10)
-			setElementPosition(flag,x,y,z + 1)
-			callClientFunction(root,"CaptureTheFlag_onClientFlagDrop",flag,x,y,z)
-			setElementData(myteam,"Capture",getElementData(myteam,"Capture") + 1)
-			setElementData(getElementData(flag,"Team"),"FlagStatus",true)
-			callClientFunction(root,"CaptureTheFlag_captureFlag",team)
-		elseif (not isElementWithinMarker(marker,base)) then
-			local xfx,yfx,zfx = getElementPosition(marker)
-			local rfx,gfx,bfx = getMarkerColor(marker)
-			callClientFunction(root,"fxAddGlass",xfx,yfx,zfx - 1,rfx,gfx,bfx,128,0.2,10)
-			callClientFunction(root,"CaptureTheFlag_returnFlag",team)
-		end
-		setElementPosition(marker,x1,y1,z1 + 1)
-		callClientFunction(root,"CaptureTheFlag_onClientFlagDrop",marker,x1,y1,z1)
-		setElementData(myteam,"FlagStatus",true)
-	elseif (team and myteam) then
-		if (isElementWithinMarker(marker,base)) then
-			callClientFunction(root,"CaptureTheFlag_stolenFlag",team,myteam)
-		end
+	else
+		local isStolen = isElementWithinMarker(marker,base)
+		playerFlag[player] = marker
 		attachElements(marker,player,0,0,2.5)
+		destroyElement(getElementData(marker,"Colshape"))
 		setPlayerProperty(player,"movespeed",tonumber(getTacticsData("modes","ctf","flag_speed")) or 0.8)
-		callClientFunction(root,"CaptureTheFlag_onClientFlagPickup",marker,player)
-		setElementData(team,"FlagStatus",false)
+		triggerEvent("onFlagPickup",marker,player,isStolen)
+		triggerClientEvent(root,"onClientFlagPickup",marker,player,isStolen)
+	end
+end
+function CaptureTheFlag_RespawnFlag(marker)
+	local parent = getElementParent(marker)
+	local x,y,z = getElementPosition(parent)
+	local player = getElementAttachedTo(marker)
+	if (player) then playerFlag[player] = nil end
+	detachElements(marker)
+	setElementPosition(marker,x,y,z + 1)
+	setElementRotation(marker,0,0,0)
+	if (isTimer(flagRespawn[marker])) then
+		killTimer(flagRespawn[marker])
+		flagRespawn[marker] = nil
+	end
+	local colshape = getElementData(marker,"Colshape")
+	if (isElement(colshape)) then
+		setElementPosition(colshape,x,y,z)
+	else
+		colshape = createColTube(x,y,z,3,4)
+		setElementParent(colshape,marker)
+		setElementData(marker,"Colshape",colshape)
 	end
 end
 function CaptureTheFlag_onPlayerDamage(attacker,weapon,bodypart,loss)
@@ -253,36 +279,74 @@ function CaptureTheFlag_onPlayerWasted(ammo,killer,weapon,bodypart,stealth)
 	end
 	setElementData(source,"Status","Die")
 	fadeCamera(source,false,5.0)
-	local attached = getAttachedElements(source)
-	if (attached) then
-		for i,element in ipairs(attached) do
-			if (getElementType(element) == "marker" and getElementData(element,"Team")) then
-				local x,y,z = getElementPosition(source)
-				detachElements(element,source)
-				setPlayerProperty(source,"movespeed",nil)
-				setElementPosition(element,x,y,z + 1)
-				callClientFunction(root,"CaptureTheFlag_onClientFlagDrop",element,x,y,z)
-			end
+	local marker = playerFlag[source]
+	if (marker and getElementAttachedTo(marker) == source) then
+		playerFlag[source] = nil
+		local x,y,z = getElementPosition(source)
+		detachElements(marker)
+		setElementPosition(marker,x,y,z + 1)
+		setElementRotation(marker,0,0,0)
+		local colshape = getElementData(marker,"Colshape")
+		if (isElement(colshape)) then
+			setElementPosition(colshape,x,y,z)
+		else
+			colshape = createColTube(x,y,z,3,4)
+			setElementParent(colshape,marker)
+			setElementData(marker,"Colshape",colshape)
 		end
+		setPlayerProperty(source,"movespeed",nil)
+		triggerEvent("onFlagDrop",marker,source)
+		triggerClientEvent(root,"onClientFlagDrop",marker,source)
 	end
 end
 function CaptureTheFlag_onPlayerQuit()
-	local attached = getAttachedElements(source)
-	if (attached) then
-		for i,element in ipairs(attached) do
-			if (getElementType(element) == "marker" and getElementData(element,"Team")) then
-				local x,y,z = getElementPosition(source)
-				detachElements(element,source)
-				setPlayerProperty(source,"movespeed",nil)
-				setElementPosition(element,x,y,z + 1)
-				callClientFunction(root,"CaptureTheFlag_onClientFlagDrop",element,x,y,z)
-			end
+	local marker = playerFlag[source]
+	if (marker and getElementAttachedTo(marker) == source) then
+		playerFlag[source] = nil
+		local x,y,z = getElementPosition(source)
+		detachElements(marker)
+		setElementPosition(marker,x,y,z + 1)
+		setElementRotation(marker,0,0,0)
+		local colshape = getElementData(marker,"Colshape")
+		if (isElement(colshape)) then
+			setElementPosition(colshape,x,y,z)
+		else
+			colshape = createColTube(x,y,z,3,4)
+			setElementParent(colshape,marker)
+			setElementData(marker,"Colshape",colshape)
 		end
+		setPlayerProperty(source,"movespeed",nil)
+		triggerEvent("onFlagDrop",marker,source)
+		triggerClientEvent(root,"onClientFlagDrop",marker,source)
 	end
 end
 function CaptureTheFlag_onWeaponDrop()
 	cancelEvent()
 end
+function CaptureTheFlag_onFlagDrop(player)
+	if (getTacticsData("modes","ctf","flag_water_respawn") == "true" and ({getElementPosition(source)})[3] <= 1.5) then
+		local x,y,z = getElementPosition(source)
+		triggerClientEvent(root,"onClientFlagReturn",source,getElementData(source,"Team"),x,y,z)
+		CaptureTheFlag_RespawnFlag(source)
+	else
+		local idlerespawn = math.floor(TimeToSec(getTacticsData("modes","ctf","flag_idle_respawn"))*1000)
+		if (idlerespawn > 50) then
+			flagRespawn[source] = setTimer(function(marker)
+				local x,y,z = getElementPosition(marker)
+				triggerClientEvent(root,"onClientFlagReturn",marker,getElementData(marker,"Team"),x,y,z)
+				CaptureTheFlag_RespawnFlag(marker)
+			end,math.max(50,idlerespawn),1,source)
+		end
+	end
+end
+function CaptureTheFlag_onFlagPickup()
+	if (isTimer(flagRespawn[source])) then
+		killTimer(flagRespawn[source])
+		flagRespawn[source] = nil
+	end
+end
+addEvent("onFlagDrop")
+addEvent("onFlagPickup")
 addEventHandler("onMapStarting",root,CaptureTheFlag_onMapStarting)
 addEventHandler("onMapStopping",root,CaptureTheFlag_onMapStopping)
 addEventHandler("onResourceStart",resourceRoot,CaptureTheFlag_onResourceStart)
