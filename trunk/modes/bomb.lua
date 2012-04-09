@@ -122,7 +122,6 @@ function BombMatch_onPlayerRoundSpawn()
 		toggleControl(source,"previous_weapon",true)
 		setElementData(source,"Weapons",true)
 		callClientFunction(source,"setCameraInterior",interior)
-		fadeCamera(source,true,2.0)
 		if (not getElementData(source,"Kills")) then
 			setElementData(source,"Kills",0)
 		end
@@ -280,8 +279,6 @@ end
 function BombMatch_onPlayerWasted(ammo,killer,weapon,bodypart,stealth)
 	if (getPedWeapon(source,10) == 11 and getPedWeaponSlot(source) ~= 10) then dropWeapon(source,10) end
 	local loss = getElementHealth(source)
-	if (isTimer(wastedTimer[source])) then killTimer(wastedTimer[source]) end
-	wastedTimer[source] = setTimer(triggerEvent,2000,1,"onPlayerRoundSpawn",source)
 	if (killer and getPlayerGameStatus(source) == "Play" and killer ~= source) then
 		if (getElementType(killer) == "vehicle") then killer = getVehicleController(killer) end
 		if (killer) then

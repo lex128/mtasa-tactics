@@ -76,7 +76,6 @@ function FlyMatch_onPlayerRoundSpawn()
 			setElementFrozen(playerPlane[source],true)
 			warpPedIntoVehicle(source,playerPlane[source])
 		end
-		fadeCamera(source,true,2.0)
 		if (not getElementData(source,"Kills")) then
 			setElementData(source,"Kills",0)
 		end
@@ -196,8 +195,6 @@ function FlyMatch_onRoundTimesup()
 end
 function FlyMatch_onPlayerWasted(ammo,attacker,killerweapon,bodypart,stealth)
 	if (isElement(playerPlane[source])) then destroyElement(playerPlane[source]) end
-	if (isTimer(wastedTimer[source])) then killTimer(wastedTimer[source]) end
-	wastedTimer[source] = setTimer(triggerEvent,2000,1,"onPlayerRoundSpawn",source)
 	if (attacker and getPlayerGameStatus(source) == "Play" and attacker ~= source) then
 		if (getElementType(attacker) == "vehicle") then attacker = getVehicleController(attacker) end
 		if (attacker) then setElementData(attacker,"Kills",getElementData(attacker,"Kills") + 1,false) end

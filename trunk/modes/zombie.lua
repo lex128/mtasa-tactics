@@ -29,7 +29,6 @@ function ZombieMod_onMapStopping(mapinfo)
 		setPedHeadless(player,false)
 	end
 	if (getTacticsData("settings","autobalance") ~= "true") then balanceTeams() end
---	if (getTacticsData("mode","zombie","night") ~= "true") then balanceTeams() end
 end
 function ZombieMod_onMapStarting(mapinfo)
 	if (mapinfo.modename ~= "zombie") then return end
@@ -109,7 +108,6 @@ function ZombieMod_onPlayerRoundSpawn()
 		setPlayerProperty(source,"movespeed",nil)
 		setPlayerProperty(source,"regenerable",nil)
 		callClientFunction(source,"setCameraInterior",interior)
-		fadeCamera(source,true,2.0)
 		if (not getElementData(source,"Kills")) then
 			setElementData(source,"Kills",0)
 		end
@@ -198,8 +196,6 @@ function ZombieMod_onRoundTimesup()
 end
 function ZombieMod_onPlayerWasted(ammo,killer,killerweapon,bodypart,stealth)
 	local loss = getElementHealth(source)
-	if (isTimer(wastedTimer[source])) then killTimer(wastedTimer[source]) end
-	wastedTimer[source] = setTimer(triggerEvent,2000,1,"onPlayerRoundSpawn",source)
 	setElementData(source,"Status","Die")
 	fadeCamera(source,false,2.0)
 	ZombieMod_onCheckRound()

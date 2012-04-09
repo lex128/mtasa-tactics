@@ -4,13 +4,11 @@ end
 function Lobby_onMapStopping(mapinfo)
 	if (mapinfo.modename ~= "lobby") then return end
 	removeEventHandler("onPlayerRoundSpawn",root,Lobby_onPlayerRoundSpawn)
-	removeEventHandler("onPlayerWasted",root,Lobby_onPlayerWasted)
 end
 function Lobby_onMapStarting(mapinfo)
 	if (mapinfo.modename ~= "lobby") then return end
 	if (isTimer(restartTimer)) then killTimer(restartTimer) end
 	addEventHandler("onPlayerRoundSpawn",root,Lobby_onPlayerRoundSpawn)
-	addEventHandler("onPlayerWasted",root,Lobby_onPlayerWasted)
 	forcedStartRound("notround")
 end
 function Lobby_onPlayerRoundSpawn()
@@ -28,11 +26,6 @@ function Lobby_onPlayerRoundSpawn()
 	setElementData(source,"Status","Play")
 	setElementData(source,"Weapons",true)
 	callClientFunction(source,"setCameraInterior",interior)
-	fadeCamera(source,true,2.0)
-end
-function Lobby_onPlayerWasted(ammo,attacker,killerweapon,bodypart,stealth)
-	if (isTimer(wastedTimer[source])) then killTimer(wastedTimer[source]) end
-	wastedTimer[source] = setTimer(triggerEvent,2000,1,"onPlayerRoundSpawn",source)
 end
 addEventHandler("onMapStarting",root,Lobby_onMapStarting)
 addEventHandler("onMapStopping",root,Lobby_onMapStopping)

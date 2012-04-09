@@ -146,6 +146,6 @@ function DestructionDerby_onClientElementStreamIn()
 		setHelicopterRotorSpeed(source,0.2)
 	end
 end
--- addEvent("onClientSetMapName",true)
+addEvent("onClientSetMapName",true)
 addEventHandler("onClientMapStarting",root,DestructionDerby_onClientMapStarting)
 addEventHandler("onClientMapStopping",root,DestructionDerby_onClientMapStopping)

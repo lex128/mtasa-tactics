@@ -106,7 +106,6 @@ function AttackDefend_onPlayerRoundSpawn()
 		toggleControl(source,"previous_weapon",true)
 		setElementData(source,"Weapons",true)
 		callClientFunction(source,"setCameraInterior",interior)
-		fadeCamera(source,true,2.0)
 		if (not getElementData(source,"Kills")) then
 			setElementData(source,"Kills",0)
 		end
@@ -230,8 +229,6 @@ function AttackDefend_onPlayerDamage(attacker,weapon,bodypart,loss)
 end
 function AttackDefend_onPlayerWasted(ammo,killer,killerweapon,bodypart,stealth)
 	local loss = getElementHealth(source)
-	if (isTimer(wastedTimer[source])) then killTimer(wastedTimer[source]) end
-	wastedTimer[source] = setTimer(triggerEvent,2000,1,"onPlayerRoundSpawn",source)
 	if (killer and getPlayerGameStatus(source) == "Play" and killer ~= source) then
 		if (getElementType(killer) == "vehicle") then killer = getVehicleController(killer) end
 		if (killer) then
