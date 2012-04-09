@@ -344,7 +344,7 @@ end
 function RaceMatch_onClientRoundFinish()
 	if (finishMusic and isElement(finishMusic)) then stopSound(finishMusic) end
 end
--- addEvent("onClientSetMapName",true)
+addEvent("onClientSetMapName",true)
 addEvent("onClientPlayerFinish",true)
 addEventHandler("onClientMapStarting",root,RaceMatch_onClientMapStarting)
 addEventHandler("onClientMapStopping",root,RaceMatch_onClientMapStopping)

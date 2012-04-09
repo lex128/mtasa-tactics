@@ -60,7 +60,7 @@ function DestructionDerby_onMapStarting(mapinfo)
 		local colshape = createColSphere(x,y,z,3.5)
 		setElementParent(colshape,object)
 	end
-	-- triggerClientEvent(root,"onClientSetMapName",root,mapinfo.name)
+	triggerClientEvent(root,"onClientSetMapName",root,mapinfo.name)
 end
 function DestructionDerby_onRoundStart()
 	startTick = getTickCount()
@@ -154,7 +154,6 @@ function DestructionDerby_onPlayerRoundSpawn()
 		toggleAllControls(source,true)
 		setCameraTarget(source,source)
 		callClientFunction(source,"setCameraInterior",interior)
-		fadeCamera(source,true,2.0)
 		setElementData(source,"Status","Play")
 	else
 		setElementData(source,"Status","Spectate")
@@ -327,8 +326,6 @@ function DestructionDerby_onPlayerWasted(ammo,killer,weapon,bodypart,stealth)
 			end
 		end,4000,1,playerVehicle[source],source)
 	end
-	if (isTimer(wastedTimer[source])) then killTimer(wastedTimer[source]) end
-	wastedTimer[source] = setTimer(triggerEvent,2000,1,"onPlayerRoundSpawn",source)
 	setElementData(source,"Status","Die")
 	fadeCamera(source,false,2.0)
 	local time = getTickCount()-getTacticsData("timestart")

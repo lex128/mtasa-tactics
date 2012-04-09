@@ -88,7 +88,7 @@ end
 function CaptureTheFlag_onRoundStart()
 	local teamsides = getTacticsData("Teamsides")
 	for i,player in ipairs(getElementsByType("player")) do
-		if (getPlayerGameStatus(player,"Status") == "Play" or getElementData(player) == "Loading") then
+		if (getPlayerGameStatus(player) == "Play" or getPlayerGameStatus(player) == "Loading") then
 			givePlayerProperty(player,"invulnerable",true,5000)
 			local team = getPlayerTeam(player)
 			if (teamsides[team]) then
@@ -129,7 +129,6 @@ function CaptureTheFlag_onPlayerRoundSpawn()
 		toggleControl(source,"previous_weapon",true)
 		setElementData(source,"Weapons",true)
 		callClientFunction(source,"setCameraInterior",interior)
-		fadeCamera(source,true,2.0)
 		if (not getElementData(source,"Kills")) then
 			setElementData(source,"Kills",0)
 		end
@@ -150,7 +149,7 @@ function CaptureTheFlag_onPlayerRoundRespawn()
 	local team = getPlayerTeam(source)
 	local model = getElementModel(source) or getElementData(team,"Skins")[1]
 	local teamsides = getTacticsData("Teamsides")
-	local spawnpoints = getElementsByType("Team"..teamsides[team])
+	local spawnpoints = getElementsByType("Team"..tostring(teamsides[team]))
 	if (#spawnpoints <= 0) then spawnpoints = getElementsByType("Team1") end
 	if (not spawnCounter[teamsides[team]]) then spawnCounter[teamsides[team]] = 0 end
 	spawnCounter[teamsides[team]] = spawnCounter[teamsides[team]] + 1
@@ -203,6 +202,7 @@ function CaptureTheFlag_onRoundTimesup()
 	end
 end
 function CaptureTheFlag_onColShapeHit(player,dim)
+	if (getElementType(player) == "vehicle") then player = getVehicleOccupant(player) end
 	if (not dim or getElementType(player) ~= "player" or getPlayerGameStatus(player) ~= "Play") then return end
 	local marker = getElementParent(source)
 	if (not marker or isElementAttached(marker) or getElementType(marker) ~= "marker") then return end
@@ -267,8 +267,6 @@ function CaptureTheFlag_onPlayerDamage(attacker,weapon,bodypart,loss)
 end
 function CaptureTheFlag_onPlayerWasted(ammo,killer,weapon,bodypart,stealth)
 	local loss = getElementHealth(source)
-	if (isTimer(wastedTimer[source])) then killTimer(wastedTimer[source]) end
-	wastedTimer[source] = setTimer(triggerEvent,2000,1,"onPlayerRoundSpawn",source)
 	if (killer and getPlayerGameStatus(source) == "Play" and killer ~= source) then
 		if (getElementType(killer) == "vehicle") then killer = getVehicleController(killer) end
 		if (killer) then
@@ -322,6 +320,25 @@ function CaptureTheFlag_onPlayerQuit()
 end
 function CaptureTheFlag_onWeaponDrop()
 	cancelEvent()
+	local marker = playerFlag[source]
+	if (marker and getElementAttachedTo(marker) == source) then
+		playerFlag[source] = nil
+		local x,y,z = getElementPosition(source)
+		detachElements(marker)
+		setElementPosition(marker,x,y,z + 1)
+		setElementRotation(marker,0,0,0)
+		local colshape = getElementData(marker,"Colshape")
+		if (isElement(colshape)) then
+			setElementPosition(colshape,x,y,z)
+		else
+			colshape = createColTube(x,y,z,3,4)
+			setElementParent(colshape,marker)
+			setElementData(marker,"Colshape",colshape)
+		end
+		setPlayerProperty(source,"movespeed",nil)
+		triggerEvent("onFlagDrop",marker,source)
+		triggerClientEvent(root,"onClientFlagDrop",marker,source)
+	end
 end
 function CaptureTheFlag_onFlagDrop(player)
 	if (getTacticsData("modes","ctf","flag_water_respawn") == "true" and ({getElementPosition(source)})[3] <= 1.5) then

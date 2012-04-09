@@ -211,9 +211,6 @@ function ProjectBang_onRoundTimesup()
 end
 function ProjectBang_onPlayerWasted(ammo,killer,weapon,bodypart,stealth)
 	takeAllWeapons(source)
-	local loss = getElementHealth(source)
-	if (isTimer(wastedTimer[source])) then killTimer(wastedTimer[source]) end
-	wastedTimer[source] = setTimer(triggerEvent,2000,1,"onPlayerRoundSpawn",source)
 	setElementData(source,"Status","Die")
 	fadeCamera(source,false,2.0)
 	ProjectBang_onCheckRound()

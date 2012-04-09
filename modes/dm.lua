@@ -88,7 +88,6 @@ function DeathMatch_onPlayerRoundSpawn()
 			callClientFunction(source,"onClientWeaponChoose")
 		end
 		callClientFunction(source,"setCameraInterior",interior)
-		fadeCamera(source,true,2.0)
 		if (not getElementData(source,"Kills")) then
 			setElementData(source,"Frags",0)
 		end
@@ -178,8 +177,6 @@ function DeathMatch_onPlayerDamage(attacker,weapon,bodypart,loss)
 end
 function DeathMatch_onPlayerWasted(ammo,killer,weapon,bodypart,stealth)
 	local loss = getElementHealth(source)
-	if (isTimer(wastedTimer[source])) then killTimer(wastedTimer[source]) end
-	wastedTimer[source] = setTimer(triggerEvent,2000,1,"onPlayerRoundSpawn",source)
 	if (killer and getPlayerGameStatus(source) == "Play" and killer ~= source) then
 		if (getElementType(killer) == "vehicle") then killer = getVehicleController(killer) end
 		if (killer) then
