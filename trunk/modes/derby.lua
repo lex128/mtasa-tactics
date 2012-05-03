@@ -154,6 +154,7 @@ function DestructionDerby_onPlayerRoundSpawn()
 		toggleAllControls(source,true)
 		setCameraTarget(source,source)
 		callClientFunction(source,"setCameraInterior",interior)
+		-- fadeCamera(source,true,2.0)
 		setElementData(source,"Status","Play")
 	else
 		setElementData(source,"Status","Spectate")

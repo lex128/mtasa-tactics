@@ -1,4 +1,5 @@
 local dynamites = {}
+-- local dynamitebag = {}
 local replacing = nil
 function BombMatch_onClientMapStopping(mapinfo)
 	if (mapinfo.modename ~= "bomb") then return end
@@ -7,11 +8,13 @@ function BombMatch_onClientMapStopping(mapinfo)
 	unbindKey("fire","both",BombMatch_toggleBombing)
 	removeEventHandler("onClientPreRender",root,BombMatch_onClientPreRender)
 	removeEventHandler("onClientHUDRender",root,BombMatch_onClientHUDRender)
-	removeEventHandler("onClientColShapeLeave",root,BombMatch_onClientColShapeLeave)
+	removeEventHandler("onClientElementColShapeHit",localPlayer,BombMatch_onClientElementColShapeHit)
+	removeEventHandler("onClientElementColShapeLeave",localPlayer,BombMatch_onClientElementColShapeLeave)
 	removeEventHandler("onClientElementStreamOut",root,BombMatch_onClientElementStreamOut)
 	removeEventHandler("onClientPlayerBlipUpdate",localPlayer,BombMatch_onClientPlayerBlipUpdate)
 	removeEventHandler("onClientPauseToggle",root,BombMatch_onClientPauseToggle)
 	removeEventHandler("onClientPlayerRoundSpawn",localPlayer,BombMatch_onClientPlayerRoundSpawn)
+	-- removeEventHandler("onClientPlayerDamage",localPlayer,BombMatch_onClientPlayerDamage)
 	removeCommandHandler("gun",onClientWeaponShow)
 	setElementData(localPlayer,"planting",nil,false)
 	setElementData(localPlayer,"defusing",nil,false)
@@ -21,7 +24,14 @@ function BombMatch_onClientMapStopping(mapinfo)
 			destroyElement(dynamite)
 		end
 	end
+	-- for player,dynamite in pairs(dynamitebag) do
+		-- if (dynamite and isElement(dynamite)) then
+			-- detachElementFromBone(dynamite)
+			-- destroyElement(dynamite)
+		-- end
+	-- end
 	dynamites = {}
+	-- dynamitebag = {}
 	if (isTimer(replacing)) then
 		killTimer(replacing)
 	else
@@ -42,7 +52,7 @@ function BombMatch_onClientMapStarting(mapinfo)
 		engineReplaceModel(bombdff,2221)
 	end,500,1)
 	if (getElementByID("BombActive")) then
-		setRoundHudComponent("timeleft",function() return "BOMB" end,tocolor(255,0,0))
+		setRoundHudComponent("timeleft","BOMB",255,0,0)
 	end
 	showRoundHudComponent("timeleft",true)
 	showRoundHudComponent("teamlist",true)
@@ -58,11 +68,13 @@ function BombMatch_onClientMapStarting(mapinfo)
 	showPlayerHudComponent("weapon",true)
 	addEventHandler("onClientPreRender",root,BombMatch_onClientPreRender)
 	addEventHandler("onClientHUDRender",root,BombMatch_onClientHUDRender)
-	addEventHandler("onClientColShapeLeave",root,BombMatch_onClientColShapeLeave)
+	addEventHandler("onClientElementColShapeHit",localPlayer,BombMatch_onClientElementColShapeHit)
+	addEventHandler("onClientElementColShapeLeave",localPlayer,BombMatch_onClientElementColShapeLeave)
 	addEventHandler("onClientElementStreamOut",root,BombMatch_onClientElementStreamOut)
 	addEventHandler("onClientPlayerBlipUpdate",localPlayer,BombMatch_onClientPlayerBlipUpdate)
 	addEventHandler("onClientPauseToggle",root,BombMatch_onClientPauseToggle)
 	addEventHandler("onClientPlayerRoundSpawn",localPlayer,BombMatch_onClientPlayerRoundSpawn)
+	-- addEventHandler("onClientPlayerDamage",localPlayer,BombMatch_onClientPlayerDamage)
 	addCommandHandler("gun",onClientWeaponShow,false)
 	bindKey("fire","both",BombMatch_toggleBombing)
 	setElementData(localPlayer,"planting",nil,false)
@@ -121,12 +133,24 @@ function BombMatch_onClientPreRender(frametick)
 			detachElementFromBone(dynamites[player])
 			destroyElement(dynamites[player])
 		end
+		-- if (getPedWeapon(player,10) == 11) then
+			-- if (not isElement(dynamitebag[player])) then
+				-- dynamitebag[player] = createObject(1310,0,0,0)
+				-- setObjectScale(dynamitebag[player],0.8)
+				-- setElementParent(dynamitebag[player],player)
+				-- setElementInterior(dynamitebag[player],getElementInterior(player))
+				-- attachElementToBone(dynamitebag[player],player,3,0,-0.1,0,0,0,0)
+			-- end
+		-- elseif (isElement(dynamitebag[player])) then
+			-- detachElementFromBone(dynamitebag[player])
+			-- destroyElement(dynamitebag[player])
+		-- end
 	end
 	local BombActive = getElementByID("BombActive")
 	if (BombActive) then
 		local sound = getElementData(BombActive,"BombSound")
 		if (not sound) then
-			setRoundHudComponent("timeleft",function() return "BOMB" end,tocolor(255,0,0))
+			setRoundHudComponent("timeleft","BOMB",255,0,0)
 			local x,y,z = getElementPosition(BombActive)
 			local time = getTacticsData("timeleft") - (getTickCount() + addTickCount)
 			sound = playSound3D("audio/bomb_tick.mp3",x,y,z,true)
@@ -218,18 +242,50 @@ function BombMatch_onClientPlayerBlipUpdate()
 		end
 	end
 end
-function BombMatch_onClientColShapeLeave(element,dimension)
-	if (element == localPlayer and getElementID(source) == "BombColshape" and getElementData(localPlayer,"defusing")) then
-		setElementData(localPlayer,"defusing",nil,false)
-		if (getPedAnimation(localPlayer) == "bomber") then
-			callServerFunction("setPedAnimation",localPlayer,"BOMBER","null")
-		end	
+local help
+function BombMatch_onClientElementColShapeHit(colshape,dimension)
+	if (not isElement(colshape)) then return end
+	if (dimension and getElementID(colshape) == "BombColshape") then
+		local teamsides = getTacticsData("Teamsides")
+		if (teamsides[getPlayerTeam(localPlayer)]%2 == 0) then
+			help = outputInfo(string.format(getLangString('help_defusing'),string.upper(next(getBoundKeys("fire")))))
+		end
 	end
-	if (element == localPlayer and getElementID(source) == "Bomb_Place" and getElementData(localPlayer,"planting")) then
-		setElementData(localPlayer,"planting",nil,false)
-		if (getPedAnimation(localPlayer) == "bomber") then
-			callServerFunction("setPedAnimation",localPlayer,"BOMBER","null")
-		end	
+	if (dimension and getElementID(colshape) == "Bomb_Place") then
+		local bombblip = getElementByID("BombBlip")
+		if (bombblip and getElementAttachedTo(bombblip) == localPlayer) then
+			local teamsides = getTacticsData("Teamsides")
+			if (teamsides[getPlayerTeam(localPlayer)]%2 == 1) then
+				help = outputInfo(string.format(getLangString('help_planting'),string.upper(next(getBoundKeys("fire")))))
+			end
+		end
+	end
+end
+function BombMatch_onClientElementColShapeLeave(colshape,dimension)
+	if (not isElement(colshape)) then return end
+	if (dimension and getElementID(colshape) == "BombColshape") then
+		local teamsides = getTacticsData("Teamsides")
+		if (teamsides[getPlayerTeam(localPlayer)]%2 == 0) then
+			if (help) then hideInfo(help) end
+			if (getElementData(localPlayer,"defusing")) then
+				setElementData(localPlayer,"defusing",nil,false)
+			end
+			if (getPedAnimation(localPlayer) == "bomber") then
+				callServerFunction("setPedAnimation",localPlayer,"BOMBER","null")
+			end
+		end
+	end
+	if (dimension and getElementID(colshape) == "Bomb_Place") then
+		local teamsides = getTacticsData("Teamsides")
+		if (teamsides[getPlayerTeam(localPlayer)]%2 == 1) then
+			if (help) then hideInfo(help) end
+			if (getElementData(localPlayer,"planting")) then
+				setElementData(localPlayer,"planting",nil,false)
+			end
+			if (getPedAnimation(localPlayer) == "bomber") then
+				callServerFunction("setPedAnimation",localPlayer,"BOMBER","null")
+			end
+		end
 	end
 end
 function BombMatch_createBombExplosion(xe,ye,ze)
@@ -280,6 +336,17 @@ function BombMatch_onClientPreviewMapCreating(modename,elements)
 		end
 	end
 end
+-- function BombMatch_onClientPlayerDamage()
+	-- if (getElementData(localPlayer,"defusing")) then
+		-- setElementData(localPlayer,"defusing",nil,false)
+	-- end
+	-- if (getElementData(localPlayer,"planting")) then
+		-- setElementData(localPlayer,"planting",nil,false)
+	-- end
+	-- if (getPedAnimation(localPlayer) == "bomber") then
+		-- callServerFunction("setPedAnimation",localPlayer,"BOMBER","null")
+	-- end
+-- end
 addEventHandler("onClientMapStarting",root,BombMatch_onClientMapStarting)
 addEventHandler("onClientMapStopping",root,BombMatch_onClientMapStopping)
 addEventHandler("onClientPreviewMapCreating",root,BombMatch_onClientPreviewMapCreating)

@@ -107,6 +107,7 @@ function Hostage_onPlayerRoundSpawn()
 		toggleControl(source,"previous_weapon",true)
 		setElementData(source,"Weapons",true)
 		callClientFunction(source,"setCameraInterior",interior)
+		-- fadeCamera(source,true,2.0)
 		if (not getElementData(source,"Kills")) then
 			setElementData(source,"Kills",0)
 		end
@@ -239,6 +240,12 @@ function Hostage_onPedWasted(ammo,killer,weapon,bodypart,stealth)
 	end
 end
 function Hostage_onHostageRescued(hostage)
+	local player = getElementSyncer(hostage)
+	if (player) then
+		outputRoundLog(getPlayerName(player).." rescued hostage")
+	else
+		outputRoundLog("Hostage rescued")
+	end
 	destroyElement(hostage)
 	callClientFunction(root,"playVoice","audio/hostage_rescued.mp3")
 	local peds = 0

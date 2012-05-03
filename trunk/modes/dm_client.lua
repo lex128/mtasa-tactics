@@ -1,7 +1,7 @@
 function DeathMatch_onClientMapStopping(mapinfo)
 	if (mapinfo.modename ~= "dm") then return end
 	showRoundHudComponent("timeleft",false)
-	showRoundHudComponent("toplist",false)
+	showRoundHudComponent("playerlist",false)
 	removeEventHandler("onClientPlayerRoundSpawn",localPlayer,DeathMatch_onClientPlayerRoundSpawn)
 	removeCommandHandler("gun",onClientWeaponShow)
 	if (guiGetVisible(weapon_window)) then
@@ -12,8 +12,8 @@ end
 function DeathMatch_onClientMapStarting(mapinfo)
 	if (mapinfo.modename ~= "dm") then return end
 	showRoundHudComponent("timeleft",true)
-	setRoundHudComponent("toplist","images/frag.png",function(ped) return getElementData(ped,"Frags") end,true)
-	showRoundHudComponent("toplist",true)
+	setRoundHudComponent("playerlist","images/frag.png",function(ped) return tonumber(getElementData(ped,"Frags")) or 0 end,true)
+	showRoundHudComponent("playerlist",true)
 	showPlayerHudComponent("ammo",true)
 	showPlayerHudComponent("area_name",false)
 	showPlayerHudComponent("armour",true)

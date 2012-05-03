@@ -29,6 +29,7 @@ function ZombieMod_onMapStopping(mapinfo)
 		setPedHeadless(player,false)
 	end
 	if (getTacticsData("settings","autobalance") ~= "true") then balanceTeams() end
+--	if (getTacticsData("mode","zombie","night") ~= "true") then balanceTeams() end
 end
 function ZombieMod_onMapStarting(mapinfo)
 	if (mapinfo.modename ~= "zombie") then return end
@@ -77,7 +78,7 @@ function ZombieMod_onRandomInfected()
 	end)
 	triggerEvent("onZombieInfected",humans[1])
 end
-function ZombieMod_onZombieInfected()
+function ZombieMod_onZombieInfected(zombie)
 	setPlayerTeam(source,getTacticsData("Sides")[2])
 	setElementModel(source,78)
 	setPedStat(source,24,1000)
@@ -86,6 +87,11 @@ function ZombieMod_onZombieInfected()
 	setElementData(source,"Weapons",false)
 	takeAllWeapons(source)
 	ZombieMod_onCheckRound()
+	if (zombie) then
+		outputRoundLog(getPlayerName(zombie).." infected "..getPlayerName(source))
+	else
+		outputRoundLog(getPlayerName(source).." infected")
+	end
 	triggerClientEvent(root,"onClientZombieInfected",source)
 end
 function ZombieMod_onPlayerRoundSpawn()
@@ -108,6 +114,7 @@ function ZombieMod_onPlayerRoundSpawn()
 		setPlayerProperty(source,"movespeed",nil)
 		setPlayerProperty(source,"regenerable",nil)
 		callClientFunction(source,"setCameraInterior",interior)
+		-- fadeCamera(source,true,2.0)
 		if (not getElementData(source,"Kills")) then
 			setElementData(source,"Kills",0)
 		end
