@@ -26,6 +26,7 @@ function Lobby_onPlayerRoundSpawn()
 	setElementData(source,"Status","Play")
 	setElementData(source,"Weapons",true)
 	callClientFunction(source,"setCameraInterior",interior)
+	-- fadeCamera(source,true,2.0)
 end
 addEventHandler("onMapStarting",root,Lobby_onMapStarting)
 addEventHandler("onMapStopping",root,Lobby_onMapStopping)

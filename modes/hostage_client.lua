@@ -37,7 +37,9 @@ function Hostage_onClientMapStarting(mapinfo)
 		end
 		return hostages
 	end,function(elements,i)
-		return "images/player.png",(getElementHealth(elements[i]) > 0 and tocolor(255,255,255)) or tocolor(0,0,0)
+		local r,g,b = 0,0,0
+		if (getElementHealth(elements[i]) > 0) then r,g,b = 255,255,255 end
+		return "images/player.png",r,g,b
 	end)
 	showRoundHudComponent("elementlist",true)
 	showPlayerHudComponent("ammo",true)

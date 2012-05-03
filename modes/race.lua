@@ -157,6 +157,7 @@ function RaceMatch_onPlayerRoundSpawn()
 		setElementData(source,"Rank",1)
 		setElementData(source,"Checkpoint",nil)
 		setElementData(source,"Checkpoint",1)
+		-- fadeCamera(source,true,2.0)
 		setElementData(source,"Status","Play")
 	else
 		setElementData(source,"Status","Spectate")

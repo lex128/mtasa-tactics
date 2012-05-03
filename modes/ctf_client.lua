@@ -24,7 +24,14 @@ function CaptureTheFlag_onClientMapStarting(mapinfo)
 	showPlayerHudComponent("vehicle_name",false)
 	showPlayerHudComponent("weapon",true)
 	showRoundHudComponent("timeleft",true)
-	setRoundHudComponent("teamlist","images/flag.png",function(team) return tostring(getElementData(team,"Capture")) end)
+	setRoundHudComponent("teamlist",
+		function(team)
+			return (getElementData(team,"IsStolen") and "images/question.png") or "images/flag.png"
+		end,
+		function(team)
+			return tostring(getElementData(team,"Capture"))
+		end
+	)
 	showRoundHudComponent("teamlist",true)
 	addEventHandler("onClientPlayerRoundSpawn",localPlayer,CaptureTheFlag_onClientPlayerRoundSpawn)
 	addEventHandler("onClientPlayerBlipUpdate",localPlayer,CaptureTheFlag_onClientPlayerBlipUpdate)
@@ -112,10 +119,9 @@ function CaptureTheFlag_onClientPlayerBlipUpdate()
 		local x2 = getElementPosition(marker)
 		if (parent and blip and team and base) then
 			if (isElementWithinMarker(marker,base) or (player and getPlayerTeam(player) == myteam) or myteam == getElementsByType("team")[1]) then
-				setBlipIcon(blip,19)
-				setBlipColor(blip,255,255,255,255)
+				local r,g,b = getTeamColor(team)
+				setBlipColor(blip,r/1.25,g/1.25,b/1.25,128)
 			else
-				setBlipIcon(blip,0)
 				setBlipColor(blip,0,0,0,0)
 			end
 		end

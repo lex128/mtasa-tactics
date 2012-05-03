@@ -62,7 +62,7 @@ function CaptureTheFlag_onMapStarting(mapinfo)
 	local interior = getTacticsData("Interior")
 	local sides = getTacticsData("Sides")
 	for i,side in ipairs(sides) do
-		setElementData(side,"FlagStatus",true)
+		setElementData(side,"IsStolen",nil)
 		local r,g,b = getTeamColor(side)
 		for i2,flagpoint in ipairs(getElementsByType("Flag"..i)) do
 			local x,y,z = tonumber(getElementData(flagpoint,"posX")),tonumber(getElementData(flagpoint,"posY")),tonumber(getElementData(flagpoint,"posZ"))
@@ -129,6 +129,7 @@ function CaptureTheFlag_onPlayerRoundSpawn()
 		toggleControl(source,"previous_weapon",true)
 		setElementData(source,"Weapons",true)
 		callClientFunction(source,"setCameraInterior",interior)
+		-- fadeCamera(source,true,2.0)
 		if (not getElementData(source,"Kills")) then
 			setElementData(source,"Kills",0)
 		end
@@ -214,20 +215,23 @@ function CaptureTheFlag_onColShapeHit(player,dim)
 		local xbase,ybase,zbase = getElementPosition(parent)
 		if (not isElementWithinMarker(marker,base)) then
 			local x,y,z = getElementPosition(marker)
-			triggerClientEvent(root,"onClientFlagReturn",marker,player,x,y,z)
 			CaptureTheFlag_RespawnFlag(marker)
+			triggerClientEvent(root,"onClientFlagReturn",marker,player,x,y,z)
 		else
 			local flag = playerFlag[player]
 			if (flag and getElementAttachedTo(flag) == player) then
 				setPlayerProperty(player,"movespeed",nil)
-				setElementData(pteam,"Capture",getElementData(pteam,"Capture") + 1)
+				local captures = getElementData(pteam,"Capture") + 1
+				setElementData(pteam,"Capture",captures)
 				local x,y,z = getElementPosition(flag)
-				triggerClientEvent(root,"onClientFlagCapture",flag,player,x,y,z)
 				CaptureTheFlag_RespawnFlag(flag)
+				triggerClientEvent(root,"onClientFlagCapture",flag,player,x,y,z)
+				outputRoundLog(getPlayerName(player).." captured the flag ("..captures..")")
 			end
 		end
 	else
 		local isStolen = isElementWithinMarker(marker,base)
+		if (isStolen) then setElementData(team,"IsStolen",true) end
 		playerFlag[player] = marker
 		attachElements(marker,player,0,0,2.5)
 		destroyElement(getElementData(marker,"Colshape"))
@@ -237,6 +241,8 @@ function CaptureTheFlag_onColShapeHit(player,dim)
 	end
 end
 function CaptureTheFlag_RespawnFlag(marker)
+	local team = getElementData(marker,"Team")
+	setElementData(team,"IsStolen",nil)
 	local parent = getElementParent(marker)
 	local x,y,z = getElementPosition(parent)
 	local player = getElementAttachedTo(marker)
@@ -343,15 +349,15 @@ end
 function CaptureTheFlag_onFlagDrop(player)
 	if (getTacticsData("modes","ctf","flag_water_respawn") == "true" and ({getElementPosition(source)})[3] <= 1.5) then
 		local x,y,z = getElementPosition(source)
-		triggerClientEvent(root,"onClientFlagReturn",source,getElementData(source,"Team"),x,y,z)
 		CaptureTheFlag_RespawnFlag(source)
+		triggerClientEvent(root,"onClientFlagReturn",source,getElementData(source,"Team"),x,y,z)
 	else
 		local idlerespawn = math.floor(TimeToSec(getTacticsData("modes","ctf","flag_idle_respawn"))*1000)
 		if (idlerespawn > 50) then
 			flagRespawn[source] = setTimer(function(marker)
 				local x,y,z = getElementPosition(marker)
-				triggerClientEvent(root,"onClientFlagReturn",marker,getElementData(marker,"Team"),x,y,z)
 				CaptureTheFlag_RespawnFlag(marker)
+				triggerClientEvent(root,"onClientFlagReturn",marker,getElementData(marker,"Team"),x,y,z)
 			end,math.max(50,idlerespawn),1,source)
 		end
 	end

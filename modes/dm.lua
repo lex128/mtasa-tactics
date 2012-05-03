@@ -88,6 +88,7 @@ function DeathMatch_onPlayerRoundSpawn()
 			callClientFunction(source,"onClientWeaponChoose")
 		end
 		callClientFunction(source,"setCameraInterior",interior)
+		fadeCamera(source,true,2.0)
 		if (not getElementData(source,"Kills")) then
 			setElementData(source,"Frags",0)
 		end
@@ -150,8 +151,8 @@ function DeathMatch_onRoundTimesup()
 		local frags = getElementData(player,"Frags") or 0
 		table.insert(players,{player,frags})
 	end
-	table.sort(players,function(a,b) return a[2] > b[2] end)
-	if (players[1][2] > players[2][2]) then
+	if (#players > 0) then table.sort(players,function(a,b) return a[2] > b[2] end) end
+	if (#players > 0 and players[1][2] > players[2][2]) then
 		local reason = ""
 		for i,data in ipairs(players) do
 			if (i > 1) then

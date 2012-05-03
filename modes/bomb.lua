@@ -122,6 +122,7 @@ function BombMatch_onPlayerRoundSpawn()
 		toggleControl(source,"previous_weapon",true)
 		setElementData(source,"Weapons",true)
 		callClientFunction(source,"setCameraInterior",interior)
+		-- fadeCamera(source,true,2.0)
 		if (not getElementData(source,"Kills")) then
 			setElementData(source,"Kills",0)
 		end
@@ -219,6 +220,7 @@ function BombMatch_onCheckRound()
 end
 function BombMatch_onPlayerBombPlanted()
 	if (getElementByID("BombActive") or isRoundPaused() or getPedWeapon(source) ~= 11) then return end
+	outputRoundLog(getPlayerName(source).." planted a bomb")
 	takeWeapon(source,11)
 	teamPlanted = getPlayerTeam(source)
 	local x,y,z = getElementPosition(source)
