@@ -43,6 +43,11 @@
 	<supported_modes				string="* Поддерживаемые режимы: #EBDDB2" />
 	<killed_for_out_bounding		string="* %s #FF6464убит за нахождение вне зоны" />
 	<weapon_limited					string="* %s можно брать только %i на команду" />
+	<vehicle_healed					string="* %s #FF6464починен транспорт" />
+	<vehicle_all_healed				string="* У всех починен транспорт" />
+	<new_verion_available			string="* Доступна новая версия! (от %s)" />
+	<this_last_verion				string="* Стоит последняя версия (от %s)" />
+	<player_cheat_detected			string="* %s #FF6464обнаружен #EBDDB2%s" />
 	<pause							string="Пауза" />
 	<unpausing_in					string="Возобновление через ... %.1f сек" />
 	<go_back_to_bounds				string="Вернитесь обратно" />
@@ -72,12 +77,12 @@
 	<hostages_rescued				string="Все заложники спасены" />
 	<hostages_killed				string="Заложники убиты" />
 	<respawn_in						string="Возрождение через ... %.1f сек" />
-	<vehicle_healed					string="* %s #FF6464починен транспорт" />
-	<vehicle_all_healed				string="* У всех починен транспорт" />
-	<new_verion_available			string="* Доступна новая версия! (от %s)" />
-	<this_last_verion				string="* Стоит последняя версия (от %s)" />
-	<player_cheat_detected			string="* %s #FF6464обнаружен #EBDDB2%s" />
 	<vip_killed						string="VIP убит" />
 	<time_over_vip_not_rescued		string="Время истекло. VIP не спасен" />
 	<vip_rescued					string="VIP спасен" />
+	<help_spectate					string="%s - сменить камеру" />
+	<help_pickup					string="%s - подобрать оружие" />
+	<help_planting					string="Достань бомбу и удерживай %s чтобы установить её здесь" />
+	<help_defusing					string="Спрячь оружие и удерживай %s чтобы обезвредить бомбу" />
+	<help_roundlog					string="%s - посмотреть статистику раунда" />
 </language>
