@@ -80,4 +80,9 @@
 	<vip_killed						string="VIP are killed" />
 	<time_over_vip_not_rescued		string="Time is up. VIP are not released" />
 	<vip_rescued					string="VIP are released" />
+	<help_spectate					string="%s - change view" />
+	<help_pickup					string="%s - pickup weapon" />
+	<help_planting					string="Switch to the bomb and hold %s for planting here" />
+	<help_defusing					string="Put your arms and hold %s to defuse this bomb" />
+	<help_roundlog					string="%s - look at the statistics round" />
 </language>
