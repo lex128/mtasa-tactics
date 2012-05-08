@@ -310,7 +310,8 @@ end
 function BombMatch_onWeaponDrop(pickup)
 	if (getPickupWeapon(pickup) == 11) then
 		setPickupType(pickup,3,2221)
-		detachElements(getElementByID("BombBlip"),source)
+		local blip = getElementByID("BombBlip")
+		if (blip) then detachElements(blip,source) end
 	end
 end
 function BombMatch_onWeaponPickup(pickup)
