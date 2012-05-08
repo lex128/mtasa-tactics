@@ -84,5 +84,6 @@
 	<help_pickup					string="%s - подобрать оружие" />
 	<help_planting					string="Достань бомбу и удерживай %s чтобы установить её здесь" />
 	<help_defusing					string="Спрячь оружие и удерживай %s чтобы обезвредить бомбу" />
-	<help_roundlog					string="%s - посмотреть статистику раунда" />
+	<help_roundlog					string="%s - посмотреть статистику игры" />
+	<help_restore					string="%s - возрождение или восстановление в игру" />
 </language>
