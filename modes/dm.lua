@@ -88,7 +88,6 @@ function DeathMatch_onPlayerRoundSpawn()
 			callClientFunction(source,"onClientWeaponChoose")
 		end
 		callClientFunction(source,"setCameraInterior",interior)
-		fadeCamera(source,true,2.0)
 		if (not getElementData(source,"Kills")) then
 			setElementData(source,"Frags",0)
 		end
@@ -104,8 +103,6 @@ function DeathMatch_onPlayerRoundSpawn()
 		setElementData(source,"Status","Play")
 	else
 		setElementData(source,"Status","Spectate")
-		fadeCamera(source,true,2.0)
-		setElementFrozen(source,true)
 	end
 	DeathMatch_onCheckRound()
 end

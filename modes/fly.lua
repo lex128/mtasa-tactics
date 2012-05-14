@@ -76,7 +76,6 @@ function FlyMatch_onPlayerRoundSpawn()
 			setElementFrozen(playerPlane[source],true)
 			warpPedIntoVehicle(source,playerPlane[source])
 		end
-		-- fadeCamera(source,true,2.0)
 		if (not getElementData(source,"Kills")) then
 			setElementData(source,"Kills",0)
 		end
@@ -89,7 +88,6 @@ function FlyMatch_onPlayerRoundSpawn()
 		setElementData(source,"Status","Play")
 	else
 		setElementData(source,"Status","Spectate")
-		setTimer(fadeCamera,1000,1,source,true,2.0)
 	end
 	FlyMatch_onCheckRound()
 end
@@ -123,7 +121,6 @@ function FlyMatch_onPlayerRoundRespawn()
 	end
 	setElementData(source,"Status","Play")
 	callClientFunction(source,"setCameraInterior",interior)
-	fadeCamera(source,true,2.0)
 	if (not getElementData(source,"Kills")) then
 		setElementData(source,"Kills",0)
 	end

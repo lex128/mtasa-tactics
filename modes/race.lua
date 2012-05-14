@@ -157,11 +157,9 @@ function RaceMatch_onPlayerRoundSpawn()
 		setElementData(source,"Rank",1)
 		setElementData(source,"Checkpoint",nil)
 		setElementData(source,"Checkpoint",1)
-		-- fadeCamera(source,true,2.0)
 		setElementData(source,"Status","Play")
 	else
 		setElementData(source,"Status","Spectate")
-		fadeCamera(source,true,2.0)
 	end
 	if (getTacticsData("modes","race","respawn") == "false") then
 		RaceMatch_onCheckRound()
@@ -211,7 +209,6 @@ function RaceMatch_onPlayerRoundRespawn()
 	callClientFunction(source,"setCameraInterior",interior)
 	setElementData(source,"Checkpoint",nil)
 	setElementData(source,"Checkpoint",math.max(1,point))
-	fadeCamera(source,true,1)
 	setTimer(function(vehicle,xvel,yvel,zvel,xturn,yturn,zturn)
 		if (isElement(vehicle)) then
 			setElementFrozen(vehicle,false)

@@ -124,7 +124,6 @@ function VeryImportantPerson_onPlayerRoundSpawn()
 		toggleControl(source,"previous_weapon",true)
 		setElementData(source,"Weapons",true)
 		callClientFunction(source,"setCameraInterior",interior)
-		-- fadeCamera(source,true,2.0)
 		if (not getElementData(source,"Kills")) then
 			setElementData(source,"Kills",0)
 		end
@@ -137,7 +136,6 @@ function VeryImportantPerson_onPlayerRoundSpawn()
 		setElementData(source,"Status","Play")
 	else
 		setElementData(source,"Status","Spectate")
-		fadeCamera(source,true,2.0)
 	end
 	VeryImportantPerson_onCheckRound()
 end
@@ -166,7 +164,6 @@ function VeryImportantPerson_onPlayerRoundRespawn()
 	setElementData(source,"Weapons",true)
 	callClientFunction(source,"onClientWeaponChoose")
 	callClientFunction(source,"setCameraInterior",interior)
-	fadeCamera(source,true,2.0)
 	givePlayerProperty(source,"invulnerable",true,5000)
 	if (not getElementData(source,"Kills")) then
 		setElementData(source,"Kills",0)
