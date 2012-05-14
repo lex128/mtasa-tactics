@@ -1,7 +1,7 @@
 function Lobby_onClientMapStopping(mapinfo)
 	if (mapinfo.modename ~= "lobby") then return end
-	removeCommandHandler("car",onClientVehicleChoose)
-	removeCommandHandler("gun",onClientWeaponShow)
+	removeCommandHandler("car",toggleVehicleManager)
+	removeCommandHandler("gun",toggleWeaponManager)
 end
 function Lobby_onClientMapStarting(mapinfo)
 	if (mapinfo.modename ~= "lobby") then return end
@@ -16,10 +16,10 @@ function Lobby_onClientMapStarting(mapinfo)
 	showPlayerHudComponent("vehicle_name",false)
 	showPlayerHudComponent("weapon",true)
 	if (getTacticsData("modes","lobby","car") == "true") then
-		addCommandHandler("car",onClientVehicleChoose,false)
+		addCommandHandler("car",toggleVehicleManager,false)
 	end
 	if (getTacticsData("modes","lobby","gun") == "true") then
-		addCommandHandler("gun",onClientWeaponShow,false)
+		addCommandHandler("gun",toggleWeaponManager,false)
 	end
 end
 addEventHandler("onClientMapStarting",root,Lobby_onClientMapStarting)

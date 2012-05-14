@@ -11,7 +11,7 @@ function VeryImportantPerson_onClientMapStopping(mapinfo)
 	removeEventHandler("onClientPlayerRoundSpawn",localPlayer,VeryImportantPerson_onClientPlayerRoundSpawn)
 	removeEventHandler("onClientPedDamage",root,VeryImportantPerson_onClientPedDamage)
 	removeEventHandler("onClientPlayerHeliKilled",root,VeryImportantPerson_onClientPlayerHeliKilled)
-	removeCommandHandler("gun",onClientWeaponShow)
+	removeCommandHandler("gun",toggleWeaponManager)
 	if (guiGetVisible(weapon_window)) then
 		guiSetVisible(weapon_window,false)
 		if (isAllGuiHidden()) then showCursor(false) end
@@ -46,7 +46,7 @@ function VeryImportantPerson_onClientMapStarting(mapinfo)
 	addEventHandler("onClientPlayerRoundSpawn",localPlayer,VeryImportantPerson_onClientPlayerRoundSpawn)
 	addEventHandler("onClientPedDamage",root,VeryImportantPerson_onClientPedDamage)
 	addEventHandler("onClientPlayerHeliKilled",root,VeryImportantPerson_onClientPlayerHeliKilled)
-	addCommandHandler("gun",onClientWeaponShow,false)
+	addCommandHandler("gun",toggleWeaponManager,false)
 end
 function VeryImportantPerson_onClientRoundStart()
 	playerVIP = getElementAttachedTo(getElementByID("BlipVIP"))

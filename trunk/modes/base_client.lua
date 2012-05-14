@@ -5,8 +5,8 @@ function AttackDefend_onClientMapStopping(mapinfo)
 	removeEventHandler("onClientHUDRender",root,AttackDefend_onClientHUDRender)
 	removeEventHandler("onClientColShapeLeave",root,AttackDefend_onClientColShapeLeave)
 	removeEventHandler("onClientPlayerRoundSpawn",localPlayer,AttackDefend_onClientPlayerRoundSpawn)
-	removeCommandHandler("car",AttackDefend_onClientVehicleChoose)
-	removeCommandHandler("gun",onClientWeaponShow)
+	removeCommandHandler("car",AttackDefend_toggleVehicleManager)
+	removeCommandHandler("gun",toggleWeaponManager)
 	for i,colshape in ipairs(getElementsByType("colshape",getRoundMapRoot())) do
 		if (getElementData(colshape,"Vehicling")) then destroyElement(colshape) end
 	end
@@ -28,8 +28,8 @@ function AttackDefend_onClientMapStarting(mapinfo)
 	addEventHandler("onClientHUDRender",root,AttackDefend_onClientHUDRender)
 	addEventHandler("onClientColShapeLeave",root,AttackDefend_onClientColShapeLeave)
 	addEventHandler("onClientPlayerRoundSpawn",localPlayer,AttackDefend_onClientPlayerRoundSpawn)
-	addCommandHandler("car",AttackDefend_onClientVehicleChoose,false)
-	addCommandHandler("gun",onClientWeaponShow,false)
+	addCommandHandler("car",AttackDefend_toggleVehicleManager,false)
+	addCommandHandler("gun",toggleWeaponManager,false)
 	local sides = getTacticsData("Sides")
 	for i,side in ipairs(sides) do
 		if (i % 2 == 1) then
@@ -70,13 +70,13 @@ end
 function AttackDefend_onClientPlayerRoundSpawn()
 	if (getRoundState() == "stopped") then setCameraPrepair() end
 end
-function AttackDefend_onClientVehicleChoose(command,model)
+function AttackDefend_toggleVehicleManager(command,model)
 	local sides = getTacticsData("Sides")
 	for i,side in ipairs(sides) do
 		if (i % 2 == 1 and side == getPlayerTeam(localPlayer)) then
 			for j,colshape in ipairs(getElementsByType("colshape"),getRoundMapRoot()) do
 				if (getElementData(colshape,"Vehicling") and isElementWithinColShape(localPlayer,colshape)) then
-					onClientVehicleChoose(command,model)
+					toggleVehicleManager(command,model)
 					return
 				end
 			end
