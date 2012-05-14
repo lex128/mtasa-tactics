@@ -75,7 +75,6 @@ function TeamDeathMatch_onPlayerRoundSpawn()
 		toggleControl (source, "previous_weapon", true)
 		setElementData (source, "Weapons", true)
 		callClientFunction (source, "setCameraInterior", interior)
-		-- fadeCamera (source, true, 2.0)
 		if (not getElementData (source, "Kills")) then
 			setElementData (source, "Kills", 0)
 		end
@@ -88,9 +87,6 @@ function TeamDeathMatch_onPlayerRoundSpawn()
 		setElementData (source, "Status", "Play")
 	else
 		setElementData (source, "Status", "Spectate")
-		fadeCamera (source, true, 2.0)
-		toggleAllControls (source, false, true, false)
-		setElementFrozen (source, true)
 	end
 	TeamDeathMatch_onCheckRound()
 end
@@ -120,7 +116,6 @@ function TeamDeathMatch_onPlayerRoundRespawn()
 	callClientFunction(source,"onClientWeaponChoose")
 	callClientFunction(source,"setCameraInterior",interior)
 	givePlayerProperty(source,"invulnerable",true,5000)
-	fadeCamera(source,true,2.0)
 	if (not getElementData(source,"Kills")) then
 		setElementData(source,"Kills",0)
 	end

@@ -109,7 +109,6 @@ function ProjectBang_onPlayerRoundSpawn()
 		setElementData(source,"Status","Play")
 	else
 		setElementData(source,"Status","Spectate")
-		setElementFrozen(source,true)
 	end
 	ProjectBang_onCheckRound()
 end
@@ -141,7 +140,6 @@ function ProjectBang_onPlayerRoundRespawn()
 	setElementData(source,"Status","Play")
 	setElementData(source,"Weapons",true)
 	callClientFunction(source,"setCameraInterior",interior)
-	fadeCamera(source,true,2.0)
 	if (not getElementData(source,"Kills")) then
 		setElementData(source,"Kills",0)
 	end

@@ -86,4 +86,5 @@
 	<help_defusing					string="Put your arms and hold %s to defuse this bomb" />
 	<help_roundlog					string="%s - look at the game statistics" />
 	<help_restore					string="%s - respawn or restore to game" />
+	<rsp_using						string="* %s #FF6464used command rsp" />
 </language>

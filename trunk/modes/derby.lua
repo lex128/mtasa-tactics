@@ -154,11 +154,9 @@ function DestructionDerby_onPlayerRoundSpawn()
 		toggleAllControls(source,true)
 		setCameraTarget(source,source)
 		callClientFunction(source,"setCameraInterior",interior)
-		-- fadeCamera(source,true,2.0)
 		setElementData(source,"Status","Play")
 	else
 		setElementData(source,"Status","Spectate")
-		fadeCamera(source,true,2.0)
 	end
 	DestructionDerby_onCheckRound()
 end
@@ -191,7 +189,6 @@ function DestructionDerby_onPlayerRoundRespawn()
 	setCameraTarget(source,source)
 	setElementData(source,"Status","Play")
 	callClientFunction(source,"setCameraInterior",interior)
-	fadeCamera(source,true,1)
 	setTimer(function(vehicle)
 		if (isElement(vehicle)) then
 			setElementFrozen(vehicle,false)

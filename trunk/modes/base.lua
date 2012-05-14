@@ -106,7 +106,6 @@ function AttackDefend_onPlayerRoundSpawn()
 		toggleControl(source,"previous_weapon",true)
 		setElementData(source,"Weapons",true)
 		callClientFunction(source,"setCameraInterior",interior)
-		-- fadeCamera(source,true,2.0)
 		if (not getElementData(source,"Kills")) then
 			setElementData(source,"Kills",0)
 		end
@@ -119,7 +118,6 @@ function AttackDefend_onPlayerRoundSpawn()
 		setElementData(source,"Status","Play")
 	else
 		setElementData(source,"Status","Spectate")
-		fadeCamera(source,true,2.0)
 	end
 	AttackDefend_onCheckRound()
 end
@@ -153,7 +151,6 @@ function AttackDefend_onPlayerRoundRespawn()
 		callClientFunction(source,"onClientWeaponChoose")
 	end
 	callClientFunction(source,"setCameraInterior",interior)
-	fadeCamera(source,true,2.0)
 	givePlayerProperty(source,"invulnerable",true,15000)
 	if (not getElementData(source,"Kills")) then
 		setElementData(source,"Kills",0)

@@ -86,4 +86,5 @@
 	<help_defusing					string="Спрячь оружие и удерживай %s чтобы обезвредить бомбу" />
 	<help_roundlog					string="%s - посмотреть статистику игры" />
 	<help_restore					string="%s - возрождение или восстановление в игру" />
+	<rsp_using						string="* %s #FF6464использовал команду rsp" />
 </language>

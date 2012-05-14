@@ -114,7 +114,6 @@ function ZombieMod_onPlayerRoundSpawn()
 		setPlayerProperty(source,"movespeed",nil)
 		setPlayerProperty(source,"regenerable",nil)
 		callClientFunction(source,"setCameraInterior",interior)
-		-- fadeCamera(source,true,2.0)
 		if (not getElementData(source,"Kills")) then
 			setElementData(source,"Kills",0)
 		end
@@ -127,9 +126,6 @@ function ZombieMod_onPlayerRoundSpawn()
 		setElementData(source,"Status","Play")
 	else
 		setElementData(source,"Status","Spectate")
-		fadeCamera(source,true,2.0)
-		toggleAllControls(source,false,true,false)
-		setElementFrozen(source,true)
 	end
 	ZombieMod_onCheckRound()
 end
@@ -149,7 +145,6 @@ function ZombieMod_onPlayerRoundRespawn()
 	setElementData(source,"Weapons",false)
 	callClientFunction(source,"setCameraInterior",interior)
 	triggerEvent("onZombieInfected",source)
-	fadeCamera(source,true,2.0)
 	if (not getElementData(source,"Kills")) then
 		setElementData(source,"Kills",0)
 	end
