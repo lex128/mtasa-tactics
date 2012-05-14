@@ -299,7 +299,7 @@ function ProjectBang_onClientGUIClick(button,state,x,y)
 		callServerFunction("ProjectBang_onPlayerVehicleChoose",localPlayer,vehicle,skill)
 	end
 end
-function ProjectBang_onClientVehicleChoose(force)
+function ProjectBang_toggleVehicleManager(force)
 	if (not force) then
 		guiSetVisible(bang_window,true)
 		showCursor(true)

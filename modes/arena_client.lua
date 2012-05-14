@@ -3,7 +3,7 @@ function TeamDeathMatch_onClientMapStopping(mapinfo)
 	showRoundHudComponent("timeleft",false)
 	showRoundHudComponent("teamlist",false)
 	removeEventHandler("onClientPlayerRoundSpawn",localPlayer,TeamDeathMatch_onClientPlayerRoundSpawn)
-	removeCommandHandler("gun",onClientWeaponShow)
+	removeCommandHandler("gun",toggleWeaponManager)
 	if (guiGetVisible(weapon_window)) then
 		guiSetVisible(weapon_window,false)
 		if (isAllGuiHidden()) then showCursor(false) end
@@ -24,7 +24,7 @@ function TeamDeathMatch_onClientMapStarting(mapinfo)
 	showRoundHudComponent("timeleft",true)
 	showRoundHudComponent("teamlist",true)
 	addEventHandler("onClientPlayerRoundSpawn",localPlayer,TeamDeathMatch_onClientPlayerRoundSpawn)
-	addCommandHandler("gun",onClientWeaponShow,false)
+	addCommandHandler("gun",toggleWeaponManager,false)
 end
 function TeamDeathMatch_onClientPlayerRoundSpawn()
 	if (getRoundState() == "stopped") then setCameraPrepair() end

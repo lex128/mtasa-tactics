@@ -3,7 +3,7 @@ function DeathMatch_onClientMapStopping(mapinfo)
 	showRoundHudComponent("timeleft",false)
 	showRoundHudComponent("playerlist",false)
 	removeEventHandler("onClientPlayerRoundSpawn",localPlayer,DeathMatch_onClientPlayerRoundSpawn)
-	removeCommandHandler("gun",onClientWeaponShow)
+	removeCommandHandler("gun",toggleWeaponManager)
 	if (guiGetVisible(weapon_window)) then
 		guiSetVisible(weapon_window,false)
 		if (isAllGuiHidden()) then showCursor(false) end
@@ -25,7 +25,7 @@ function DeathMatch_onClientMapStarting(mapinfo)
 	showPlayerHudComponent("vehicle_name",false)
 	showPlayerHudComponent("weapon",true)
 	addEventHandler("onClientPlayerRoundSpawn",localPlayer,DeathMatch_onClientPlayerRoundSpawn)
-	addCommandHandler("gun",onClientWeaponShow,false)
+	addCommandHandler("gun",toggleWeaponManager,false)
 end
 function DeathMatch_onClientPlayerRoundSpawn()
 	if (getRoundState() == "stopped") then setCameraPrepair() end

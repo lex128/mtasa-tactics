@@ -9,7 +9,7 @@ function Hostage_onClientMapStopping(mapinfo)
 	removeEventHandler("onClientPedDamage",root,Hostage_onClientPedDamage)
 	removeEventHandler("onClientColShapeHit",root,Hostage_onClientColShapeHit)
 	removeEventHandler("onClientPlayerRoundSpawn",localPlayer,Hostage_onClientPlayerRoundSpawn)
-	removeCommandHandler("gun",onClientWeaponShow)
+	removeCommandHandler("gun",toggleWeaponManager)
 	if (guiGetVisible(weapon_window)) then
 		guiSetVisible(weapon_window,false)
 		if (isAllGuiHidden()) then showCursor(false) end
@@ -57,7 +57,7 @@ function Hostage_onClientMapStarting(mapinfo)
 	addEventHandler("onClientPedDamage",root,Hostage_onClientPedDamage)
 	addEventHandler("onClientColShapeHit",root,Hostage_onClientColShapeHit)
 	addEventHandler("onClientPlayerRoundSpawn",localPlayer,Hostage_onClientPlayerRoundSpawn)
-	addCommandHandler("gun",onClientWeaponShow,false)
+	addCommandHandler("gun",toggleWeaponManager,false)
 	bindKey("group_control_forwards","down",Hostage_onClientHostageControl)
 	bindKey("group_control_back","down",Hostage_onClientHostageControl)
 	for i,ped in ipairs(getElementsByType("ped")) do

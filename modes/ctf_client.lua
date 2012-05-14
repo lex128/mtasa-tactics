@@ -9,7 +9,7 @@ function CaptureTheFlag_onClientMapStopping(mapinfo)
 	showRoundHudComponent("timeleft",false)
 	showRoundHudComponent("teamlist",false)
 	setRoundHudComponent("teamlist")
-	removeCommandHandler("gun",onClientWeaponShow)
+	removeCommandHandler("gun",toggleWeaponManager)
 end
 function CaptureTheFlag_onClientMapStarting(mapinfo)
 	if (mapinfo.modename ~= "ctf") then return end
@@ -39,7 +39,7 @@ function CaptureTheFlag_onClientMapStarting(mapinfo)
 	addEventHandler("onClientFlagPickup",root,CaptureTheFlag_onClientFlagPickup)
 	addEventHandler("onClientFlagReturn",root,CaptureTheFlag_onClientFlagReturn)
 	addEventHandler("onClientFlagCapture",root,CaptureTheFlag_onClientFlagCapture)
-	addCommandHandler("gun",onClientWeaponShow,false)
+	addCommandHandler("gun",toggleWeaponManager,false)
 end
 function CaptureTheFlag_onClientPlayerRoundSpawn()
 	if (getRoundState() == "stopped") then setCameraPrepair() end
