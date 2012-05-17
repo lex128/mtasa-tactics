@@ -1,7 +1,7 @@
 captureTimer = false
 spawnCounter = {}
 function AttackDefend_onResourceStart(resource)
-	createTacticsMode("base",{timelimit="15:00",capturing="0:20",def_veh_jacking="false"})
+	createTacticsMode("base",{timelimit="15:00",capturing="0:20",def_veh_jacking="false",spawnprotect="0:15"})
 end
 function AttackDefend_onMapStopping(mapinfo)
 	if (mapinfo.modename ~= "base") then return end
@@ -58,10 +58,11 @@ function AttackDefend_onMapStarting(mapinfo)
 	setElementParent(blip,basepoint)
 end
 function AttackDefend_onRoundStart()
+	local spawnprotect = TimeToSec(getRoundModeSettings("spawnprotect"))
 	local teamsides = getTacticsData("Teamsides")
 	for i,player in ipairs(getElementsByType("player")) do
 		if (getPlayerGameStatus(player) == "Play") then
-			givePlayerProperty(player,"invulnerable",true,15000)
+			givePlayerProperty(player,"invulnerable",true,spawnprotect*1000)
 			if (teamsides[getPlayerTeam(player)]%2 == 1) then
 				callClientFunction(player,"onClientWeaponChoose")
 				callClientFunction(player,"onClientVehicleChoose")
@@ -151,7 +152,8 @@ function AttackDefend_onPlayerRoundRespawn()
 		callClientFunction(source,"onClientWeaponChoose")
 	end
 	callClientFunction(source,"setCameraInterior",interior)
-	givePlayerProperty(source,"invulnerable",true,15000)
+	local spawnprotect = TimeToSec(getRoundModeSettings("spawnprotect"))
+	givePlayerProperty(source,"invulnerable",true,spawnprotect*1000)
 	if (not getElementData(source,"Kills")) then
 		setElementData(source,"Kills",0)
 	end
@@ -266,7 +268,7 @@ function AttackDefend_onColShapeHit(element)
 		local histeam = getPlayerTeam(element)
 		local teamsides = getTacticsData("Teamsides")
 		if (teamsides[histeam]%2 == 1) then
-			local capturing = TimeToSec(getTacticsData("modes","base","capturing") or "0:20")
+			local capturing = TimeToSec(getRoundModeSettings("capturing") or "0:20")
 			captureTimer = setTimer(function(team)
 				local r,g,b = getTeamColor(team)
 				endRound({r,g,b,'team_win_round',getTeamName(team)},'base_captured',{[team]=1})
@@ -333,7 +335,7 @@ function AttackDefend_onVehicleStartEnter(player)
 	local side = teamsides[getPlayerTeam(player)]
 	if (not side) then return end
 	side = (side-1)%2 + 1
-	if (side == 2 and getTacticsData("modes","base","def_veh_jacking") == "false") then
+	if (side == 2 and getRoundModeSettings("def_veh_jacking") == "false") then
 		cancelEvent()
 	end
 end

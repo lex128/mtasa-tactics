@@ -135,7 +135,7 @@ end
 function DestructionDerby_disableVehicleWeapons()
 	local vehicle = getPedOccupiedVehicle(localPlayer)
 	if (vehicle and (getVehicleType(vehicle) == "Plane" or getVehicleType(vehicle) == "Helicopter")) then
-		if (getTacticsData("modes","dderby","disable_weapons") == "true") then
+		if (getRoundModeSettings("disable_weapons") == "true") then
 			setControlState("vehicle_fire",false)
 			setControlState("vehicle_secondary_fire",false)
 		end

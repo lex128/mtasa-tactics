@@ -161,7 +161,7 @@ function RaceMatch_onPlayerRoundSpawn()
 	else
 		setElementData(source,"Status","Spectate")
 	end
-	if (getTacticsData("modes","race","respawn") == "false") then
+	if (getRoundModeSettings("respawn") == "false") then
 		RaceMatch_onCheckRound()
 	end
 end
@@ -234,7 +234,7 @@ function RaceMatch_onPlayerQuit(type,reason,element)
 			end,4000,1,playerVehicle[source])
 		end
 		setElementData(source,"Status",nil)
-		if (getTacticsData("modes","race","respawn") == "false") then
+		if (getRoundModeSettings("respawn") == "false") then
 			RaceMatch_onCheckRound()
 		end
 	end
@@ -272,7 +272,7 @@ function RaceMatch_onPlayerFinish(place,time)
 	end,2000,1,source)
 	if (isTimer(overtimeTimer)) then
 		local remaining = getTimerDetails(overtimeTimer)
-		local finish = TimeToSec(getTacticsData("modes","race","finish") or "0:30")
+		local finish = TimeToSec(getRoundModeSettings("finish") or "0:30")
 		if (remaining > finish*1000) then
 			killTimer(overtimeTimer)
 			setTacticsData(getTickCount() + finish*1000,"timeleft")
@@ -293,7 +293,7 @@ function RaceMatch_onCheckRound()
 		if (#finishCounter < 1) then
 			return endRound('draw_round')
 		end
-		local type_play = getTacticsData("modes","race","type_play")
+		local type_play = getRoundModeSettings("type_play")
 		if (type_play == "teamplay") then
 			local reason = ""
 			local firsttime = finishCounter[1][3]
@@ -339,7 +339,7 @@ function RaceMatch_onRoundTimesup()
 	if (#finishCounter < 1) then
 		return endRound('draw_round',{'time_over',""})
 	end
-	local type_play = getTacticsData("modes","race","type_play")
+	local type_play = getRoundModeSettings("type_play")
 	if (type_play == "teamplay") then
 		local reason = ""
 		local firsttime = finishCounter[1][3]
@@ -397,7 +397,7 @@ function RaceMatch_onPlayerWasted(ammo,killer,weapon,bodypart,stealth)
 	end
 	setElementData(source,"Status","Die")
 	fadeCamera(source,false,2.0)
-	if (getTacticsData("modes","race","respawn") == "false") then
+	if (getRoundModeSettings("respawn") == "false") then
 		RaceMatch_onCheckRound()
 	end
 end

@@ -15,10 +15,10 @@ function Lobby_onClientMapStarting(mapinfo)
 	showPlayerHudComponent("radar",true)
 	showPlayerHudComponent("vehicle_name",false)
 	showPlayerHudComponent("weapon",true)
-	if (getTacticsData("modes","lobby","car") == "true") then
+	if (getRoundModeSettings("car") == "true") then
 		addCommandHandler("car",toggleVehicleManager,false)
 	end
-	if (getTacticsData("modes","lobby","gun") == "true") then
+	if (getRoundModeSettings("gun") == "true") then
 		addCommandHandler("gun",toggleWeaponManager,false)
 	end
 end

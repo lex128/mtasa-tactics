@@ -1,7 +1,7 @@
 spawnCounter = {}
 teamPlanted = false
 function BombMatch_onResourceStart(resource)
-	createTacticsMode("bomb",{timelimit="15:00",bombtimer="1:50",planting="0:05",defusing="0:10"})
+	createTacticsMode("bomb",{timelimit="15:00",bombtimer="1:50",planting="0:05",defusing="0:10",spawnprotect="0:05"})
 end
 function BombMatch_onMapStopping(mapinfo)
 	if (mapinfo.modename ~= "bomb") then return end
@@ -65,9 +65,10 @@ function BombMatch_onMapStarting(mapinfo)
 	end
 end
 function BombMatch_onRoundStart()
+	local spawnprotect = TimeToSec(getRoundModeSettings("spawnprotect"))
 	for i,player in ipairs(getElementsByType("player")) do
 		if (getPlayerGameStatus(player) == "Play") then
-			givePlayerProperty(player,"invulnerable",true,5000)
+			givePlayerProperty(player,"invulnerable",true,spawnprotect*1000)
 			callClientFunction(player,"onClientWeaponChoose")
 		end
 	end
@@ -162,7 +163,8 @@ function BombMatch_onPlayerRoundRespawn ()
 	setElementData(source,"Weapons",true)
 	callClientFunction(source,"onClientWeaponChoose")
 	callClientFunction(source,"setCameraInterior",interior)
-	givePlayerProperty(source,"invulnerable",true,5000)
+	local spawnprotect = TimeToSec(getRoundModeSettings("spawnprotect"))
+	givePlayerProperty(source,"invulnerable",true,spawnprotect*1000)
 	if (not getElementData(source,"Kills")) then
 		setElementData(source,"Kills",0)
 	end
@@ -240,7 +242,7 @@ function BombMatch_onPlayerBombPlanted()
 --	setElementID(blip,"BombBlip")
 --	setElementParent(blip,element)
 	killTimer(overtimeTimer)
-	local bombtimer = TimeToSec(getTacticsData("modes","bomb","bombtimer") or "1:30")
+	local bombtimer = TimeToSec(getRoundModeSettings("bombtimer") or "1:30")
 	overtimeTimer = setTimer(triggerEvent,bombtimer*1000,1,"onRoundTimesup",root)
 	setTacticsData(getTickCount() + bombtimer*1000,"timeleft")
 	callClientFunction(root,"playVoice","audio/bomb_planted.mp3")

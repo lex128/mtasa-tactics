@@ -93,7 +93,7 @@ function Hostage_onClientPlayerBlipUpdate()
 	end
 end
 function Hostage_onClientPedDamage()
-	if (getElementData(source,"Hostage") and getTacticsData("modes","hostage","hostagekill") == "false") then
+	if (getElementData(source,"Hostage") and getRoundModeSettings("hostagekill") == "false") then
 		cancelEvent()
 	end
 end

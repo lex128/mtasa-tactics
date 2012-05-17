@@ -1,7 +1,7 @@
 spawnCounter = {}
 playerVIP = nil
 function VeryImportantPerson_onResourceStart(resource)
-	createTacticsMode("vip",{timelimit="10:00"})
+	createTacticsMode("vip",{timelimit="10:00", spawnprotect="0:05"})
 end
 function VeryImportantPerson_onMapStopping(mapinfo)
 	if (mapinfo.modename ~= "vip") then return end
@@ -85,9 +85,10 @@ function VeryImportantPerson_onRoundStart()
 		giveWeapon(playerVIP,23,17*6,true)
 		attachElements(blipVIP,playerVIP)
 	end
+	local spawnprotect = TimeToSec(getRoundModeSettings("spawnprotect"))
 	for i,player in ipairs(getElementsByType("player")) do
 		if (getPlayerGameStatus(player) == "Play") then
-			givePlayerProperty(player,"invulnerable",true,5000)
+			givePlayerProperty(player,"invulnerable",true,spawnprotect*1000)
 			if (player ~= playerVIP) then callClientFunction(player,"onClientWeaponChoose") end
 		end
 	end
@@ -164,7 +165,8 @@ function VeryImportantPerson_onPlayerRoundRespawn()
 	setElementData(source,"Weapons",true)
 	callClientFunction(source,"onClientWeaponChoose")
 	callClientFunction(source,"setCameraInterior",interior)
-	givePlayerProperty(source,"invulnerable",true,5000)
+	local spawnprotect = TimeToSec(getRoundModeSettings("spawnprotect"))
+	givePlayerProperty(source,"invulnerable",true,spawnprotect*1000)
 	if (not getElementData(source,"Kills")) then
 		setElementData(source,"Kills",0)
 	end

@@ -1,6 +1,6 @@
 infectionTimer = false
 function ZombieMod_onResourceStart(resource)
-	createTacticsMode("zombie",{timelimit="10:00",zombie_speed="1.2",zombie_regenerate="5",night="true"})
+	createTacticsMode("zombie",{timelimit="10:00",zombie_speed="1.2",zombie_regenerate="5",night="true",spawnprotect="0:15"})
 end
 function ZombieMod_onResourceStop(resource)
 	for i,player in ipairs(getElementsByType("player")) do
@@ -53,32 +53,38 @@ function ZombieMod_onMapStarting(mapinfo)
 	end
 end
 function ZombieMod_onRoundStart()
+	local spawnprotect = TimeToSec(getRoundModeSettings("spawnprotect"))
 	for i,player in ipairs(getElementsByType("player")) do
 		if (getPlayerGameStatus(player,"Status") == "Play" or getElementData(player) == "Loading") then
-			givePlayerProperty(player,"invulnerable",true,15000)
+			givePlayerProperty(player,"invulnerable",true,spawnprotect*1000)
 			callClientFunction(player,"onClientWeaponChoose")
 		end
 	end
 	if (isTimer(infectionTimer)) then killTimer(infectionTimer) end
-	infectionTimer = setTimer(ZombieMod_onRandomInfected,15000,1)
+	infectionTimer = setTimer(randomInfected,1000,0)
 end
-function ZombieMod_onRandomInfected()
+function randomInfected()
 	local humans = {}
 	for i,player in ipairs(getElementsByType("player")) do
-		if (getPlayerGameStatus(player) == "Play") then
+		if (getPlayerGameStatus(player) == "Play" and not getPlayerProperty(player,"invulnerable")) then
 			table.insert(humans,player)
 		end
 	end
+	if (#humans == 0) then return false end
 	local center = getElementsByType("Central_Marker")[1]
 	local xc,yc,zc = getElementPosition(center)
-	table.sort(humans,function(a,b)
-		local xa,ya,za = getElementPosition(a)
-		local xb,yb,zb = getElementPosition(b)
-		return getDistanceBetweenPoints3D(xc,yc,zc,xa,ya,za) < getDistanceBetweenPoints3D(xc,yc,zc,xb,yb,zb)
-	end)
-	triggerEvent("onZombieInfected",humans[1])
+	if (#humans > 1) then
+		table.sort(humans,function(a,b)
+			local xa,ya,za = getElementPosition(a)
+			local xb,yb,zb = getElementPosition(b)
+			return getDistanceBetweenPoints3D(xc,yc,zc,xa,ya,za) < getDistanceBetweenPoints3D(xc,yc,zc,xb,yb,zb)
+		end)
+	end
+	triggerEvent("onZombieInfected",humans[1],false)
+	return true
 end
 function ZombieMod_onZombieInfected(zombie)
+	if (isTimer(infectionTimer)) then killTimer(infectionTimer) end
 	setPlayerTeam(source,getTacticsData("Sides")[2])
 	setElementModel(source,78)
 	setPedStat(source,24,1000)
@@ -144,7 +150,7 @@ function ZombieMod_onPlayerRoundRespawn()
 	setElementData(source,"Status","Play")
 	setElementData(source,"Weapons",false)
 	callClientFunction(source,"setCameraInterior",interior)
-	triggerEvent("onZombieInfected",source)
+	triggerEvent("onZombieInfected",source,false)
 	if (not getElementData(source,"Kills")) then
 		setElementData(source,"Kills",0)
 	end
@@ -166,7 +172,7 @@ function ZombieMod_onCheckRound()
 		infectionTimer = setTimer(function()
 			local sides = getTacticsData("Sides")
 			if (countPlayersInTeam(sides[2]) == 0) then
-				ZombieMod_onRandomInfected()
+				randomInfected()
 			end
 		end,50,1)
 	end

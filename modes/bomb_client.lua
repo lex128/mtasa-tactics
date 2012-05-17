@@ -89,8 +89,8 @@ function BombMatch_toggleBombing(key,state)
 	elseif (getPedWeapon(localPlayer) == 0 or getPedWeapon(localPlayer) == 11) then
 		toggleBombing = true
 		if (isRoundPaused()) then return end
-		local bombplanting = TimeToSec(getTacticsData("modes","bomb","planting") or "0:05")
-		local bombdefusing = TimeToSec(getTacticsData("modes","bomb","defusing") or "0:10")
+		local bombplanting = TimeToSec(getRoundModeSettings("planting") or "0:05")
+		local bombdefusing = TimeToSec(getRoundModeSettings("defusing") or "0:10")
 		local teamsides = getTacticsData("Teamsides")
 		local team = getPlayerTeam(localPlayer)
 		if (not teamsides[team]) then return end
@@ -170,7 +170,7 @@ function BombMatch_onClientHUDRender()
 	local planting = getElementData(localPlayer,"planting")
 	local defusing = getElementData(localPlayer,"defusing")
 	if (planting) then
-		local bombplanting = TimeToSec(getTacticsData("modes","bomb","planting") or "0:05")
+		local bombplanting = TimeToSec(getRoundModeSettings("planting") or "0:05")
 		if (getTacticsData("Pause")) then
 			progress = bombplanting*1000 - planting
 		else
@@ -197,7 +197,7 @@ function BombMatch_onClientHUDRender()
 			dxDrawText(getLangString('bomb_planting'),xscreen*0.863,yscreen*0.193,xscreen*0.863,yscreen*0.193,0xFF000000,getFont(1),"default-bold","center","center")
 		end
 	elseif (defusing) then
-		local bombdefusing = TimeToSec(getTacticsData("modes","bomb","defusing") or "0:10")
+		local bombdefusing = TimeToSec(getRoundModeSettings("defusing") or "0:10")
 		if (getTacticsData("Pause")) then
 			progress = bombdefusing*1000 - defusing
 		else
