@@ -118,7 +118,7 @@ function DestructionDerby_onPlayersRanking()
 		setElementData(player,"Rank",#players)
 		local vehicle = getPedOccupiedVehicle(player)
 		if (not vehicle or (isElementInWater(vehicle) and getVehicleType(vehicle) ~= "Boat" and getElementModel(vehicle) ~= 460 and getElementModel(vehicle) ~= 447 and getElementModel(vehicle) ~= 417 and getElementModel(vehicle) ~= 539)) then
-			if (getTacticsData("modes","derby","firewater") == "true" and vehicle) then
+			if (getRoundModeSettings("firewater") == "true" and vehicle) then
 				blowVehicle(vehicle)
 			else
 				killPed(player)
@@ -217,7 +217,7 @@ function DestructionDerby_onPlayerQuit(type,reason,element)
 end
 function DestructionDerby_onCheckRound()
 	if (getRoundState() ~= "started" or getTacticsData("Pause")) then return end
-	local type_play = getTacticsData("modes","derby","type_play")
+	local type_play = getRoundModeSettings("type_play")
 	if (type_play == "teamplay") then
 		local players = {}
 		for i,team in ipairs(getElementsByType("team")) do

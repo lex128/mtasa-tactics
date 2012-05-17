@@ -18,7 +18,6 @@ function ProjectBang_onMapStopping(mapinfo)
 	end
 	ProjectBang_vehicles = {}
 	for i,player in ipairs(getElementsByType("player")) do
-		setPlayerProperty(player,"invulnerable",false)
 		setElementData(player,"Kills",getElementData(player,"Kills"))
 		setElementData(player,"Damage",getElementData(player,"Damage"))
 		setElementData(player,"Deaths",getElementData(player,"Deaths"))

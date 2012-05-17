@@ -95,7 +95,7 @@ function AttackDefend_onClientHUDRender()
 		local capture = getTacticsData("timecapture")
 		if (capture) then
 			local remaining = getTacticsData("Pause")
-			local capturing = TimeToSec(getTacticsData("modes","base","capturing") or "0:20")
+			local capturing = TimeToSec(getRoundModeSettings("capturing") or "0:20")
 			if (remaining) then
 				progress = capturing*1000 - capture
 			else

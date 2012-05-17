@@ -1,6 +1,6 @@
 spawnCounter = {}
 function Hostage_onResourceStart(resource)
-	createTacticsMode("hostage",{timelimit="30:00",hostagekill="false"})
+	createTacticsMode("hostage",{timelimit="30:00",hostagekill="false", spawnprotect="0:05"})
 end
 function Hostage_onMapStopping(mapinfo)
 	if (mapinfo.modename ~= "hostage") then return end
@@ -67,9 +67,10 @@ function Hostage_onMapStarting(mapinfo)
 	end
 end
 function Hostage_onRoundStart()
+	local spawnprotect = TimeToSec(getRoundModeSettings("spawnprotect"))
 	for _,player in ipairs(getElementsByType("player")) do
 		if (getPlayerGameStatus(player) == "Play") then
-			givePlayerProperty(player,"invulnerable",true,5000)
+			givePlayerProperty(player,"invulnerable",true,spawnprotect*1000)
 			local team = getPlayerTeam(player)
 			callClientFunction(player,"onClientWeaponChoose")
 		end
@@ -147,7 +148,8 @@ function Hostage_onPlayerRoundRespawn()
 	setElementData(source,"Weapons",true)
 	callClientFunction(source,"onClientWeaponChoose")
 	callClientFunction(source,"setCameraInterior",interior)
-	givePlayerProperty(source,"invulnerable",true,5000)
+	local spawnprotect = TimeToSec(getRoundModeSettings("spawnprotect"))
+	givePlayerProperty(source,"invulnerable",true,spawnprotect*1000)
 	if (not getElementData(source,"Kills")) then
 		setElementData(source,"Kills",0)
 	end

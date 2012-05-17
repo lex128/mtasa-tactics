@@ -74,7 +74,7 @@ function RaceMatch_onClientElementDataChange(data,old)
 			destroyElement(marker)
 		end
 		if (type(point) ~= "number") then return end
-		if (getTacticsData("modes","race","respawn") ~= "false" and type(old) == "number") then
+		if (getRoundModeSettings("respawn") ~= "false" and type(old) == "number") then
 			local vehicle = getPedOccupiedVehicle(localPlayer)
 			local xpos,ypos,zpos = getElementPosition(vehicle)
 			local xrot,yrot,zrot = getElementRotation(vehicle)
@@ -95,7 +95,7 @@ function RaceMatch_onClientElementDataChange(data,old)
 		local size = tonumber(getElementData(checkpoint,"size")) or 1.0
 		local color = getElementData(checkpoint,"color") or "#0080FF"
 		local r,g,b,a = getColorFromString(color)
-		local increase_checkpoints = getTacticsData("modes","race","increase_checkpoints") or 4
+		local increase_checkpoints = getRoundModeSettings("increase_checkpoints") or 4
 		local marker = createMarker(posX,posY,posZ,type,size*increase_checkpoints,r,g,b,a)
 		setElementParent(marker,checkpoint)
 		local blip = createBlipAttachedTo(marker,0,3,r,g,b,255,1)
@@ -159,7 +159,7 @@ function RaceMatch_onClientElementDataChange(data,old)
 		local size = tonumber(getElementData(checkpoint,"size")) or 1.0
 		local color = getElementData(checkpoint,"color") or "#0080FF"
 		local r,g,b,a = getColorFromString(color)
-		local increase_checkpoints = getTacticsData("modes","race","increase_checkpoints") or 4
+		local increase_checkpoints = getRoundModeSettings("increase_checkpoints") or 4
 		local marker = createMarker(posX,posY,posZ,type,size*increase_checkpoints,r,g,b,a)
 		setElementParent(marker,checkpoint)
 		local blip = createBlipAttachedTo(marker,0,3,r,g,b,255,1)
@@ -322,7 +322,7 @@ end
 function RaceMatch_disableVehicleWeapons()
 	local vehicle = getPedOccupiedVehicle(localPlayer)
 	if (vehicle and (getVehicleType(vehicle) == "Plane" or getVehicleType(vehicle) == "Helicopter")) then
-		if (getTacticsData("modes","race","disable_weapons") == "true") then
+		if (getRoundModeSettings("disable_weapons") == "true") then
 			setControlState("vehicle_fire",false)
 			setControlState("vehicle_secondary_fire",false)
 		end

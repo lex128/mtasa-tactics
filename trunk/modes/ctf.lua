@@ -3,7 +3,7 @@ local flagRespawn = {}
 local teamFlag = {}
 local playerFlag = {}
 function CaptureTheFlag_onResourceStart(resource)
-	createTacticsMode("ctf",{timelimit="10:00",respawn="true",respawn_lives="0",respawn_time="0:05",flag_speed="0.8",flag_idle_respawn="1:00",flag_water_respawn="true"})
+	createTacticsMode("ctf",{timelimit="10:00",respawn="true",respawn_lives="0",respawn_time="0:05",flag_speed="0.8",flag_idle_respawn="1:00",flag_water_respawn="true", spawnprotect="0:05"})
 end
 function CaptureTheFlag_onMapStopping(mapinfo)
 	if (mapinfo.modename ~= "ctf") then return end
@@ -86,10 +86,11 @@ function CaptureTheFlag_onMapStarting(mapinfo)
 	end
 end
 function CaptureTheFlag_onRoundStart()
+	local spawnprotect = TimeToSec(getRoundModeSettings("spawnprotect"))
 	local teamsides = getTacticsData("Teamsides")
 	for i,player in ipairs(getElementsByType("player")) do
 		if (getPlayerGameStatus(player) == "Play" or getPlayerGameStatus(player) == "Loading") then
-			givePlayerProperty(player,"invulnerable",true,5000)
+			givePlayerProperty(player,"invulnerable",true,spawnprotect*1000)
 			local team = getPlayerTeam(player)
 			if (teamsides[team]) then
 				callClientFunction(player,"onClientWeaponChoose")
@@ -168,7 +169,8 @@ function CaptureTheFlag_onPlayerRoundRespawn()
 	setElementData(source,"Weapons",true)
 	callClientFunction(source,"onClientWeaponChoose")
 	callClientFunction(source,"setCameraInterior",interior)
-	givePlayerProperty(source,"invulnerable",true,5000)
+	local spawnprotect = TimeToSec(getRoundModeSettings("spawnprotect"))
+	givePlayerProperty(source,"invulnerable",true,spawnprotect*1000)
 	if (not getElementData(source,"Kills")) then
 		setElementData(source,"Kills",0)
 	end
@@ -231,7 +233,7 @@ function CaptureTheFlag_onColShapeHit(player,dim)
 		playerFlag[player] = marker
 		attachElements(marker,player,0,0,2.5)
 		destroyElement(getElementData(marker,"Colshape"))
-		setPlayerProperty(player,"movespeed",tonumber(getTacticsData("modes","ctf","flag_speed")) or 0.8)
+		setPlayerProperty(player,"movespeed",tonumber(getRoundModeSettings("flag_speed")) or 0.8)
 		triggerEvent("onFlagPickup",marker,player,isStolen)
 		triggerClientEvent(root,"onClientFlagPickup",marker,player,isStolen)
 	end
@@ -343,12 +345,12 @@ function CaptureTheFlag_onWeaponDrop()
 	end
 end
 function CaptureTheFlag_onFlagDrop(player)
-	if (getTacticsData("modes","ctf","flag_water_respawn") == "true" and ({getElementPosition(source)})[3] <= 1.5) then
+	if (getRoundModeSettings("flag_water_respawn") == "true" and ({getElementPosition(source)})[3] <= 1.5) then
 		local x,y,z = getElementPosition(source)
 		CaptureTheFlag_RespawnFlag(source)
 		triggerClientEvent(root,"onClientFlagReturn",source,getElementData(source,"Team"),x,y,z)
 	else
-		local idlerespawn = math.floor(TimeToSec(getTacticsData("modes","ctf","flag_idle_respawn"))*1000)
+		local idlerespawn = math.floor(TimeToSec(getRoundModeSettings("flag_idle_respawn"))*1000)
 		if (idlerespawn > 50) then
 			flagRespawn[source] = setTimer(function(marker)
 				local x,y,z = getElementPosition(marker)

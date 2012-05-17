@@ -1,5 +1,5 @@
 function DeathMatch_onResourceStart(resource)
-	createTacticsMode("dm",{timelimit="10:00",fraglimit="50",player_radarblip="none|none,team,all"})
+	createTacticsMode("dm",{timelimit="10:00",fraglimit="50",player_radarblip="none|none,team,all",spawnprotect="0:02"})
 end
 function DeathMatch_onMapStopping(mapinfo)
 	if (mapinfo.modename ~= "dm") then return end
@@ -39,10 +39,11 @@ function DeathMatch_onMapStarting(mapinfo)
 	addEventHandler("onWeaponDrop",root,DeathMatch_onWeaponDrop)
 end
 function DeathMatch_onRoundStart()
+	local spawnprotect = TimeToSec(getRoundModeSettings("spawnprotect"))
 	local teamsides = getTacticsData("Teamsides")
 	for i,player in ipairs(getElementsByType("player")) do
 		if (getPlayerGameStatus(player,"Status") == "Play" or getElementData(player) == "Loading") then
-			givePlayerProperty(player,"invulnerable",true,5000)
+			givePlayerProperty(player,"invulnerable",true,spawnprotect*1000)
 			local team = getPlayerTeam(player)
 			if (teamsides[team]) then
 				callClientFunction(player,"onClientWeaponChoose")
@@ -83,7 +84,8 @@ function DeathMatch_onPlayerRoundSpawn()
 			toggleControl(source,"previous_weapon",true)
 		else
 			setElementData(source,"Status","Play")
-			givePlayerProperty(source,"invulnerable",true,2000)
+			local spawnprotect = TimeToSec(getRoundModeSettings("spawnprotect"))
+			givePlayerProperty(source,"invulnerable",true,spawnprotect*1000)
 			setCameraTarget(source,source)
 			callClientFunction(source,"onClientWeaponChoose")
 		end
@@ -114,7 +116,7 @@ function DeathMatch_onPlayerQuit(type,reason,element)
 end
 function DeathMatch_onCheckRound(killer,frags)
 	if (getRoundState() ~= "started" or getTacticsData("Pause")) then return end
-	local fraglimit = tonumber(getTacticsData("modes","dm","fraglimit") or 50)
+	local fraglimit = tonumber(getRoundModeSettings("fraglimit") or 50)
 	local players = {}
 	for i,player in ipairs(getElementsByType("player")) do
 		local frags = getElementData(player,"Frags") or 0

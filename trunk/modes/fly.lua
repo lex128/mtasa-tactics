@@ -35,7 +35,7 @@ function FlyMatch_onMapStarting(mapinfo)
 	addEventHandler("onVehicleStartExit",root,FlyMatch_onVehicleStartExit)
 	addEventHandler("onPauseToggle",root,FlyMatch_onPauseToggle)
 	addEventHandler("onPlayerRestored",root,FlyMatch_onPlayerRestored)
-	if (getTacticsData("modes","fly","spawn_into_plane") ~= "none") then
+	if (getRoundModeSettings("spawn_into_plane") ~= "none") then
 		for i,vehicle in ipairs(getElementsByType("vehicle")) do
 			destroyElement(vehicle)
 		end
@@ -69,8 +69,8 @@ function FlyMatch_onPlayerRoundSpawn()
 		setElementFrozen(source,true)
 		toggleAllControls(source,false,true,false)
 		callClientFunction(source,"setCameraInterior",interior)
-		if (getTacticsData("modes","fly","spawn_into_plane") ~= "none") then
-			local model = getVehicleModelFromName(getTacticsData("modes","fly","spawn_into_plane"))
+		if (getRoundModeSettings("spawn_into_plane") ~= "none") then
+			local model = getVehicleModelFromName(getRoundModeSettings("spawn_into_plane"))
 			if (isElement(playerPlane[source])) then destroyElement(playerPlane[source]) end
 			playerPlane[source] = createMapVehicle(model,posX,posY,posZ+1,0,0,rotZ)
 			setElementFrozen(playerPlane[source],true)
@@ -112,8 +112,8 @@ function FlyMatch_onPlayerRoundRespawn()
 	spawnPlayer(source,posX,posY,posZ,rotZ,model,interior,0,team)
 	setElementFrozen(source,true)
 	toggleAllControls(source,false,true,false)
-	if (getTacticsData("modes","fly","spawn_into_plane") ~= "none") then
-		local model = getVehicleModelFromName(getTacticsData("modes","fly","spawn_into_plane"))
+	if (getRoundModeSettings("spawn_into_plane") ~= "none") then
+		local model = getVehicleModelFromName(getRoundModeSettings("spawn_into_plane"))
 		if (isElement(playerPlane[source])) then destroyElement(playerPlane[source]) end
 		playerPlane[source] = createMapVehicle(model,posX,posY,posZ+1,0,0,rotZ)
 		setElementFrozen(playerPlane[source],true)
@@ -206,14 +206,14 @@ function FlyMatch_onVehicleStartExit(player,seat,jacked)
 	cancelEvent()
 end
 function FlyMatch_onPauseToggle(paused)
-	if (not paused and getTacticsData("modes","fly","spawn_into_plane") ~= "none") then
+	if (not paused and getRoundModeSettings("spawn_into_plane") ~= "none") then
 		for player,vehicle in pairs(playerPlane) do
 			if (isElement(vehicle)) then destroyElement(vehicle) end
 		end
 	end
 end
 function FlyMatch_onPlayerRestored(store)
-	if (getTacticsData("modes","fly","spawn_into_plane") ~= "none") then
+	if (getRoundModeSettings("spawn_into_plane") ~= "none") then
 		playerPlane[source] = getPedOccupiedVehicle(source)
 	end
 end
