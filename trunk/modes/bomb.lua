@@ -63,32 +63,39 @@ function BombMatch_onMapStarting(mapinfo)
 		setElementInterior(blip,interior)
 		setElementParent(blip,bombpoint)
 	end
+	local spawnpoints = getElementsByType("Team1")
+	if (#spawnpoints > 0) then
+		if (not spawnCounter[1]) then spawnCounter[1] = 0 end
+		spawnCounter[1] = spawnCounter[1] + 1
+		if (spawnCounter[1] > #spawnpoints) then
+			spawnCounter[1] = 1
+		end
+		local element = spawnpoints[spawnCounter[1]]
+		local posX = getElementData(element,"posX")
+		local posY = getElementData(element,"posY")
+		local posZ = getElementData(element,"posZ")
+		local rotZ = getElementData(element,"rotZ")
+		local interior = getTacticsData("Interior")
+		local pickup = createPickup(posX,posY,posZ,2,11,0,1)
+		setElementParent(pickup,getRoundMapDynamicRoot())
+		setElementData(pickup,"Clip",1)
+		setElementInterior(pickup,interior)
+		setPickupType(pickup,3,2221)
+		local bombblip = getElementByID("BombBlip")
+		if (bombblip) then destroyElement(bombblip) end
+		bombblip = createBlip(posX,posY,posZ,0,1,0,0,0,0,-1)
+		setElementID(bombblip,"BombBlip")
+		setElementParent(bombblip,getRoundMapDynamicRoot())
+		triggerClientEvent(root,"onClientPlayerBlipUpdate",root)
+	end
 end
 function BombMatch_onRoundStart()
 	local spawnprotect = TimeToSec(getRoundModeSettings("spawnprotect"))
 	for i,player in ipairs(getElementsByType("player")) do
 		if (getPlayerGameStatus(player) == "Play") then
 			givePlayerProperty(player,"invulnerable",true,spawnprotect*1000)
-			callClientFunction(player,"onClientWeaponChoose")
+			callClientFunction(player,"toggleWeaponManager",true)
 		end
-	end
-	local sides = getTacticsData("Sides")
-	local bombers = {}
-	for i,player in ipairs(getPlayersInTeam(sides[1])) do
-		if (getPlayerGameStatus(player) == "Play") then
-			table.insert(bombers,player)
-		end
-	end
-	if (#bombers > 0) then
-		local bombblip = getElementByID("BombBlip")
-		if (bombblip) then destroyElement(bombblip) end
-		bombblip = createBlip(0,0,0,0,1,0,0,0,0,-1)
-		setElementID(bombblip,"BombBlip")
-		setElementParent(bombblip,getRoundMapDynamicRoot())
-		triggerClientEvent(root,"onClientPlayerBlipUpdate",root)
-		local bomber = bombers[math.random(#bombers)]
-		giveWeapon(bomber,11,1,true)
-		attachElements(bombblip,bomber)
 	end
 end
 function BombMatch_onRoundFinish()
@@ -101,7 +108,7 @@ end
 function BombMatch_onPlayerRoundSpawn()
 	local team = getPlayerTeam(source)
 	local model = getElementModel(source) or getElementData(team,"Skins")[1]
-	if (getRoundState() ~= "started" and not isTimer(winTimer)) then
+	if (getRoundState() == "stopped") then
 		local teamsides = getTacticsData("Teamsides")
 		local spawnpoints = getElementsByType("Team"..teamsides[team])
 		if (#spawnpoints <= 0) then spawnpoints = getElementsByType("Team1") end
@@ -161,7 +168,7 @@ function BombMatch_onPlayerRoundRespawn ()
 	toggleAllControls(source,true)
 	setElementData(source,"Status","Play")
 	setElementData(source,"Weapons",true)
-	callClientFunction(source,"onClientWeaponChoose")
+	callClientFunction(source,"toggleWeaponManager",true)
 	callClientFunction(source,"setCameraInterior",interior)
 	local spawnprotect = TimeToSec(getRoundModeSettings("spawnprotect"))
 	givePlayerProperty(source,"invulnerable",true,spawnprotect*1000)
@@ -297,13 +304,6 @@ function BombMatch_onPlayerWeaponpackGot(weaponpack)
 	local bombblip = getElementByID("BombBlip")
 	if (bombblip and getElementAttachedTo(bombblip) == source) then
 		giveWeapon(source,11,1,true)
-	elseif (not bombblip and getPlayerTeam(source) and getTacticsData("Teamsides")[getPlayerTeam(source)]%2 == 1) then
-		bombblip = createBlip(0,0,0,0,1,0,0,0,0,-1)
-		setElementID(bombblip,"BombBlip")
-		setElementParent(bombblip,getRoundMapDynamicRoot())
-		triggerClientEvent(root,"onClientPlayerBlipUpdate",root)
-		giveWeapon(source,11,1,true)
-		attachElements(bombblip,source)
 	end
 end
 function BombMatch_onWeaponDrop(pickup)

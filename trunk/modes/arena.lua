@@ -40,7 +40,7 @@ function TeamDeathMatch_onRoundStart ()
 	for i, player in ipairs (getElementsByType ("player")) do
 		if (getPlayerGameStatus (player) == "Play") then
 			givePlayerProperty (player, "invulnerable", true, spawnprotect*1000)
-			callClientFunction (player, "onClientWeaponChoose")
+			callClientFunction (player, "toggleWeaponManager", true)
 		end
 	end
 end
@@ -54,7 +54,7 @@ end
 function TeamDeathMatch_onPlayerRoundSpawn()
 	local team = getPlayerTeam (source)
 	local model = getElementModel (source) or getElementData (team, "Skins")[1] or 7
-	if (getRoundState() ~= "started" and not isTimer (winTimer)) then
+	if (getRoundState() == "stopped") then
 		local teamsides = getTacticsData ("Teamsides")
 		local spawnpoints = getElementsByType ("Team"..teamsides[team],getRoundMapRoot())
 		if (#spawnpoints <= 0) then spawnpoints = getElementsByType ("Team1",getRoundMapRoot()) end
@@ -114,7 +114,7 @@ function TeamDeathMatch_onPlayerRoundRespawn()
 	toggleAllControls(source,true)
 	setElementData(source,"Status","Play")
 	setElementData(source,"Weapons",true)
-	callClientFunction(source,"onClientWeaponChoose")
+	callClientFunction(source,"toggleWeaponManager",true)
 	callClientFunction(source,"setCameraInterior",interior)
 	local spawnprotect = TimeToSec(getRoundModeSettings("spawnprotect"))
 	givePlayerProperty(source,"invulnerable",true,spawnprotect*1000)

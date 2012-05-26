@@ -25,8 +25,7 @@
 	<player_do_not_loaded			string="* Gracz nie pobrał zasobów" />
 	<player_play_already			string="* Gracz jest aktualnie w grze" />
 	<player_not_play_yet			string="* Gracz nie jest aktualnie w grze" />
-	<scores_cleaned					string="* Punkty drużyn zostały zresetowane" />
-	<player_stats_cleaned			string="* Statystyki wszystkich graczy sš zresetowane" />
+	<stats_cleaned					string="* Statistics and scores are resetted" />
 	<team_balanced					string="* Gracze sš zrównoważeni w drużynach" />
 	<team_balanced_mode				string="* Gracze sš zrównoważeni w drużynach [%s]" />
 	<player_healed					string="* %s #FF6464jest naprawiony" />
@@ -34,6 +33,7 @@
 	<team_swaped					string="* Drużyny zmieniły strony" />
 	<player_can_weapon_choice		string="* %s #FF6464może raz jeszcze wybrać broń" />
 	<map_set_next					string="* Następna mapa to #EBDDB2%s" />
+	<map_cancel_next				string="* Next map canceled" />
 	<voting_falied					string="* Głosowanie się nie powiodło" />
 	<voting_canceled				string="* Głosowanie zatrzymane" />
 	<voting_disabled				string="* Lobby tryb jest włšczony. Głosowanie tylko I wyłšcznie w trybie Lobby" />
@@ -74,8 +74,8 @@
 	<respawn_in						string="Odrodzisz się za ... %.1f sec" />
 	<vehicle_healed					string="* %s #FF6464wóz został naprawiony" />
 	<vehicle_all_healed				string="* All vehicles have been fixed" />
-	<new_verion_available			string="* New version is available! (dated %s)" />
-	<this_last_verion				string="* This is the latest version (dated %s)" />
+	<new_version_available			string="* New version is available! (%s)" />
+	<this_last_version				string="* This is the latest version (%s)" />
 	<player_cheat_detected			string="* %s #FF6464detected #EBDDB2%s" />
 	<vip_killed						string="VIP are killed" />
 	<time_over_vip_not_rescued		string="Time is up. VIP are not released" />

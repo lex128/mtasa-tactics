@@ -57,7 +57,7 @@ function ZombieMod_onRoundStart()
 	for i,player in ipairs(getElementsByType("player")) do
 		if (getPlayerGameStatus(player,"Status") == "Play" or getElementData(player) == "Loading") then
 			givePlayerProperty(player,"invulnerable",true,spawnprotect*1000)
-			callClientFunction(player,"onClientWeaponChoose")
+			callClientFunction(player,"toggleWeaponManager",true)
 		end
 	end
 	if (isTimer(infectionTimer)) then killTimer(infectionTimer) end
@@ -103,7 +103,7 @@ end
 function ZombieMod_onPlayerRoundSpawn()
 	local team = getPlayerTeam(source)
 	local model = getElementModel(source) or getElementData(team,"Skins")[1]
-	if (getRoundState() ~= "started" and not isTimer(winTimer)) then
+	if (getRoundState() == "stopped") then
 		local sides = getTacticsData("Sides")
 		local element = getElementsByType("spawnpoint")[math.random(#getElementsByType("spawnpoint"))]
 		local posX = getElementData(element,"posX")

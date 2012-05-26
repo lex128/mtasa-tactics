@@ -25,8 +25,7 @@
 	<player_do_not_loaded			string="* Игрок не загрузил ресурсы" />
 	<player_play_already			string="* Игрок уже в игре" />
 	<player_not_play_yet			string="* Игрок не в игре" />
-	<scores_cleaned					string="* У команд обнулены очки" />
-	<player_stats_cleaned			string="* У всех игроков обнулена статистика" />
+	<stats_cleaned					string="* Статистика и очки обнулены" />
 	<team_balanced					string="* Игроки сбалансированы по командам" />
 	<team_balanced_mode				string="* Игроки сбалансированы по командам [%s]" />
 	<player_healed					string="* %s #FF6464пополнено здоровье" />
@@ -34,6 +33,7 @@
 	<team_swaped					string="* Команды поменялись сторонами" />
 	<player_can_weapon_choice		string="* %s #FF6464может перевыбрать оружие" />
 	<map_set_next					string="* Следующая карта установлена на #EBDDB2%s" />
+	<map_cancel_next				string="* Следующая карта отменена" />
 	<voting_falied					string="* Голосование не состоялось" />
 	<voting_canceled				string="* Голосование прервано" />
 	<voting_disabled				string="* Голосование доступно только в лобби" />
@@ -45,8 +45,8 @@
 	<weapon_limited					string="* %s можно брать только %i на команду" />
 	<vehicle_healed					string="* %s #FF6464починен транспорт" />
 	<vehicle_all_healed				string="* У всех починен транспорт" />
-	<new_verion_available			string="* Доступна новая версия! (от %s)" />
-	<this_last_verion				string="* Стоит последняя версия (от %s)" />
+	<new_version_available			string="* Доступна новая версия! (%s)" />
+	<this_last_version				string="* Стоит последняя версия (%s)" />
 	<player_cheat_detected			string="* %s #FF6464обнаружен #EBDDB2%s" />
 	<pause							string="Пауза" />
 	<unpausing_in					string="Возобновление через ... %.1f сек" />

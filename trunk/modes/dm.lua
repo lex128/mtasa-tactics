@@ -46,7 +46,7 @@ function DeathMatch_onRoundStart()
 			givePlayerProperty(player,"invulnerable",true,spawnprotect*1000)
 			local team = getPlayerTeam(player)
 			if (teamsides[team]) then
-				callClientFunction(player,"onClientWeaponChoose")
+				callClientFunction(player,"toggleWeaponManager",true)
 				setElementData(player,"Frags",0)
 			end
 		end
@@ -87,7 +87,7 @@ function DeathMatch_onPlayerRoundSpawn()
 			local spawnprotect = TimeToSec(getRoundModeSettings("spawnprotect"))
 			givePlayerProperty(source,"invulnerable",true,spawnprotect*1000)
 			setCameraTarget(source,source)
-			callClientFunction(source,"onClientWeaponChoose")
+			callClientFunction(source,"toggleWeaponManager",true)
 		end
 		callClientFunction(source,"setCameraInterior",interior)
 		if (not getElementData(source,"Kills")) then
