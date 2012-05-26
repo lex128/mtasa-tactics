@@ -25,8 +25,7 @@
 	<player_do_not_loaded			string="* Играч није сникуо ресурсе" />
 	<player_play_already			string="* Играч је већ у игри" />
 	<player_not_play_yet			string="* Играч тренутно није у игри" />
-	<scores_cleaned					string="* Скор тимова је ресетован" />
-	<player_stats_cleaned			string="* Скор свих играча је ресетован " />
+	<stats_cleaned					string="* Statistics and scores are resetted" />
 	<team_balanced					string="* Извршен је баланс између тимова" />
 	<team_balanced_mode				string="* Извршен је баланс између тимова [%s]" />
 	<player_healed					string="* %s #FF6464је оживео" />
@@ -34,6 +33,7 @@
 	<team_swaped					string="* Тимови су променили стране" />
 	<player_can_weapon_choice		string="* %s #FF6464може опет да одабере оружје" />
 	<map_set_next					string="* Мапа постављена - #EBDDB2%s" />
+	<map_cancel_next				string="* Next map canceled" />
 	<voting_falied					string="* Гласање неуспешно" />
 	<voting_canceled				string="* Гласање заустављено" />
 	<voting_disabled				string="* Гласање више није доступно" />
@@ -74,8 +74,8 @@
 	<respawn_in						string="Оживећеш за ... %.1f sec" />
 	<vehicle_healed					string="* %s #FF6464возило је поправљено" />
 	<vehicle_all_healed				string="* Сва возила су поправљена" />
-	<new_verion_available			string="* Нова верзија је доступна! (dated %s)" />
-	<this_last_verion				string="* Ово је најновија верзија (dated %s)" />
+	<new_version_available			string="* Нова верзија је доступна! (%s)" />
+	<this_last_version				string="* Ово је најновија верзија (%s)" />
 	<player_cheat_detected			string="* %s #FF6464откривен #EBDDB2%s" />
 	<vip_killed						string="VIP су убијени" />
 	<time_over_vip_not_rescued		string="Време је истекло. VIP нису ослобођени" />

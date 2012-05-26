@@ -50,7 +50,7 @@ end
 function FlyMatch_onPlayerRoundSpawn()
 	local team = getPlayerTeam(source)
 	local model = getElementModel(source) or getElementData(team,"Skins")[1]
-	if (getRoundState() ~= "started" and not isTimer(winTimer)) then
+	if (getRoundState() == "stopped") then
 		local teamsides = getTacticsData("Teamsides")
 		local spawnpoints = getElementsByType("Team"..teamsides[team])
 		if (#spawnpoints <= 0) then spawnpoints = getElementsByType("Team1") end

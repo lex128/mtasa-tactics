@@ -63,11 +63,9 @@ function AttackDefend_onRoundStart()
 	for i,player in ipairs(getElementsByType("player")) do
 		if (getPlayerGameStatus(player) == "Play") then
 			givePlayerProperty(player,"invulnerable",true,spawnprotect*1000)
+			callClientFunction(player,"toggleWeaponManager",true)
 			if (teamsides[getPlayerTeam(player)]%2 == 1) then
-				callClientFunction(player,"onClientWeaponChoose")
 				callClientFunction(player,"onClientVehicleChoose")
-			else
-				callClientFunction(player,"onClientWeaponChoose")
 			end
 		end
 	end
@@ -85,7 +83,7 @@ end
 function AttackDefend_onPlayerRoundSpawn()
 	local team = getPlayerTeam(source)
 	local model = getElementModel(source) or getElementData(team,"Skins")[1]
-	if (getRoundState() ~= "started" and not isTimer(winTimer)) then
+	if (getRoundState() == "stopped") then
 		local teamsides = getTacticsData("Teamsides")
 		local spawnpoints = getElementsByType("Team"..teamsides[team],getRoundMapRoot())
 		if (#spawnpoints <= 0) then spawnpoints = getElementsByType("Team1",getRoundMapRoot()) end
@@ -145,11 +143,9 @@ function AttackDefend_onPlayerRoundRespawn()
 	toggleAllControls(source,true)
 	setElementData(source,"Status","Play")
 	setElementData(source,"Weapons",true)
+	callClientFunction(source,"toggleWeaponManager",true)
 	if (teamsides[team]%2 == 1) then
-		callClientFunction(source,"onClientWeaponChoose")
 		callClientFunction(source,"onClientVehicleChoose")
-	else
-		callClientFunction(source,"onClientWeaponChoose")
 	end
 	callClientFunction(source,"setCameraInterior",interior)
 	local spawnprotect = TimeToSec(getRoundModeSettings("spawnprotect"))

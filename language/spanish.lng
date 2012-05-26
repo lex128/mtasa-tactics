@@ -25,8 +25,7 @@
 	<player_do_not_loaded			string="* No ha enviado los recursos" />
 	<player_play_already			string="* Que ya en el juego" />
 	<player_not_play_yet			string="* Ningun jugador en el juego" />
-	<scores_cleaned					string="* Los equipos de limpiado las gafas" />
-	<player_stats_cleaned			string="* Todas las estadisticas de los jugadores a cero" />
+	<stats_cleaned					string="* Statistics and scores are resetted" />
 	<team_balanced					string="* Jugadores de los equipos equilibrados" />
 	<team_balanced_mode				string="* Jugadores de los equipos equilibrados [%s]" />
 	<player_healed					string="* %s #FF6464salud repone" />
@@ -34,6 +33,7 @@
 	<team_swaped					string="* Los equipos intercambian partes" />
 	<player_can_weapon_choice		string="* %s #FF6464puede re-electo arma" />
 	<map_set_next					string="* La votacion no se llevo a cabo %s" />
+	<map_cancel_next				string="* Next map canceled" />
 	<voting_falied					string="* La votacion no se llevo a cabo" />
 	<voting_canceled				string="* Votacion interrumpido" />
 	<voting_disabled				string="* El modo lobby esta activada. Derecho a voto solo esta disponible en lobby" />
@@ -74,8 +74,8 @@
 	<respawn_in						string="You will respawn in ... %.1f sec" />
 	<vehicle_healed					string="* %s #FF6464vehicle has been fixed" />
 	<vehicle_all_healed				string="* All vehicles have been fixed" />
-	<new_verion_available			string="* New version is available! (dated %s)" />
-	<this_last_verion				string="* This is the latest version (dated %s)" />
+	<new_version_available			string="* New version is available! (%s)" />
+	<this_last_version				string="* This is the latest version (%s)" />
 	<player_cheat_detected			string="* %s #FF6464detected #EBDDB2%s" />
 	<vip_killed						string="VIP are killed" />
 	<time_over_vip_not_rescued		string="Time is up. VIP are not released" />

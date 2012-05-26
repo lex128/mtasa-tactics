@@ -129,7 +129,7 @@ end
 function RaceMatch_onPlayerRoundSpawn()
 	local team = getPlayerTeam(source)
 	local model = getElementModel(source)
-	if (getRoundState() ~= "started" and not isTimer(winTimer)) then
+	if (getRoundState() == "stopped") then
 		if (not spawnCounter) then spawnCounter = 1 end
 		spawnCounter = spawnCounter + 1
 		if (spawnCounter > #getElementsByType("spawnpoint",getRoundMapRoot())) then

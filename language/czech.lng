@@ -25,8 +25,7 @@
 	<player_do_not_loaded			string="* Hráč nestáhl potřebné data" />
 	<player_play_already			string="* Hráč je již ve hře" />
 	<player_not_play_yet			string="* Hráč zrovna není ve hře" />
-	<scores_cleaned					string="* Týmové' body vynulovány" />
-	<player_stats_cleaned			string="* Statistika všech hráčů byla vynulovana" />
+	<stats_cleaned					string="* Statistics and scores are resetted" />
 	<team_balanced					string="* Týmy jsou vyrovnané" />
 	<team_balanced_mode				string="* Týmy jsou vyrovnané [%s]" />
 	<player_healed					string="* %s #FF6464znovu žije" />
@@ -34,6 +33,7 @@
 	<team_swaped					string="* Týmy změnily strany" />
 	<player_can_weapon_choice		string="* %s #FF6464 si znovu vybral zbraně" />
 	<map_set_next					string="* Další mapa zvolena jako #EBDDB2%s" />
+	<map_cancel_next				string="* Next map canceled" />
 	<voting_falied					string="* Hlasování neúspěšné" />
 	<voting_canceled				string="* Hlasování zastaveno" />
 	<voting_disabled				string="* Lobby mod zapnuty. Hlasovaní je povoleno jen u Lobby" />
@@ -74,8 +74,8 @@
 	<respawn_in						string="Budeš obnoven za  ... %.1f sec" />
 	<vehicle_healed					string="* %s #FF6464dopravní prostředek opraven" />
 	<vehicle_all_healed				string="* Všechny vozidla byly opraveny" />
-	<new_verion_available			string="* Nová verze je k dispozici! (dated %s)" />
-	<this_last_verion				string="* Toto je nejnovější verze (dated %s)" />
+	<new_version_available			string="* Nová verze je k dispozici! (%s)" />
+	<this_last_version				string="* Toto je nejnovější verze (%s)" />
 	<player_cheat_detected			string="* %s #FF6464zaznamenalo #EBDDB2%s" />
 	<vip_killed						string="VIP are killed" />
 	<time_over_vip_not_rescued		string="Time is up. VIP are not released" />

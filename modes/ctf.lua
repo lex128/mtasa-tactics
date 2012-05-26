@@ -93,7 +93,7 @@ function CaptureTheFlag_onRoundStart()
 			givePlayerProperty(player,"invulnerable",true,spawnprotect*1000)
 			local team = getPlayerTeam(player)
 			if (teamsides[team]) then
-				callClientFunction(player,"onClientWeaponChoose")
+				callClientFunction(player,"toggleWeaponManager",true)
 			end
 		end
 	end
@@ -108,7 +108,7 @@ end
 function CaptureTheFlag_onPlayerRoundSpawn()
 	local team = getPlayerTeam(source)
 	local model = getElementModel(source) or getElementData(team,"Skins")[1]
-	if (getRoundState() ~= "started" and not isTimer(winTimer)) then
+	if (getRoundState() == "stopped") then
 		local teamsides = getTacticsData("Teamsides")
 		local spawnpoints = getElementsByType("Team"..teamsides[team])
 		if (#spawnpoints <= 0) then spawnpoints = getElementsByType("Team1") end
@@ -167,7 +167,7 @@ function CaptureTheFlag_onPlayerRoundRespawn()
 	toggleAllControls(source,true)
 	setElementData(source,"Status","Play")
 	setElementData(source,"Weapons",true)
-	callClientFunction(source,"onClientWeaponChoose")
+	callClientFunction(source,"toggleWeaponManager",true)
 	callClientFunction(source,"setCameraInterior",interior)
 	local spawnprotect = TimeToSec(getRoundModeSettings("spawnprotect"))
 	givePlayerProperty(source,"invulnerable",true,spawnprotect*1000)
