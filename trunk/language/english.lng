@@ -39,7 +39,7 @@
 	<voting_disabled				string="* Voting is not allowed now" />
 	<voting_notexist				string="* Map does not exist or is locked. #EBDDB2M #FF6464-all available maps" />
 	<syntax_vote					string="* Syntax: #EBDDB2vote [mode] [map]" />
-	<you_leave_vehcile_choice		string="* You have left vehicle choosing area" />
+	<you_leave_vehicle_choice		string="* You have left vehicle choosing area" />
 	<supported_modes				string="* Supported modes: #EBDDB2" />
 	<killed_for_out_bounding		string="* %s #FF6464was killed (getting out of the map)" />
 	<weapon_limited					string="* %s can be taken only %i on a team" />
@@ -87,4 +87,6 @@
 	<help_roundlog					string="%s - look at the statistics round" />
 	<help_restore					string="%s - respawn or restore to game" />
 	<rsp_using						string="* %s #FF6464used command rsp" />
+	<screen_disabled				string="* Player has turned off screen capture" />
+	<screen_minimized				string="* Game is minimized, unable to capture" />
 </language>

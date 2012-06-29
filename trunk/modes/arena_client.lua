@@ -4,10 +4,6 @@ function TeamDeathMatch_onClientMapStopping(mapinfo)
 	showRoundHudComponent("teamlist",false)
 	removeEventHandler("onClientPlayerRoundSpawn",localPlayer,TeamDeathMatch_onClientPlayerRoundSpawn)
 	removeCommandHandler("gun",toggleWeaponManager)
-	if (guiGetVisible(weapon_window)) then
-		guiSetVisible(weapon_window,false)
-		if (isAllGuiHidden()) then showCursor(false) end
-	end
 end
 function TeamDeathMatch_onClientMapStarting(mapinfo)
 	if (mapinfo.modename ~= "arena") then return end

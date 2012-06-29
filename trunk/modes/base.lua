@@ -65,7 +65,7 @@ function AttackDefend_onRoundStart()
 			givePlayerProperty(player,"invulnerable",true,spawnprotect*1000)
 			callClientFunction(player,"toggleWeaponManager",true)
 			if (teamsides[getPlayerTeam(player)]%2 == 1) then
-				callClientFunction(player,"onClientVehicleChoose")
+				callClientFunction(player,"toggleVehicleManager")
 			end
 		end
 	end
@@ -145,7 +145,7 @@ function AttackDefend_onPlayerRoundRespawn()
 	setElementData(source,"Weapons",true)
 	callClientFunction(source,"toggleWeaponManager",true)
 	if (teamsides[team]%2 == 1) then
-		callClientFunction(source,"onClientVehicleChoose")
+		callClientFunction(source,"toggleVehicleManager")
 	end
 	callClientFunction(source,"setCameraInterior",interior)
 	local spawnprotect = TimeToSec(getRoundModeSettings("spawnprotect"))

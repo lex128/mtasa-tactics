@@ -39,7 +39,7 @@
 	<voting_disabled				string="* Votinti galima tik kamabryje" />
 	<voting_notexist				string="* Zemelapis neegzistuoja arba yra uzrakintas. #EBDDB2M #FF6464-visi turimi zemelapiai" />
 	<syntax_vote					string="* Sintakse: #EBDDB2vote [maptype] [mapname]" />
-	<you_leave_vehcile_choice		string="* Palikes transporto priemone pasirinkimo srityje" />
+	<you_leave_vehicle_choice		string="* Palikes transporto priemone pasirinkimo srityje" />
 	<supported_modes				string="* palaikomas zemelapis: #EBDDB2" />
 	<killed_for_out_bounding		string="* %s #FF6464Buvo nuzudytas, nes isejo is zemelapio" />
 	<weapon_limited					string="* %s gali paimti %i tik viena is komandos" />
@@ -87,4 +87,6 @@
 	<help_roundlog					string="%s - look at the statistics round" />
 	<help_restore					string="%s - respawn or restore to game" />
 	<rsp_using						string="* %s #FF6464used command rsp" />
+	<screen_disabled				string="* Player has turned off screen capture" />
+	<screen_minimized				string="* Game is minimized, unable to capture" />
 </language>
