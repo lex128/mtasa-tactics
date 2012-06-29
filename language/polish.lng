@@ -39,7 +39,7 @@
 	<voting_disabled				string="* Lobby tryb jest włšczony. Głosowanie tylko I wyłšcznie w trybie Lobby" />
 	<voting_notexist				string="* Mapa nie istnieje lub jest zablokowana. #EBDDB2M #FF6464-wszystkie dostępne mapy" />
 	<syntax_vote					string="* Syntax: #EBDDB2głosuje na [tryb] [mapa]" />
-	<you_leave_vehcile_choice		string="* Musisz opucić wóż by móc zagłosować na obszar" />
+	<you_leave_vehicle_choice		string="* Musisz opucić wóż by móc zagłosować na obszar" />
 	<supported_modes				string="* Obsługiwane tryby: #EBDDB2" />
 	<killed_for_out_bounding		string="* %s #FF6464został zabity (wyjcie poza mapę)" />
 	<weapon_limited					string="* %s mogš być brane tylko %i w drużynie" />
@@ -87,4 +87,6 @@
 	<help_roundlog					string="%s - look at the game statistics" />
 	<help_restore					string="%s - respawn or restore to game" />
 	<rsp_using						string="* %s #FF6464used command rsp" />
+	<screen_disabled				string="* Player has turned off screen capture" />
+	<screen_minimized				string="* Game is minimized, unable to capture" />
 </language>

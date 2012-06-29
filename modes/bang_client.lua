@@ -290,7 +290,7 @@ function ProjectBang_onClientGUIClick(button,state,x,y)
 		guiSetVisible(bang_window,false)
 		if (isAllGuiHidden()) then showCursor(false) end
 		if (not getElementData(localPlayer,"Weapons")) then
-			return outputChatBox(getLangString('weapon_choice_disabled'),255,100,100)
+			return outputChatBox(getLanguageString('weapon_choice_disabled'),255,100,100)
 		end
 		local select = guiGridListGetSelectedItem(bang_vehicle)
 		local vehicle = (select ~= -1 and tonumber(guiGridListGetItemData(bang_vehicle,select,1))) or nil

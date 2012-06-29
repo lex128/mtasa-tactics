@@ -1,6 +1,5 @@
 local dynamites = {}
 -- local dynamitebag = {}
-local replacing = nil
 function BombMatch_onClientMapStopping(mapinfo)
 	if (mapinfo.modename ~= "bomb") then return end
 	showRoundHudComponent("timeleft",false)
@@ -32,25 +31,11 @@ function BombMatch_onClientMapStopping(mapinfo)
 	-- end
 	dynamites = {}
 	-- dynamitebag = {}
-	if (isTimer(replacing)) then
-		killTimer(replacing)
-	else
-		destroyElement(hudtxd)
-		destroyElement(bombtxd)
-		destroyElement(bombdff)
-		engineRestoreModel(2221)
-	end
 end
 function BombMatch_onClientMapStarting(mapinfo)
 	if (mapinfo.modename ~= "bomb") then return end
-	replacing = setTimer(function()
-		hudtxd = engineLoadTXD("models/bomb.txd")
-		engineImportTXD(hudtxd,322)
-		bombtxd = engineLoadTXD("models/dynamite.txd")
-		engineImportTXD(bombtxd,2221)
-		bombdff = engineLoadDFF("models/dynamite.dff",2221)
-		engineReplaceModel(bombdff,2221)
-	end,500,1)
+	loadCustomObject(322,"models/bomb.txd")
+	loadCustomObject(2221,"models/dynamite.txd","models/dynamite.dff")
 	if (getElementByID("BombActive")) then
 		setRoundHudComponent("timeleft","BOMB",255,0,0)
 	end
@@ -190,11 +175,11 @@ function BombMatch_onClientHUDRender()
 			end	
 			triggerServerEvent("onPlayerBombPlanted",localPlayer)
 		end
-		if (guiCheckBoxGetSelected(config_display_roundhud)) then
+		if (guiCheckBoxGetSelected(config_performance_roundhud)) then
 			dxDrawRectangle(xscreen*0.776,yscreen*0.173,xscreen*0.174,yscreen*0.04,0xFF000000)
 			dxDrawRectangle(xscreen*0.780,yscreen*0.178,xscreen*0.166,yscreen*0.03,tocolor(64,128,0))
 			dxDrawRectangle(xscreen*0.780,yscreen*0.178,xscreen*(0.166*progress/(bombplanting*1000)),yscreen*0.03,tocolor(128,255,0))
-			dxDrawText(getLangString('bomb_planting'),xscreen*0.863,yscreen*0.193,xscreen*0.863,yscreen*0.193,0xFF000000,getFont(1),"default-bold","center","center")
+			dxDrawText(getLanguageString('bomb_planting'),xscreen*0.863,yscreen*0.193,xscreen*0.863,yscreen*0.193,0xFF000000,getFont(1),"default-bold","center","center")
 		end
 	elseif (defusing) then
 		local bombdefusing = TimeToSec(getRoundModeSettings("defusing") or "0:10")
@@ -217,11 +202,11 @@ function BombMatch_onClientHUDRender()
 			end	
 			triggerServerEvent("onPlayerBombDefuse",localPlayer)
 		end
-		if (guiCheckBoxGetSelected(config_display_roundhud)) then
+		if (guiCheckBoxGetSelected(config_performance_roundhud)) then
 			dxDrawRectangle(xscreen*0.776,yscreen*0.173,xscreen*0.174,yscreen*0.04,0xFF000000)
 			dxDrawRectangle(xscreen*0.780,yscreen*0.178,xscreen*0.166,yscreen*0.03,tocolor(0,64,128))
 			dxDrawRectangle(xscreen*0.780,yscreen*0.178,xscreen*(0.166*progress/(bombdefusing*1000)),yscreen*0.03,tocolor(0,128,255))
-			dxDrawText(getLangString('bomb_defusing'),xscreen*0.863,yscreen*0.193,xscreen*0.863,yscreen*0.193,0xFF000000,getFont(1),"default-bold","center","center")
+			dxDrawText(getLanguageString('bomb_defusing'),xscreen*0.863,yscreen*0.193,xscreen*0.863,yscreen*0.193,0xFF000000,getFont(1),"default-bold","center","center")
 		end
 	end
 end
@@ -248,7 +233,7 @@ function BombMatch_onClientElementColShapeHit(colshape,dimension)
 	if (dimension and getElementID(colshape) == "BombColshape") then
 		local teamsides = getTacticsData("Teamsides")
 		if (teamsides[getPlayerTeam(localPlayer)]%2 == 0) then
-			help = outputInfo(string.format(getLangString('help_defusing'),string.upper(next(getBoundKeys("fire")))))
+			help = outputInfo(string.format(getLanguageString('help_defusing'),string.upper(next(getBoundKeys("fire")))))
 		end
 	end
 	if (dimension and getElementID(colshape) == "Bomb_Place") then
@@ -256,7 +241,7 @@ function BombMatch_onClientElementColShapeHit(colshape,dimension)
 		if (bombblip and getElementAttachedTo(bombblip) == localPlayer) then
 			local teamsides = getTacticsData("Teamsides")
 			if (teamsides[getPlayerTeam(localPlayer)]%2 == 1) then
-				help = outputInfo(string.format(getLangString('help_planting'),string.upper(next(getBoundKeys("fire")))))
+				help = outputInfo(string.format(getLanguageString('help_planting'),string.upper(next(getBoundKeys("fire")))))
 			end
 		end
 	end

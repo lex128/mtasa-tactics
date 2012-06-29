@@ -39,7 +39,7 @@
 	<voting_disabled				string="* Гласање више није доступно" />
 	<voting_notexist				string="* Карта не постоји или је закључана. #FF6464M #EBDDB2-све расположиве мапе" />
 	<syntax_vote					string="* Syntax: #EBDDB2vote [mode] [map]" />
-	<you_leave_vehcile_choice		string="* Напустио си зону за мењање возила" />
+	<you_leave_vehicle_choice		string="* Напустио си зону за мењање возила" />
 	<supported_modes				string="* Подржани модови: #EBDDB2" />
 	<killed_for_out_bounding		string="* %s #FF6464је убијен (био је изван мапе)" />
 	<weapon_limited					string="* %s могу да се изаберу %i у тиму" />
@@ -87,4 +87,6 @@
 	<help_roundlog					string="%s - look at the statistics round" />
 	<help_restore					string="%s - respawn or restore to game" />
 	<rsp_using						string="* %s #FF6464used command rsp" />
+	<screen_disabled				string="* Player has turned off screen capture" />
+	<screen_minimized				string="* Game is minimized, unable to capture" />
 </language>

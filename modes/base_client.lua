@@ -84,14 +84,14 @@ function AttackDefend_toggleVehicleManager(command,model)
 	end
 end
 function AttackDefend_onClientColShapeLeave(element,dimension)
-	if (getElementData(source,"Vehicling") and element == localPlayer and guiGetVisible(vehicle_window)) then
-		outputChatBox(getLangString('you_leave_vehcile_choice'),255,100,100)
+	if (getElementData(source,"Vehicling") and element == localPlayer and isElement(vehicle_window) and guiGetVisible(vehicle_window)) then
+		outputChatBox(getLanguageString('you_leave_vehicle_choice'),255,100,100)
 		guiSetVisible(vehicle_window,false)
 		if (isAllGuiHidden()) then showCursor(false) end
 	end
 end
 function AttackDefend_onClientHUDRender()
-	if (guiCheckBoxGetSelected(config_display_roundhud)) then
+	if (guiCheckBoxGetSelected(config_performance_roundhud)) then
 		local capture = getTacticsData("timecapture")
 		if (capture) then
 			local remaining = getTacticsData("Pause")
@@ -105,7 +105,7 @@ function AttackDefend_onClientHUDRender()
 			dxDrawRectangle(xscreen*0.776,yscreen*0.173,xscreen*0.174,yscreen*0.04,tocolor(0,0,0))
 			dxDrawRectangle(xscreen*0.780,yscreen*0.178,xscreen*0.166,yscreen*0.03,tocolor(128,64,0))
 			dxDrawRectangle(xscreen*0.780,yscreen*0.178,xscreen*(0.166*progress/(capturing*1000)),yscreen*0.03,tocolor(255,128,0))
-			dxDrawText(getLangString('base_capturing'),xscreen*0.863,yscreen*0.193,xscreen*0.863,yscreen*0.193,tocolor(0,0,0),getFont(1),"default-bold","center","center")
+			dxDrawText(getLanguageString('base_capturing'),xscreen*0.863,yscreen*0.193,xscreen*0.863,yscreen*0.193,tocolor(0,0,0),getFont(1),"default-bold","center","center")
 		end
 	end
 end

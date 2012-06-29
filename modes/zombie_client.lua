@@ -1,6 +1,5 @@
 ﻿function ZombieMod_onClientMapStopping(mapinfo)
 	if (mapinfo.modename ~= "zombie") then return end
-	if (isElement(zombieskin)) then destroyElement(zombieskin) end
 	showRoundHudComponent("timeleft",false)
 	showRoundHudComponent("teamlist",false)
 	removeEventHandler("onClientPlayerDamage",localPlayer,ZombieMod_onClientPlayerDamage)
@@ -21,8 +20,7 @@
 end
 function ZombieMod_onClientMapStarting(mapinfo)
 	if (mapinfo.modename ~= "zombie") then return end
-	zombieskin = engineLoadTXD("models/zombie.txd")
-	engineImportTXD(zombieskin,78)
+	loadCustomObject(78,"models/zombie.txd")
 	showPlayerHudComponent("ammo",true)
 	showPlayerHudComponent("area_name",false)
 	showPlayerHudComponent("armour",true)

@@ -39,7 +39,7 @@
 	<voting_disabled				string="* التصويت متاح لك اثناء الانتظار ما بين الجولات فقط " />
 	<voting_notexist				string="* خريطة غير موجود أو غير مؤمن. #FF6464M #EBDDB2 للجميع الخرائط المتوفرة" />
 	<syntax_vote					string="* استخدم الأمر: #EBDDB2/vote [MODE] [ID], مثال /vote arena 20" />
-	<you_leave_vehcile_choice		string="* إرجع إلى منطقة البداية لفريقك حتى تتمكن من إختيار المركبة" />
+	<you_leave_vehicle_choice		string="* إرجع إلى منطقة البداية لفريقك حتى تتمكن من إختيار المركبة" />
 	<supported_modes				string="* المابات المتاحة #EBDDB2" />
 	<killed_for_out_bounding		string="* %s #FF6464تمت إزالته من الجولة, بسبب خروجه عن حدود الماب" />
 	<weapon_limited					string="* %s يمكن أن يأخذه %i في كل فريق" />
@@ -87,4 +87,6 @@
 	<help_roundlog					string="%s - look at the statistics round" />
 	<help_restore					string="%s - respawn or restore to game" />
 	<rsp_using						string="* %s #FF6464used command rsp" />
+	<screen_disabled				string="* Player has turned off screen capture" />
+	<screen_minimized				string="* Game is minimized, unable to capture" />
 </language>

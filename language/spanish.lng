@@ -39,7 +39,7 @@
 	<voting_disabled				string="* El modo lobby esta activada. Derecho a voto solo esta disponible en lobby" />
 	<voting_notexist				string="* Mapa no existe o esta bloqueado. #FF6464M #EBDDB2 de todos los mapas disponibles" />
 	<syntax_vote					string="* Sintaxis: #EBDDB2vote [modo] [mapa]" />
-	<you_leave_vehcile_choice		string="* Que han abandonado la zona una gran variedad de vehiculos" />
+	<you_leave_vehicle_choice		string="* Que han abandonado la zona una gran variedad de vehiculos" />
 	<supported_modes				string="* Modo compatible: #EBDDB2" />
 	<killed_for_out_bounding		string="* %s es asesinado por ser fuera de la zona" />
 	<weapon_limited					string="* %s solo puede adoptarse %i el equipo" />
@@ -87,4 +87,6 @@
 	<help_roundlog					string="%s - look at the statistics round" />
 	<help_restore					string="%s - respawn or restore to game" />
 	<rsp_using						string="* %s #FF6464used command rsp" />
+	<screen_disabled				string="* Player has turned off screen capture" />
+	<screen_minimized				string="* Game is minimized, unable to capture" />
 </language>
