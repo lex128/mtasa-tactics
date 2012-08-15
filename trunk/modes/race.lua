@@ -9,7 +9,7 @@ function RaceMatch_onResourceStart(resource)
 end
 function RaceMatch_onMapStopping(mapinfo)
 	if (mapinfo.modename ~= "race" or not isRace) then return end
-	if (wasghostmode) then setTacticsData(wasghostmode,"settings","ghostmode") end
+	if (wasghostmode) then setTacticsData(wasghostmode,"settings","ghostmode",true) end
 	if (isTimer(rankingTimer)) then killTimer(rankingTimer) end
 	removeEventHandler("onPlayerRoundSpawn",root,RaceMatch_onPlayerRoundSpawn)
 	removeEventHandler("onPlayerQuit",root,RaceMatch_onPlayerQuit)
@@ -31,6 +31,11 @@ function RaceMatch_onMapStarting(mapinfo)
 	if (mapinfo.modename ~= "race" or #getElementsByType("checkpoint",getRoundMapRoot()) == 0) then return end
 	isRace = true
 	wasghostmode = getTacticsData("settings","ghostmode")
+	if (wasghostmode ~= "team" and wasghostmode ~= "all") then
+		setTacticsData("all","settings","ghostmode",true)
+	else
+		wasghostmode = nil
+	end
 	if (isTimer(restartTimer)) then killTimer(restartTimer) end
 	spawnCounter = 1
 	finishCounter = {}
@@ -49,7 +54,6 @@ function RaceMatch_onMapStarting(mapinfo)
 	addEventHandler("onVehicleStartExit",root,RaceMatch_onVehicleStartExit)
 	addEventHandler("onPauseToggle",root,RaceMatch_onPauseToggle)
 	setTabboardColumns({{"Rank",0.14},{"Checkpoint",0.15}})
-	setTacticsData("true","settings","ghostmode")
 	setSideNames("Side 1","Side 2")
 	for i,racepickup in ipairs(getElementsByType("racepickup",getRoundMapRoot())) do
 		local x,y,z = getElementPosition(racepickup)

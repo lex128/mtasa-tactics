@@ -11,7 +11,7 @@ function DestructionDerby_onResourceStart(resource)
 end
 function DestructionDerby_onMapStopping(mapinfo)
 	if ((mapinfo.modename ~= "race" and mapinfo.modename ~= "derby") or not isDestructionDerby) then return end
-	setTacticsData(wasghostmode,"settings","ghostmode")
+	if (wasghostmode) then setTacticsData(wasghostmode,"settings","ghostmode",true) end
 	if (isTimer(rankingTimer)) then killTimer(rankingTimer) end
 	removeEventHandler("onPlayerRoundSpawn",root,DestructionDerby_onPlayerRoundSpawn)
 	removeEventHandler("onPlayerQuit",root,DestructionDerby_onPlayerQuit)
@@ -33,6 +33,11 @@ function DestructionDerby_onMapStarting(mapinfo)
 	isDestructionDerby = true
 	setTacticsData("derby","Map")
 	wasghostmode = getTacticsData("settings","ghostmode")
+	if (wasghostmode ~= "none" and wasghostmode ~= "team") then
+		setTacticsData("none","settings","ghostmode",true)
+	else
+		wasghostmode = nil
+	end
 	if (isTimer(restartTimer)) then killTimer(restartTimer) end
 	spawnCounter = 1
 	finishCounter = {}
@@ -49,7 +54,6 @@ function DestructionDerby_onMapStarting(mapinfo)
 	addEventHandler("onVehicleStartExit",root,DestructionDerby_onVehicleStartExit)
 	addEventHandler("onPauseToggle",root,DestructionDerby_onPauseToggle)
 	setTabboardColumns()
-	setTacticsData("false","settings","ghostmode")
 	setSideNames("Side 1","Side 2")
 	for i,racepickup in ipairs(getElementsByType("racepickup",getRoundMapRoot())) do
 		local x,y,z = getElementPosition(racepickup)

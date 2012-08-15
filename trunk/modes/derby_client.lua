@@ -1,17 +1,8 @@
 local isDestructionDerby = false
 local font1 = (0.015*yscreen)/9
-local replaceModels = {nitro = 2221,repair = 2222,vehiclechange = 2223}
-local replaces = {}
 local pickups = {}
 function DestructionDerby_onClientMapStopping(mapinfo)
 	if ((mapinfo.modename ~= "race" and mapinfo.modename ~= "derby") or not isDestructionDerby) then return end
-	for _,data in ipairs(replaces) do
-		local txd,dff,id = unpack(data)
-		if (id) then engineRestoreModel(id) end
-		if (txd) then destroyElement(txd) end
-		if (dff) then destroyElement(dff) end
-	end
-	replaces = {}
 	showRoundHudComponent("timeleft",false)
 	showRoundHudComponent("race",false)
 	removeEventHandler("onClientRender",root,DestructionDerby_onClientRender)
@@ -24,14 +15,9 @@ end
 function DestructionDerby_onClientMapStarting(mapinfo)
 	if ((mapinfo.modename ~= "race" and mapinfo.modename ~= "derby") or #getElementsByType("checkpoint",getRoundMapRoot()) > 0) then return end
 	isDestructionDerby = true
-	for name,id in pairs(replaceModels) do
-		local txd = engineLoadTXD("models/"..name..".txd")
-		if (txd) then engineImportTXD(txd,id) end
-		local dff = engineLoadDFF("models/"..name..".dff",id)
-		if (dff) then engineReplaceModel(dff,id) end
-		if (id) then engineSetModelLODDistance(id,60) end
-		table.insert(replaces,{txd,dff,id})
-	end
+	loadCustomObject(2221,"models/nitro.txd","models/nitro.dff")
+	loadCustomObject(2222,"models/repair.txd","models/repair.dff")
+	loadCustomObject(2223,"models/vehiclechange.txd","models/vehiclechange.dff")
 	showRoundHudComponent("timeleft",true)
 	setRoundHudComponent("race",true)
 	showRoundHudComponent("race",true)

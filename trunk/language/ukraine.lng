@@ -16,7 +16,7 @@
     <help_me                        string="* %s #FFFF00потрібна допомога!" />
     <weapon_choice_disabled         string="* Зміна зброї зараз недоступна" />
     <you_have_not_permissions       string="* Ви не маєте прав на використання цієї команди" />
-    <resource_have_not_permissions  string="* Ресурс #EBDDB2%s#FF6464 не в змозі виконувати цю функцію. Для використання цієї функції дайте групі доступ до '#EBDDB2%s#FF6464' в ACL />
+    <resource_have_not_permissions  string="* Ресурс #EBDDB2%s#FF6464 не в змозі виконувати цю функцію. Для використання цієї функції дайте групі доступ до '#EBDDB2%s#FF6464' в ACL" />
     <for_open_userpanel             string="* Натисніть #EBDDB2F2 #FF6464, щоб відкрити Панель ваших налаштувань." />
     <for_open_controlpanel          string="* Натисніть #EBDDB2F1 #FF6464, щоб відкрити Панель управління" />
     <config_loaded                  string="* %s конфіг завантажений" />

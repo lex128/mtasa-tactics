@@ -56,18 +56,16 @@ function VeryImportantPerson_onClientPlayerRoundSpawn()
 end
 function VeryImportantPerson_onClientPlayerBlipUpdate()
 	local myteam = getPlayerTeam(localPlayer)
-	local blipVIP = getElementByID("BlipVIP")
-	if (blipVIP) then
+	local teamsides = getTacticsData("Teamsides")
+	local blipRescue = getElementByID("BlipRescue")
+	if (blipRescue) then
 		if (myteam == getElementsByType("team")[1]) then
-			setBlipIcon(blipVIP,60)
+			setBlipIcon(blipRescue,22)
+		elseif (teamsides[myteam] and teamsides[myteam]%2 == 1) then
+			setBlipIcon(blipRescue,22)
 		else
-			local teamsides = getTacticsData("Teamsides")
-			if (teamsides[myteam] and teamsides[myteam]%2 == 1) then
-				setBlipIcon(blipVIP,60)
-			else
-				setBlipIcon(blipVIP,0)
-				setBlipColor(blipVIP,0,0,0,0)
-			end
+			setBlipIcon(blipRescue,0)
+			setBlipColor(blipRescue,0,0,0,0)
 		end
 	end
 end
