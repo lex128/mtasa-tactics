@@ -1,5 +1,6 @@
 spawnCounter = {}
 teamPlanted = false
+playerPlanted = false
 function BombMatch_onResourceStart(resource)
 	createTacticsMode("bomb",{timelimit="15:00",bombtimer="1:50",planting="0:05",defusing="0:10",spawnprotect="0:05"})
 end
@@ -228,7 +229,9 @@ function BombMatch_onPlayerBombPlanted()
 	if (getElementByID("BombActive") or isRoundPaused() or getPedWeapon(source) ~= 11) then return end
 	outputRoundLog(getPlayerName(source).." planted a bomb")
 	takeWeapon(source,11)
+	giveElementStat(source,"Kills",1)
 	teamPlanted = getPlayerTeam(source)
+	playerPlanted = getElementID(source)
 	local x,y,z = getElementPosition(source)
 	local element = createObject(2221,x,y,z-0.9,-90,0,0)
 	setElementID(element,"Bomb")
@@ -258,6 +261,7 @@ end
 function BombMatch_onPlayerBombDefuse()
 	if (not getElementByID("BombActive") or isRoundPaused()) then return end
 	destroyElement(getElementByID("BombActive"))
+	giveElementStat(source,"Kills",3)
 	local team = getPlayerTeam(source)
 	local r,g,b = getTeamColor(team)
 	endRound({r,g,b,'team_win_round',getTeamName(team)},{'player_defuse_bomb',getPlayerName(source)},{[team]=1})
@@ -271,6 +275,7 @@ function BombMatch_onRoundTimesup()
 		local bomb = getElementByID("Bomb")
 		local x,y,z = getElementPosition(bomb)
 		destroyElement(bomb)
+		giveElementStat(getElementByID(playerPlanted),"Kills",2)
 		local r,g,b = getTeamColor(teamPlanted)
 		endRound({r,g,b,'team_win_round',getTeamName(teamPlanted)},'time_over_bomb_explosed',{[teamPlanted]=1})
 		callClientFunction(root,"BombMatch_createBombExplosion",x,y,z)
@@ -332,6 +337,10 @@ end
 function BombMatch_onPlayerRestored(row)
 	if (getPedWeapon(source,10) == 11 and getElementByID("BombBlip")) then
 		takeWeapon(source,11)
+	end
+	local restore = getRestoreData(row)
+	if (restore and restore.data.ID == playerPlanted) then
+		playerPlanted = getElementID(source)
 	end
 end
 addEvent("onPlayerBombPlanted",true)
