@@ -1,3 +1,10 @@
+--[[**************************************************************************
+*
+*  ПРОЕКТ:        TACTICS MODES
+*  ВЕРСИЯ ДВИЖКА: 1.2-r18
+*  РАЗРАБОТЧИКИ:  Александр Романов <lexr128@gmail.com>
+*
+****************************************************************************]]
 function DeathMatch_onResourceStart(resource)
 	createTacticsMode("dm",{timelimit="10:00",fraglimit="50",player_radarblip="none|none,team,all",spawnprotect="0:02"})
 end

@@ -1,3 +1,10 @@
+--[[**************************************************************************
+*
+*  ПРОЕКТ:        TACTICS MODES
+*  ВЕРСИЯ ДВИЖКА: 1.2-r18
+*  РАЗРАБОТЧИКИ:  Александр Романов <lexr128@gmail.com>
+*
+****************************************************************************]]
 function Lobby_onClientMapStopping(mapinfo)
 	if (mapinfo.modename ~= "lobby") then return end
 	removeCommandHandler("car",toggleVehicleManager)

@@ -1,4 +1,11 @@
-﻿function ZombieMod_onClientMapStopping(mapinfo)
+--[[**************************************************************************
+*
+*  ПРОЕКТ:        TACTICS MODES
+*  ВЕРСИЯ ДВИЖКА: 1.2-r18
+*  РАЗРАБОТЧИКИ:  Александр Романов <lexr128@gmail.com>
+*
+****************************************************************************]]
+function ZombieMod_onClientMapStopping(mapinfo)
 	if (mapinfo.modename ~= "zombie") then return end
 	showRoundHudComponent("timeleft",false)
 	showRoundHudComponent("teamlist",false)

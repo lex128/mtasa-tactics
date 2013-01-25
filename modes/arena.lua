@@ -1,3 +1,10 @@
+--[[**************************************************************************
+*
+*  ПРОЕКТ:        TACTICS MODES
+*  ВЕРСИЯ ДВИЖКА: 1.2-r18
+*  РАЗРАБОТЧИКИ:  Александр Романов <lexr128@gmail.com>
+*
+****************************************************************************]]
 spawnCounter = {}
 function TeamDeathMatch_onResourceStart (resource)
 	createTacticsMode ("arena", {timelimit="10:00", spawnprotect="0:05"})
@@ -128,34 +135,6 @@ function TeamDeathMatch_onPlayerRoundRespawn()
 		setElementData(source,"Damage",0)
 	end
 end
-function TeamDeathMatch_onPlayerQuit(type,reason,element)
-	if (getPlayerGameStatus(source) == "Play") then
-		setElementData(source,"Status",nil)
-		TeamDeathMatch_onCheckRound()
-	end
-end
-function TeamDeathMatch_onCheckRound()
-	if (getRoundState() ~= "started" or getTacticsData("Pause")) then return end
-	local players = {}
-	for i,team in ipairs(getElementsByType("team")) do
-		if (i > 1) then
-			local count = {0,team}
-			for j,player in ipairs(getPlayersInTeam(team)) do
-				if (getPlayerGameStatus(player) == "Play") then
-					count[1] = count[1] + 1
-				end
-			end
-			table.insert(players,count)
-		end
-	end
-	table.sort(players,function(a,b) return a[1] > b[1] end)
-	if (players[1][1] > 0 and players[2][1] == 0) then
-		local r,g,b = getTeamColor(players[1][2])
-		endRound({r,g,b,'team_win_round',getTeamName(players[1][2])},'team_kill_all',{[players[1][2]]=1})
-	elseif (players[1][1] == 0) then
-		endRound('draw_round','nobody_alive')
-	end
-end
 function TeamDeathMatch_onRoundTimesup()
 	local players = {}
 	for i,team in ipairs(getElementsByType("team")) do
@@ -206,6 +185,34 @@ function TeamDeathMatch_onPlayerWasted(ammo,killer,weapon,bodypart,stealth)
 	setElementData(source,"Status","Die")
 	fadeCamera(source,false,2.0)
 	TeamDeathMatch_onCheckRound()
+end
+function TeamDeathMatch_onPlayerQuit(type,reason,element)
+	if (getPlayerGameStatus(source) == "Play") then
+		setElementData(source,"Status",nil)
+		TeamDeathMatch_onCheckRound()
+	end
+end
+function TeamDeathMatch_onCheckRound()
+	if (getRoundState() ~= "started" or getTacticsData("Pause")) then return end
+	local players = {}
+	for i,team in ipairs(getElementsByType("team")) do
+		if (i > 1) then
+			local count = {0,team}
+			for j,player in ipairs(getPlayersInTeam(team)) do
+				if (getPlayerGameStatus(player) == "Play") then
+					count[1] = count[1] + 1
+				end
+			end
+			table.insert(players,count)
+		end
+	end
+	table.sort(players,function(a,b) return a[1] > b[1] end)
+	if (players[1][1] > 0 and players[2][1] == 0) then
+		local r,g,b = getTeamColor(players[1][2])
+		endRound({r,g,b,'team_win_round',getTeamName(players[1][2])},'team_kill_all',{[players[1][2]]=1})
+	elseif (players[1][1] == 0) then
+		endRound('draw_round','nobody_alive')
+	end
 end
 addEventHandler("onMapStarting",root,TeamDeathMatch_onMapStarting)
 addEventHandler("onMapStopping",root,TeamDeathMatch_onMapStopping)

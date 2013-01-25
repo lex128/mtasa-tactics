@@ -1,3 +1,10 @@
+--[[**************************************************************************
+*
+*  ПРОЕКТ:        TACTICS MODES
+*  ВЕРСИЯ ДВИЖКА: 1.2-r18
+*  РАЗРАБОТЧИКИ:  Александр Романов <lexr128@gmail.com>
+*
+****************************************************************************]]
 spawnCounter = {}
 local flagRespawn = {}
 local teamFlag = {}
@@ -19,6 +26,7 @@ function CaptureTheFlag_onMapStopping(mapinfo)
 	removeEventHandler("onColShapeHit",root,CaptureTheFlag_onColShapeHit)
 	removeEventHandler("onFlagDrop",root,CaptureTheFlag_onFlagDrop)
 	removeEventHandler("onFlagPickup",root,CaptureTheFlag_onFlagPickup)
+	removeEventHandler("onPlayerSuicide",root,CaptureTheFlag_onPlayerSuicide)
 	for i,player in ipairs(getElementsByType("player")) do
 		setPlayerProperty(player,"invulnerable",nil)
 		setPlayerProperty(player,"movespeed",nil)
@@ -52,6 +60,7 @@ function CaptureTheFlag_onMapStarting(mapinfo)
 	addEventHandler("onColShapeHit",root,CaptureTheFlag_onColShapeHit)
 	addEventHandler("onFlagDrop",root,CaptureTheFlag_onFlagDrop)
 	addEventHandler("onFlagPickup",root,CaptureTheFlag_onFlagPickup)
+	addEventHandler("onPlayerSuicide",root,CaptureTheFlag_onPlayerSuicide)
 	for i,team in ipairs(getElementsByType("team")) do
 		if (i > 1) then
 			setElementData(team,"Capture",0)
@@ -143,6 +152,7 @@ function CaptureTheFlag_onPlayerRoundSpawn()
 	else
 		setElementData(source,"Status","Spectate")
 	end
+	CaptureTheFlag_onCheckRound() -- ?
 end
 function CaptureTheFlag_onPlayerRoundRespawn()
 	local team = getPlayerTeam(source)
@@ -183,9 +193,11 @@ function CaptureTheFlag_onPlayerRoundRespawn()
 end
 function CaptureTheFlag_onRoundTimesup()
 	local captures = {}
+	local scores = {}
 	for i,team in ipairs(getElementsByType("team")) do
 		if (i > 1) then
-			table.insert(captures,{team,getElementData(team,"Capture")})
+			scores[team] = getElementData(team,"Capture")
+			table.insert(captures,{team,scores[team]})
 		end
 	end
 	table.sort(captures,function(a,b) return a[2] > b[2] end)
@@ -195,9 +207,9 @@ function CaptureTheFlag_onRoundTimesup()
 	end
 	if (captures[1][2] > captures[2][2] and captures[1][2] ~= 0) then
 		local r,g,b = getTeamColor(captures[1][1])
-		endRound({r,g,b,'team_win_round',getTeamName(captures[1][1])},{'time_over',reason},{[captures[1][1]]=1})
+		endRound({r,g,b,'team_win_round',getTeamName(captures[1][1])},{'time_over',reason},scores)
 	else
-		endRound('draw_round',{'time_over',reason})
+		endRound('draw_round',{'time_over',reason},scores)
 	end
 end
 function CaptureTheFlag_onColShapeHit(player,dim)
@@ -300,6 +312,7 @@ function CaptureTheFlag_onPlayerWasted(ammo,killer,weapon,bodypart,stealth)
 		triggerEvent("onFlagDrop",marker,source)
 		triggerClientEvent(root,"onClientFlagDrop",marker,source)
 	end
+	CaptureTheFlag_onCheckRound()
 end
 function CaptureTheFlag_onPlayerQuit()
 	local marker = playerFlag[source]
@@ -320,6 +333,49 @@ function CaptureTheFlag_onPlayerQuit()
 		setPlayerProperty(source,"movespeed",nil)
 		triggerEvent("onFlagDrop",marker,source)
 		triggerClientEvent(root,"onClientFlagDrop",marker,source)
+	end
+	if (getPlayerGameStatus(source) == "Play") then
+		setElementData(source,"Status",nil)
+		CaptureTheFlag_onCheckRound()
+	end
+end
+function CaptureTheFlag_onCheckRound()
+	if (getRoundState() ~= "started" or getTacticsData("Pause")) then return end
+	local respawn = getRoundModeSettings("respawn") or getTacticsData("settings","respawn") or "false"
+	local respawn_lives = tonumber(getRoundModeSettings("respawn_lives") or getTacticsData("settings","respawn_lives") or "0")
+	if (respawn ~= "true" or respawn_lives <= 0) then return end
+	local players = {}
+	local scores = {}
+	for i,team in ipairs(getElementsByType("team")) do
+		if (i > 1) then
+			scores[team] = getElementData(team,"Capture")
+			local data = {players={},team=team,count=0}
+			for j,player in ipairs(getPlayersInTeam(team)) do
+				if (getPlayerGameStatus(player) ~= "Play") then
+					table.insert(data.players,getElementData(player,"RespawnLives") or respawn_lives)
+				else
+					table.insert(data.players,respawn_lives)
+					data.count = data.count + 1
+				end
+			end
+			table.insert(players,data)
+		end
+	end
+	table.sort(players,function(a,b) return a.count > b.count end)
+	if (players[1].count > 0 and players[2].count == 0) then
+		table.sort(players[2].players,function(a,b) return a > b end)
+		if (players[2].players[1] == -1) then
+			local r,g,b = getTeamColor(players[1].team)
+			if (scores[players[1].team] <= scores[players[2].team]) then
+				scores[players[1].team] = scores[players[2].team] + 1
+			end
+			endRound({r,g,b,'team_win_round',getTeamName(players[1].team)},'team_kill_all',scores)
+		end
+	elseif (players[1].count == 0) then
+		table.sort(players[1].players,function(a,b) return a > b end)
+		if (players[1].players[1] == -1) then
+			endRound('draw_round','nobody_alive')
+		end
 	end
 end
 function CaptureTheFlag_onWeaponDrop()
@@ -365,6 +421,9 @@ function CaptureTheFlag_onFlagPickup()
 		killTimer(flagRespawn[source])
 		flagRespawn[source] = nil
 	end
+end
+function CaptureTheFlag_onPlayerSuicide()
+	cancelEvent()
 end
 addEvent("onFlagDrop")
 addEvent("onFlagPickup")

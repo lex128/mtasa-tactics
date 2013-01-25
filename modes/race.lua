@@ -1,3 +1,10 @@
+--[[**************************************************************************
+*
+*  ПРОЕКТ:        TACTICS MODES
+*  ВЕРСИЯ ДВИЖКА: 1.2-r18
+*  РАЗРАБОТЧИКИ:  Александр Романов <lexr128@gmail.com>
+*
+****************************************************************************]]
 local isRace = false
 local rankingTimer = false
 local vehicleTimer = {}
@@ -14,6 +21,7 @@ function RaceMatch_onMapStopping(mapinfo)
 	removeEventHandler("onPlayerRoundSpawn",root,RaceMatch_onPlayerRoundSpawn)
 	removeEventHandler("onPlayerQuit",root,RaceMatch_onPlayerQuit)
 	removeEventHandler("onPlayerWasted",root,RaceMatch_onPlayerWasted)
+	removeEventHandler("onVehicleExit",root,RaceMatch_onVehicleExit)
 	removeEventHandler("onPlayerRoundRespawn",root,RaceMatch_onPlayerRoundRespawn)
 	removeEventHandler("onRoundTimesup",root,RaceMatch_onRoundTimesup)
 	removeEventHandler("onPlayerReachCheckpointInternal",root,RaceMatch_onPlayerReachCheckpointInternal)
@@ -45,6 +53,7 @@ function RaceMatch_onMapStarting(mapinfo)
 	addEventHandler("onPlayerRoundSpawn",root,RaceMatch_onPlayerRoundSpawn)
 	addEventHandler("onPlayerQuit",root,RaceMatch_onPlayerQuit)
 	addEventHandler("onPlayerWasted",root,RaceMatch_onPlayerWasted)
+	addEventHandler("onVehicleExit",root,RaceMatch_onVehicleExit)
 	addEventHandler("onPlayerRoundRespawn",root,RaceMatch_onPlayerRoundRespawn)
 	addEventHandler("onRoundTimesup",root,RaceMatch_onRoundTimesup)
 	addEventHandler("onPlayerReachCheckpointInternal",root,RaceMatch_onPlayerReachCheckpointInternal)
@@ -233,9 +242,7 @@ function RaceMatch_onPlayerQuit(type,reason,element)
 	if (getPlayerGameStatus(source) == "Play") then
 		if (playerVehicle[source]) then
 			if (isTimer(vehicleTimer[playerVehicle[source]])) then killTimer(vehicleTimer[playerVehicle[source]]) end
-			vehicleTimer[playerVehicle[source]] = setTimer(function(vehicle)
-				if (not isRoundPaused()) then destroyElement(vehicle) end
-			end,4000,1,playerVehicle[source])
+			vehicleTimer[playerVehicle[source]] = setTimer(RaceMatch_removeVehicle,4000,1,playerVehicle[source],source)
 		end
 		setElementData(source,"Status",nil)
 		if (getRoundModeSettings("respawn") == "false") then
@@ -388,22 +395,28 @@ function RaceMatch_onPlayerWasted(ammo,killer,weapon,bodypart,stealth)
 	if (playerFinish[source]) then return end
 	if (playerVehicle[source]) then
 		if (isTimer(vehicleTimer[playerVehicle[source]])) then killTimer(vehicleTimer[playerVehicle[source]]) end
-		vehicleTimer[playerVehicle[source]] = setTimer(function(vehicle,player)
-			if (isElement(player)) then
-				removePedFromVehicle(player)
-				setElementFrozen(player,true)
-				setElementPosition(player,0,0,0)
-			end
-			if (isElement(vehicle)) then
-				destroyElement(vehicle)
-			end
-		end,4000,1,playerVehicle[source],source)
+		vehicleTimer[playerVehicle[source]] = setTimer(RaceMatch_removeVehicle,4000,1,playerVehicle[source],source)
 	end
 	setElementData(source,"Status","Die")
 	fadeCamera(source,false,2.0)
 	if (getRoundModeSettings("respawn") == "false") then
 		RaceMatch_onCheckRound()
 	end
+end
+function RaceMatch_onVehicleExit(player,seat,jacked)
+	if (seat == 0 and playerVehicle[player] and not isTimer(vehicleTimer[playerVehicle[player]])) then
+		vehicleTimer[playerVehicle[player]] = setTimer(RaceMatch_removeVehicle,4000,1,playerVehicle[player],player)
+	end
+end
+function RaceMatch_removeVehicle(vehicle,player)
+	if (isRoundPaused() or not isElement(vehicle) or getRoundState() == "finished") then return false end
+	if (isElement(player) and getVehicleController(vehicle) == player) then
+		removePedFromVehicle(player)
+		setElementFrozen(player,true)
+		setElementPosition(player,0,0,0)
+	end
+	destroyElement(vehicle)
+	return true
 end
 function RaceMatch_onVehicleEnter(player,seat,jacked)
 	if (seat == 0) then playerVehicle[player] = source end
