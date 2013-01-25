@@ -1,3 +1,10 @@
+--[[**************************************************************************
+*
+*  ПРОЕКТ:        TACTICS MODES
+*  ВЕРСИЯ ДВИЖКА: 1.2-r18
+*  РАЗРАБОТЧИКИ:  Александр Романов <lexr128@gmail.com>
+*
+****************************************************************************]]
 infectionTimer = false
 function ZombieMod_onResourceStart(resource)
 	createTacticsMode("zombie",{timelimit="10:00",zombie_speed="1.2",zombie_regenerate="5",night="true",spawnprotect="0:15"})
@@ -29,7 +36,6 @@ function ZombieMod_onMapStopping(mapinfo)
 		setPedHeadless(player,false)
 	end
 	if (getTacticsData("settings","autobalance") ~= "true") then balanceTeams() end
---	if (getTacticsData("mode","zombie","night") ~= "true") then balanceTeams() end
 end
 function ZombieMod_onMapStarting(mapinfo)
 	if (mapinfo.modename ~= "zombie") then return end
@@ -88,6 +94,7 @@ function ZombieMod_onZombieInfected(zombie)
 	setPlayerTeam(source,getTacticsData("Sides")[2])
 	setElementModel(source,78)
 	setPedStat(source,24,1000)
+	setPlayerProperty(source,"invulnerable",false)
 	setElementHealth(source,200)
 	setPedHeadless(source,true)
 	setElementData(source,"Weapons",false)

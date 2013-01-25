@@ -1,3 +1,10 @@
+--[[**************************************************************************
+*
+*  ПРОЕКТ:        TACTICS MODES
+*  ВЕРСИЯ ДВИЖКА: 1.2-r18
+*  РАЗРАБОТЧИКИ:  Александр Романов <lexr128@gmail.com>
+*
+****************************************************************************]]
 function CaptureTheFlag_onClientMapStopping(mapinfo)
 	if (mapinfo.modename ~= "ctf") then return end
 	removeEventHandler("onClientPlayerRoundSpawn",localPlayer,CaptureTheFlag_onClientPlayerRoundSpawn)

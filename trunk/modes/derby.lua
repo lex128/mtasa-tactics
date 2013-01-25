@@ -1,3 +1,10 @@
+--[[**************************************************************************
+*
+*  ПРОЕКТ:        TACTICS MODES
+*  ВЕРСИЯ ДВИЖКА: 1.2-r18
+*  РАЗРАБОТЧИКИ:  Александр Романов <lexr128@gmail.com>
+*
+****************************************************************************]]
 local isDestructionDerby = false
 local rankingTimer = false
 local vehicleTimer = {}
@@ -16,6 +23,7 @@ function DestructionDerby_onMapStopping(mapinfo)
 	removeEventHandler("onPlayerRoundSpawn",root,DestructionDerby_onPlayerRoundSpawn)
 	removeEventHandler("onPlayerQuit",root,DestructionDerby_onPlayerQuit)
 	removeEventHandler("onPlayerWasted",root,DestructionDerby_onPlayerWasted)
+	removeEventHandler("onVehicleExit",root,DestructionDerby_onVehicleExit)
 	removeEventHandler("onPlayerRoundRespawn",root,DestructionDerby_onPlayerRoundRespawn)
 	removeEventHandler("onRoundStart",root,DestructionDerby_onRoundStart)
 	removeEventHandler("onRoundTimesup",root,DestructionDerby_onRoundTimesup)
@@ -46,6 +54,7 @@ function DestructionDerby_onMapStarting(mapinfo)
 	addEventHandler("onPlayerRoundSpawn",root,DestructionDerby_onPlayerRoundSpawn)
 	addEventHandler("onPlayerQuit",root,DestructionDerby_onPlayerQuit)
 	addEventHandler("onPlayerWasted",root,DestructionDerby_onPlayerWasted)
+	addEventHandler("onVehicleExit",root,DestructionDerby_onVehicleExit)
 	addEventHandler("onPlayerRoundRespawn",root,DestructionDerby_onPlayerRoundRespawn)
 	addEventHandler("onRoundStart",root,DestructionDerby_onRoundStart)
 	addEventHandler("onRoundTimesup",root,DestructionDerby_onRoundTimesup)
@@ -211,16 +220,29 @@ function DestructionDerby_onPlayerQuit(type,reason,element)
 	if (getPlayerGameStatus(source) == "Play") then
 		if (playerVehicle[source]) then
 			if (isTimer(vehicleTimer[playerVehicle[source]])) then killTimer(vehicleTimer[playerVehicle[source]]) end
-			vehicleTimer[playerVehicle[source]] = setTimer(function(vehicle)
-				if (not isRoundPaused() and isElement(vehicle)) then destroyElement(vehicle) end
-			end,4000,1,playerVehicle[source])
+			vehicleTimer[playerVehicle[source]] = setTimer(DestructionDerby_removeVehicle,4000,1,playerVehicle[source],source)
 		end
 		setElementData(source,"Status",nil)
 		DestructionDerby_onCheckRound()
 	end
 end
+function DestructionDerby_onVehicleExit(player,seat,jacker)
+	if (seat == 0 and playerVehicle[player] and not isTimer(vehicleTimer[playerVehicle[player]])) then
+		vehicleTimer[playerVehicle[player]] = setTimer(DestructionDerby_removeVehicle,4000,1,playerVehicle[player],player)
+	end
+end
+function DestructionDerby_removeVehicle(vehicle,player)
+	if (isRoundPaused() or not isElement(vehicle) or getRoundState() == "finished") then return false end
+	if (isElement(player) and getVehicleController(vehicle) == player) then
+		removePedFromVehicle(player)
+		setElementFrozen(player,true)
+		setElementPosition(player,0,0,0)
+	end
+	destroyElement(vehicle)
+	return true
+end
 function DestructionDerby_onCheckRound()
-	if (getRoundState() ~= "started" or getTacticsData("Pause")) then return end
+	if (getRoundState() ~= "started" or isRoundPaused()) then return end
 	local type_play = getRoundModeSettings("type_play")
 	if (type_play == "teamplay") then
 		local players = {}
@@ -317,16 +339,7 @@ function DestructionDerby_onPlayerWasted(ammo,killer,weapon,bodypart,stealth)
 	if (getPlayerGameStatus(source) ~= "Play" or not getTacticsData("timestart")) then return end
 	if (playerVehicle[source]) then
 		if (isTimer(vehicleTimer[playerVehicle[source]])) then killTimer(vehicleTimer[playerVehicle[source]]) end
-		vehicleTimer[playerVehicle[source]] = setTimer(function(vehicle,player)
-			if (isElement(player)) then
-				removePedFromVehicle(player)
-				setElementFrozen(player,true)
-				setElementPosition(player,0,0,0)
-			end
-			if (isElement(vehicle)) then
-				destroyElement(vehicle)
-			end
-		end,4000,1,playerVehicle[source],source)
+		vehicleTimer[playerVehicle[source]] = setTimer(DestructionDerby_removeVehicle,4000,1,playerVehicle[source],source)
 	end
 	setElementData(source,"Status","Die")
 	fadeCamera(source,false,2.0)

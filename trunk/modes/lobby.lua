@@ -1,3 +1,10 @@
+--[[**************************************************************************
+*
+*  ПРОЕКТ:        TACTICS MODES
+*  ВЕРСИЯ ДВИЖКА: 1.2-r18
+*  РАЗРАБОТЧИКИ:  Александр Романов <lexr128@gmail.com>
+*
+****************************************************************************]]
 function Lobby_onResourceStart(resource)
 	createTacticsMode("lobby",{car="true",gun="true",player_radarblip="all|none,team,all"})
 end
