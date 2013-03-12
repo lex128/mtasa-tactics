@@ -163,7 +163,7 @@ function BombMatch_onClientHUDRender()
 	local defusing = getElementData(localPlayer,"defusing")
 	if (planting) then
 		local bombplanting = TimeToSec(getRoundModeSettings("planting") or "0:05")
-		if (getTacticsData("Pause")) then
+		if (isRoundPaused()) then
 			progress = bombplanting*1000 - planting
 		else
 			progress = bombplanting*1000 - (planting - getTickCount())
@@ -171,7 +171,10 @@ function BombMatch_onClientHUDRender()
 				setElementData(localPlayer,"planting",nil,false)
 				if (getPedAnimation(localPlayer) == "bomber") then
 					callServerFunction("setPedAnimation",localPlayer,"BOMBER","null")
-				end	
+				end
+			end
+			if (getPedAnimation(localPlayer) ~= "bomber") then
+				setElementData(localPlayer,"planting",nil,false)
 			end
 		end
 		if (progress >= bombplanting*1000) then
@@ -179,7 +182,7 @@ function BombMatch_onClientHUDRender()
 			setElementData(localPlayer,"planting",nil,false)
 			if (getPedAnimation(localPlayer) == "bomber") then
 				callServerFunction("setPedAnimation",localPlayer,"BOMBER","null")
-			end	
+			end
 			triggerServerEvent("onPlayerBombPlanted",localPlayer)
 		end
 		if (guiCheckBoxGetSelected(config_performance_roundhud)) then
@@ -190,7 +193,7 @@ function BombMatch_onClientHUDRender()
 		end
 	elseif (defusing) then
 		local bombdefusing = TimeToSec(getRoundModeSettings("defusing") or "0:10")
-		if (getTacticsData("Pause")) then
+		if (isRoundPaused()) then
 			progress = bombdefusing*1000 - defusing
 		else
 			progress = bombdefusing*1000 - (defusing - getTickCount())
@@ -198,7 +201,10 @@ function BombMatch_onClientHUDRender()
 				setElementData(localPlayer,"defusing",nil,false)
 				if (getPedAnimation(localPlayer) == "bomber") then
 					callServerFunction("setPedAnimation",localPlayer,"BOMBER","null")
-				end	
+				end
+			end
+			if (getPedAnimation(localPlayer) ~= "bomber") then
+				setElementData(localPlayer,"defusing",nil,false)
 			end
 		end
 		if (progress >= bombdefusing*1000) then
@@ -206,7 +212,7 @@ function BombMatch_onClientHUDRender()
 			setElementData(localPlayer,"defusing",nil,false)
 			if (getPedAnimation(localPlayer) == "bomber") then
 				callServerFunction("setPedAnimation",localPlayer,"BOMBER","null")
-			end	
+			end
 			triggerServerEvent("onPlayerBombDefuse",localPlayer)
 		end
 		if (guiCheckBoxGetSelected(config_performance_roundhud)) then

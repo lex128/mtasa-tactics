@@ -185,13 +185,17 @@ function DestructionDerby_onPlayerRoundRespawn()
 	if (spawnCounter > #getElementsByType("spawnpoint",getRoundMapRoot())) then
 		spawnCounter = 1
 	end
-	local parent = getElementsByType("spawnpoint",getRoundMapRoot())[spawnCounter]
-	local model = tonumber(getElementData(parent,"vehicle")) or 411
-	local xpos,ypos,zpos = getElementPosition(parent)
-	local xrot,yrot,zrot = 0,0,tonumber(getElementData(parent,"rotation")) or 0
+	local element = getElementsByType("spawnpoint",getRoundMapRoot())[spawnCounter]
+	local vehmodel = tonumber(getElementData(element,"vehicle")) or 411
+	local posX = tonumber(getElementData(element,"posX"))
+	local posY = tonumber(getElementData(element,"posY"))
+	local posZ = tonumber(getElementData(element,"posZ"))
+	local rotX = tonumber(getElementData(element,"rotX")) or 0.0
+	local rotY = tonumber(getElementData(element,"rotY")) or 0.0
+	local rotZ = tonumber(getElementData(element,"rotZ")) or tonumber(getElementData(element,"rotation")) or 0.0
 	local interior = getTacticsData("Interior")
 	spawnPlayer(source,xpos,ypos,zpos,zrot,skin,interior,0,team)
-	vehicle = createVehicle(model,xpos,ypos,zpos,xrot,yrot,zrot)
+	vehicle = createVehicle(vehmodel,xpos,ypos,zpos,xrot,yrot,zrot)
 	setElementFrozen(vehicle,true)
 	setElementCollisionsEnabled(vehicle,false)
 	setElementParent(vehicle,getRoundMapDynamicRoot())
@@ -217,11 +221,11 @@ function DestructionDerby_onPlayerRoundRespawn()
 	end
 end
 function DestructionDerby_onPlayerQuit(type,reason,element)
+	if (playerVehicle[source]) then
+		if (isTimer(vehicleTimer[playerVehicle[source]])) then killTimer(vehicleTimer[playerVehicle[source]]) end
+		vehicleTimer[playerVehicle[source]] = setTimer(DestructionDerby_removeVehicle,4000,1,playerVehicle[source],source)
+	end
 	if (getPlayerGameStatus(source) == "Play") then
-		if (playerVehicle[source]) then
-			if (isTimer(vehicleTimer[playerVehicle[source]])) then killTimer(vehicleTimer[playerVehicle[source]]) end
-			vehicleTimer[playerVehicle[source]] = setTimer(DestructionDerby_removeVehicle,4000,1,playerVehicle[source],source)
-		end
 		setElementData(source,"Status",nil)
 		DestructionDerby_onCheckRound()
 	end
