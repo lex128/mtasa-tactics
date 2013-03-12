@@ -190,23 +190,27 @@ function RaceMatch_onPlayerRoundRespawn()
 		destroyElement(vehicle)
 	end
 	local point = math.max((getElementData(source,"Checkpoint") or 1)-1,0)
-	local model,xpos,ypos,zpos,xrot,yrot,zrot,xvel,yvel,zvel,xturn,yturn,zturn,property,geardown,nitrolevel = unpack(getElementData(source,"checksave"..point) or {})
-	if (not model) then
+	local vehmodel,xpos,ypos,zpos,xrot,yrot,zrot,xvel,yvel,zvel,xturn,yturn,zturn,property,geardown,nitrolevel = unpack(getElementData(source,"checksave"..point) or {})
+	if (not vehmodel) then
 		if (not spawnCounter) then spawnCounter = 1 end
 		spawnCounter = spawnCounter + 1
 		if (spawnCounter > #getElementsByType("spawnpoint",getRoundMapRoot())) then
 			spawnCounter = 1
 		end
-		local parent = getElementsByType("spawnpoint",getRoundMapRoot())[spawnCounter]
-		model = tonumber(getElementData(parent,"vehicle")) or 411
-		xpos,ypos,zpos = getElementPosition(parent)
-		xrot,yrot,zrot = 0,0,tonumber(getElementData(parent,"rotation")) or 0
+		local element = getElementsByType("spawnpoint",getRoundMapRoot())[spawnCounter]
+		vehmodel = tonumber(getElementData(element,"vehicle")) or 411
+		posX = tonumber(getElementData(element,"posX"))
+		posY = tonumber(getElementData(element,"posY"))
+		posZ = tonumber(getElementData(element,"posZ"))
+		rotX = tonumber(getElementData(element,"rotX")) or 0.0
+		rotY = tonumber(getElementData(element,"rotY")) or 0.0
+		rotZ = tonumber(getElementData(element,"rotZ")) or tonumber(getElementData(element,"rotation")) or 0.0
 		xvel,yvel,zvel,xturn,yturn,zturn = 0,0,0,0,0,0
 		property,geardown,nitrolevel = 0,true,0
 	end
 	local interior = getTacticsData("Interior")
 	spawnPlayer(source,xpos,ypos,zpos,0,skin,interior,0,team)
-	vehicle = createVehicle(model,xpos,ypos,zpos,xrot,yrot,zrot)
+	vehicle = createVehicle(vehmodel,xpos,ypos,zpos,xrot,yrot,zrot)
 	if (property) then callClientFunction(root,"setVehicleAdjustableProperty",vehicle,property) end
 	setVehicleLandingGearDown(vehicle,geardown or false)
 	if (nitrolevel) then setElementData(vehicle,"nitrolevel",nitrolevel) end
@@ -239,11 +243,11 @@ function RaceMatch_onPlayerRoundRespawn()
 	end
 end
 function RaceMatch_onPlayerQuit(type,reason,element)
+	if (playerVehicle[source]) then
+		if (isTimer(vehicleTimer[playerVehicle[source]])) then killTimer(vehicleTimer[playerVehicle[source]]) end
+		vehicleTimer[playerVehicle[source]] = setTimer(RaceMatch_removeVehicle,4000,1,playerVehicle[source],source)
+	end
 	if (getPlayerGameStatus(source) == "Play") then
-		if (playerVehicle[source]) then
-			if (isTimer(vehicleTimer[playerVehicle[source]])) then killTimer(vehicleTimer[playerVehicle[source]]) end
-			vehicleTimer[playerVehicle[source]] = setTimer(RaceMatch_removeVehicle,4000,1,playerVehicle[source],source)
-		end
 		setElementData(source,"Status",nil)
 		if (getRoundModeSettings("respawn") == "false") then
 			RaceMatch_onCheckRound()
