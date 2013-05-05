@@ -30,7 +30,7 @@ function ZombieMod_onMapStopping(mapinfo)
 		setPlayerProperty(player,"invulnerable",nil)
 		setPlayerProperty(player,"movespeed",nil)
 		setPlayerProperty(player,"regenerable",nil)
-		local model = getElementData(getPlayerTeam(player),"Skins")[1]
+		local model = (getPlayerTeam(player) and getElementData(getPlayerTeam(player),"Skins")[1]) or 0
 		setElementModel(player,model)
 		setPedStat(player,24,569)
 		setPedHeadless(player,false)
@@ -61,7 +61,7 @@ end
 function ZombieMod_onRoundStart()
 	local spawnprotect = TimeToSec(getRoundModeSettings("spawnprotect"))
 	for i,player in ipairs(getElementsByType("player")) do
-		if (getPlayerGameStatus(player,"Status") == "Play" or getElementData(player) == "Loading") then
+		if (getPlayerGameStatus(player) == "Play" or getPlayerGameStatus(player) == "Loading") then
 			givePlayerProperty(player,"invulnerable",true,spawnprotect*1000)
 			callClientFunction(player,"toggleWeaponManager",true)
 		end
@@ -183,7 +183,7 @@ function ZombieMod_onCheckRound()
 			end
 		end,50,1)
 	end
-	if (getRoundState() ~= "started" or getTacticsData("Pause")) then return end
+	if (getRoundState() ~= "started" or isRoundPaused()) then return end
 	local players = {}
 	for i,team in ipairs(getElementsByType("team")) do
 		if (i > 1) then

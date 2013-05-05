@@ -168,7 +168,7 @@ function AttackDefend_onPlayerRoundRespawn()
 	end
 end
 function AttackDefend_onPlayerQuit(type,reason,element)
-	if (not getTacticsData("Pause") and getTacticsData("timecapture") and getPlayerGameStatus(source) == "Play") then
+	if (not isRoundPaused() and getTacticsData("timecapture") and getPlayerGameStatus(source) == "Play") then
 		local colshape = getElementByID("CaptureFlag")
 		if (isElementWithinColShape(source,colshape)) then
 			local sides = getTacticsData("Sides")
@@ -196,7 +196,7 @@ function AttackDefend_onPlayerQuit(type,reason,element)
 	end
 end
 function AttackDefend_onCheckRound()
-	if (getRoundState() ~= "started" or getTacticsData("Pause")) then return end
+	if (getRoundState() ~= "started" or isRoundPaused()) then return end
 	local players = {}
 	for i,team in ipairs(getElementsByType("team")) do
 		if (i > 1) then
@@ -242,7 +242,7 @@ function AttackDefend_onPlayerWasted(ammo,killer,killerweapon,bodypart,stealth)
 	end
 	setElementData(source,"Status","Die")
 	fadeCamera(source,false,2.0)
-	if (not getTacticsData("Pause") and getTacticsData("timecapture")) then
+	if (not isRoundPaused() and getTacticsData("timecapture")) then
 		local colshape = getElementByID("CaptureFlag")
 		if (isElementWithinColShape(source,colshape)) then
 			local sides = getTacticsData("Sides")
@@ -267,7 +267,7 @@ function AttackDefend_onPlayerWasted(ammo,killer,killerweapon,bodypart,stealth)
 	AttackDefend_onCheckRound()
 end
 function AttackDefend_onColShapeHit(element)
-	if (getElementID(source) == "CaptureFlag" and not getTacticsData("Pause") and not getTacticsData("timecapture") and getElementType(element) == "player" and getPlayerGameStatus(element) == "Play") then
+	if (getElementID(source) == "CaptureFlag" and not isRoundPaused() and not getTacticsData("timecapture") and getElementType(element) == "player" and getPlayerGameStatus(element) == "Play") then
 		local histeam = getPlayerTeam(element)
 		local teamsides = getTacticsData("Teamsides")
 		if (teamsides[histeam]%2 == 1) then
@@ -282,7 +282,7 @@ function AttackDefend_onColShapeHit(element)
 	end
 end
 function AttackDefend_onColShapeLeave(element)
-	if (getElementID(source) == "CaptureFlag" and not getTacticsData("Pause") and getTacticsData("timecapture") and getElementType(element) == "player" and getPlayerGameStatus(element) == "Play") then
+	if (getElementID(source) == "CaptureFlag" and not isRoundPaused() and getTacticsData("timecapture") and getElementType(element) == "player" and getPlayerGameStatus(element) == "Play") then
 		local sides = getTacticsData("Sides")
 		for i,side in ipairs(sides) do
 			if (i % 2 == 1) then

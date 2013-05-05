@@ -3,6 +3,7 @@
 	<disconnect_save	 			string="* %s #FF6464је напустио игру [%s]%s [Сачувано]" />
 	<disconnect		 				string="* %s #FF6464је напустио игру [%s]%s" />
 	<change_nick					string="* %s #FF6464је знан као #EBDDB2%s" />
+    <change_nick_cancel             string="* %s #FF6464Можете да промените ницк само једном у 5 секунди" />
 	<add_to_round					string="* %s #FF6464је убачен у игру" />
 	<remove_from_round				string="* %s #FF6464је избачен из игре" />
 	<map_change						string="* Следећа мапа је #EBDDB2%s" />

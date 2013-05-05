@@ -3,6 +3,7 @@
 	<disconnect_save	 			string="* %s #FF6464خرج من السيرفر [%s]%s [تخزين البيانات]" />
 	<disconnect		 				string="* %s #FF6464خرج من السيرفر [%s]%s" />
 	<change_nick					string="* %s #FF6464غير إسمه المستعار إلى #EBDDB2%s" />
+    <change_nick_cancel             string="* %s #FF6464يمكنك تغيير نيك مرة واحدة فقط كل 5 ثوان" />
 	<add_to_round					string="* %s #FF6464تمت إضافته إلى الجولة" />
 	<remove_from_round				string="* %s #FF6464تمت إزالته من الجولة" />
 	<map_change						string="* هو الماب الحالي #EBDDB2%s" />

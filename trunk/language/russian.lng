@@ -3,6 +3,7 @@
     <disconnect_save                string="* %s #FF6464отключается [%s]%s [Сохранен]" />
     <disconnect                     string="* %s #FF6464отключается [%s]%s" />
     <change_nick                    string="* %s #FF6464меняет ник на #EBDDB2%s" />
+    <change_nick_cancel             string="* %s #FF6464Вы можете изменить ник только один раз в 5 секунд" />
     <add_to_round                   string="* %s #FF6464добавляется в игру" />
     <remove_from_round              string="* %s #FF6464удаляется из игры" />
     <map_change                     string="* Карта сменена на #EBDDB2%s" />

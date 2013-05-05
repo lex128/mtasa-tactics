@@ -3,6 +3,7 @@
 	<disconnect_save	 			string="* %s #FF6464Trennen [%s]%s [gespreichert]" />
 	<disconnect		 				string="* %s #FF6464Trennen [%s]%s" />
 	<change_nick					string="* %s #FF6464Aendert Nick auf #EBDDB2%s" />
+    <change_nick_cancel             string="* %s #FF6464Sie können nick nur einmal alle 5 Sekunden" />
 	<add_to_round					string="* %s #FF6464Tritt ins Spiel ein" />
 	<remove_from_round				string="* %s #FF6464Tritt aus dem Spiel aus" />
 	<map_change						string="* Karte geaendert auf #EBDDB2%s" />

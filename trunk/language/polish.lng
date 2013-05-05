@@ -3,6 +3,7 @@
 	<disconnect_save	 			string="* %s #FF6464opucił grę [%s]%s [Zapisano]" />
 	<disconnect		 				string="* %s #FF6464opucił grę [%s]%s" />
 	<change_nick					string="* %s #FF6464zmienił nazwę na #EBDDB2%s" />
+    <change_nick_cancel             string="* %s #FF6464Możesz zmienić nick tylko raz na 5 sekund" />
 	<add_to_round					string="* %s #FF6464został dodany do gry" />
 	<remove_from_round				string="* %s #FF6464został usunięty z gry" />
 	<map_change						string="* Następna mapa to #EBDDB2%s" />
