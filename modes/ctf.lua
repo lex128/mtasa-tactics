@@ -27,6 +27,7 @@ function CaptureTheFlag_onMapStopping(mapinfo)
 	removeEventHandler("onFlagDrop",root,CaptureTheFlag_onFlagDrop)
 	removeEventHandler("onFlagPickup",root,CaptureTheFlag_onFlagPickup)
 	removeEventHandler("onPlayerSuicide",root,CaptureTheFlag_onPlayerSuicide)
+	removeEventHandler("onPauseToggle",root,CaptureTheFlag_onPauseToggle)
 	for i,player in ipairs(getElementsByType("player")) do
 		setPlayerProperty(player,"invulnerable",nil)
 		setPlayerProperty(player,"movespeed",nil)
@@ -61,6 +62,7 @@ function CaptureTheFlag_onMapStarting(mapinfo)
 	addEventHandler("onFlagDrop",root,CaptureTheFlag_onFlagDrop)
 	addEventHandler("onFlagPickup",root,CaptureTheFlag_onFlagPickup)
 	addEventHandler("onPlayerSuicide",root,CaptureTheFlag_onPlayerSuicide)
+	addEventHandler("onPauseToggle",root,CaptureTheFlag_onPauseToggle)
 	for i,team in ipairs(getElementsByType("team")) do
 		if (i > 1) then
 			setElementData(team,"Capture",0)
@@ -340,7 +342,7 @@ function CaptureTheFlag_onPlayerQuit()
 	end
 end
 function CaptureTheFlag_onCheckRound()
-	if (getRoundState() ~= "started" or getTacticsData("Pause")) then return end
+	if (getRoundState() ~= "started" or isRoundPaused()) then return end
 	local respawn = getRoundModeSettings("respawn") or getTacticsData("settings","respawn") or "false"
 	local respawn_lives = tonumber(getRoundModeSettings("respawn_lives") or getTacticsData("settings","respawn_lives") or "0")
 	if (respawn ~= "true" or respawn_lives <= 0) then return end
@@ -404,15 +406,19 @@ function CaptureTheFlag_onFlagDrop(player)
 	if (getRoundModeSettings("flag_water_respawn") == "true" and ({getElementPosition(source)})[3] <= 1.5) then
 		local x,y,z = getElementPosition(source)
 		CaptureTheFlag_RespawnFlag(source)
-		triggerClientEvent(root,"onClientFlagReturn",source,getElementData(source,"Team"),x,y,z)
+		triggerClientEvent(root,"onClientFlagReturn",source,false,x,y,z)
 	else
 		local idlerespawn = math.floor(TimeToSec(getRoundModeSettings("flag_idle_respawn"))*1000)
 		if (idlerespawn > 50) then
-			flagRespawn[source] = setTimer(function(marker)
-				local x,y,z = getElementPosition(marker)
-				CaptureTheFlag_RespawnFlag(marker)
-				triggerClientEvent(root,"onClientFlagReturn",marker,getElementData(marker,"Team"),x,y,z)
-			end,math.max(50,idlerespawn),1,source)
+			if (not isRoundPaused()) then
+				flagRespawn[source] = setTimer(function(marker)
+					local x,y,z = getElementPosition(marker)
+					CaptureTheFlag_RespawnFlag(marker)
+					triggerClientEvent(root,"onClientFlagReturn",marker,false,x,y,z)
+				end,math.max(50,idlerespawn),1,source)
+			else
+				flagRespawn[source] = math.max(50,idlerespawn)
+			end
 		end
 	end
 end
@@ -424,6 +430,27 @@ function CaptureTheFlag_onFlagPickup()
 end
 function CaptureTheFlag_onPlayerSuicide()
 	cancelEvent()
+end
+function CaptureTheFlag_onPauseToggle(isPaused)
+	if (isPaused) then
+		for flag,timer in pairs(flagRespawn) do
+			if (isTimer(timer)) then
+				local remaining = getTimerDetails(timer)
+				killTimer(timer)
+				flagRespawn[flag] = remaining
+			end
+		end
+	else
+		for flag,timer in pairs(flagRespawn) do
+			if (type(timer) == "number") then
+				flagRespawn[flag] = setTimer(function(marker)
+					local x,y,z = getElementPosition(marker)
+					CaptureTheFlag_RespawnFlag(marker)
+					triggerClientEvent(root,"onClientFlagReturn",marker,false,x,y,z)
+				end,math.max(50,timer),1,flag)
+			end
+		end
+	end
 end
 addEvent("onFlagDrop")
 addEvent("onFlagPickup")

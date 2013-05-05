@@ -69,7 +69,8 @@ end
 function CaptureTheFlag_onClientFlagReturn(player,x,y,z)
 	local r,g,b = getMarkerColor(source)
 	fxAddGlass(x,y,z - 1,r,g,b,128,0.2,10)
-	if (player == getPlayerTeam(localPlayer) or getPlayerTeam(player) == getPlayerTeam(localPlayer)) then
+	local flagteam = (player and getPlayerTeam(player)) or getElementData(source,"Team")
+	if (flagteam == getPlayerTeam(localPlayer)) then
 		playVoice("audio/your_flag_returned.mp3")
 	else
 		playVoice("audio/enemy_flag_returned.mp3")

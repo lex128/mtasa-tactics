@@ -3,6 +3,7 @@
 	<disconnect_save	 			string="* %s #FF6464opustil hru [%s]%s [Uloženo]" />
 	<disconnect		 				string="* %s #FF6464opustil hru [%s]%s" />
 	<change_nick					string="* %s #FF6464se přejmenoval na #EBDDB2%s" />
+    <change_nick_cancel             string="* %s #FF6464Můžete změnit nick pouze jednou za 5 sekund" />
 	<add_to_round					string="* %s #FF6464byl přidán do hry" />
 	<remove_from_round				string="* %s #FF6464byl odstraněn ze hry" />
 	<map_change						string="* Další mapa zvolena jako #EBDDB2%s" />

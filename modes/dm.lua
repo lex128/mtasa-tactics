@@ -122,7 +122,7 @@ function DeathMatch_onPlayerQuit(type,reason,element)
 	end
 end
 function DeathMatch_onCheckRound(killer,frags)
-	if (getRoundState() ~= "started" or getTacticsData("Pause")) then return end
+	if (getRoundState() ~= "started" or isRoundPaused()) then return end
 	local fraglimit = tonumber(getRoundModeSettings("fraglimit") or 50)
 	local players = {}
 	for i,player in ipairs(getElementsByType("player")) do

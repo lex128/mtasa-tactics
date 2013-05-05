@@ -3,6 +3,7 @@
 	<disconnect_save	 			string="* %s #FF6464paliko serveri [%s]%s [Isejo]" />
 	<disconnect		 				string="* %s #FF6464paliko serveri [%s]%s" />
 	<change_nick					string="* %s #FF6464pakeite zaidimo slapyvardi i #EBDDB2%s" />
+    <change_nick_cancel             string="* %s #FF6464Galite pakeisti nika tik karta per 5 sekundes" />
 	<add_to_round					string="* %s #FF6464pridetas prie zaidimo" />
 	<remove_from_round				string="* %s #FF6464pasalintas is zaidimo" />
 	<map_change						string="* Pakeite zemelapi i #EBDDB2%s" />

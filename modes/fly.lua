@@ -148,7 +148,7 @@ function FlyMatch_onPlayerQuit(type,reason,element)
 	end
 end
 function FlyMatch_onCheckRound()
-	if (getRoundState() ~= "started" or getTacticsData("Pause")) then return end
+	if (getRoundState() ~= "started" or isRoundPaused()) then return end
 	local players = {}
 	for i,team in ipairs(getElementsByType("team")) do
 		if (i > 1) then

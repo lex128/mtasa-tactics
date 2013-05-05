@@ -11,7 +11,7 @@ function BombMatch_onClientMapStopping(mapinfo)
 	if (mapinfo.modename ~= "bomb") then return end
 	showRoundHudComponent("timeleft",false)
 	showRoundHudComponent("teamlist",false)
-	unbindKey("fire","both",BombMatch_toggleBombing)
+	unbindKey("fire","both",BombMatch_onBombingToggle)
 	removeEventHandler("onClientPreRender",root,BombMatch_onClientPreRender)
 	removeEventHandler("onClientHUDRender",root,BombMatch_onClientHUDRender)
 	removeEventHandler("onClientElementColShapeHit",localPlayer,BombMatch_onClientElementColShapeHit)
@@ -68,14 +68,14 @@ function BombMatch_onClientMapStarting(mapinfo)
 	addEventHandler("onClientPlayerRoundSpawn",localPlayer,BombMatch_onClientPlayerRoundSpawn)
 	-- addEventHandler("onClientPlayerDamage",localPlayer,BombMatch_onClientPlayerDamage)
 	addCommandHandler("gun",toggleWeaponManager,false)
-	bindKey("fire","both",BombMatch_toggleBombing)
+	bindKey("fire","both",BombMatch_onBombingToggle)
 	setElementData(localPlayer,"planting",nil,false)
 	setElementData(localPlayer,"defusing",nil,false)
 end
 function BombMatch_onClientPlayerRoundSpawn()
 	if (getRoundState() == "stopped") then setCameraPrepair() end
 end
-function BombMatch_toggleBombing(key,state)
+function BombMatch_onBombingToggle(key,state)
 	if (state == "up") then
 		toggleBombing = false
 	elseif (getPedWeapon(localPlayer) == 0 or getPedWeapon(localPlayer) == 11) then
@@ -93,6 +93,7 @@ function BombMatch_toggleBombing(key,state)
 			if (not getElementByID("BombActive") and speed < 0.1) then
 				for i,colshape in ipairs(getElementsByType("colshape")) do
 					if (getElementID(colshape) == "Bomb_Place" and isElementWithinColShape(localPlayer,colshape)) then
+						setPedAnimation(localPlayer,"BOMBER","BOM_Plant_Loop",-1,true,false,false)
 						setElementData(localPlayer,"planting",getTickCount() + bombplanting*1000,false)
 						callServerFunction("setPedAnimation",localPlayer,"BOMBER","BOM_Plant_Loop",-1,true,false,false)
 						break

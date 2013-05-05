@@ -1,7 +1,7 @@
 --[[**************************************************************************
 *
 *  ПРОЕКТ:        TACTICS MODES
-*  ВЕРСИЯ ДВИЖКА: 1.2-r18
+*  ВЕРСИЯ ДВИЖКА: 1.2-r20
 *  РАЗРАБОТЧИКИ:  Александр Романов <lexr128@gmail.com>
 *
 ****************************************************************************]]
@@ -26,8 +26,8 @@ function BombMatch_onMapStopping(mapinfo)
 	removeEventHandler("onPlayerWeaponpackGot",root,BombMatch_onPlayerWeaponpackGot)
 	removeEventHandler("onWeaponDrop",root,BombMatch_onWeaponDrop)
 	removeEventHandler("onWeaponPickup",root,BombMatch_onWeaponPickup)
-	removeEventHandler("onElementDataChange",root,BombMatch_onElementDataChange)
 	removeEventHandler("onPlayerRestored",root,BombMatch_onPlayerRestored)
+	removeEventHandler("onPlayerGameStatusChange",root,BombMatch_onPlayerGameStatusChange)
 	for i,player in ipairs(getElementsByType("player")) do
 		setPlayerProperty(player,"invulnerable",false)
 		setElementData(player,"Kills",getElementData(player,"Kills"))
@@ -55,8 +55,8 @@ function BombMatch_onMapStarting(mapinfo)
 	addEventHandler("onPlayerWeaponpackGot",root,BombMatch_onPlayerWeaponpackGot)
 	addEventHandler("onWeaponDrop",root,BombMatch_onWeaponDrop)
 	addEventHandler("onWeaponPickup",root,BombMatch_onWeaponPickup)
-	addEventHandler("onElementDataChange",root,BombMatch_onElementDataChange)
 	addEventHandler("onPlayerRestored",root,BombMatch_onPlayerRestored)
+	addEventHandler("onPlayerGameStatusChange",root,BombMatch_onPlayerGameStatusChange)
 	local interior = getTacticsData("Interior") or 0
 	for i,bombpoint in ipairs(getElementsByType("Bomb_Place")) do
 		local x,y,z = getElementPosition(bombpoint)
@@ -198,7 +198,7 @@ function BombMatch_onPlayerQuit(type,reason,element)
 	end
 end
 function BombMatch_onCheckRound()
-	if (getRoundState() ~= "started" or getTacticsData("Pause")) then return end
+	if (getRoundState() ~= "started" or isRoundPaused()) then return end
 	local players = {}
 	for i,team in ipairs(getElementsByType("team")) do
 		if (i > 1) then
@@ -336,11 +336,6 @@ function BombMatch_onWeaponPickup(pickup)
 		end
 	end
 end
-function BombMatch_onElementDataChange(data,old)
-	if (data == "Status" and old == "Play" and getElementData(source,data) ~= "Die") then
-		if (getPedWeapon(source,10) == 11) then dropWeapon(source,10) end
-	end
-end
 function BombMatch_onPlayerRestored(row)
 	if (getPedWeapon(source,10) == 11 and getElementByID("BombBlip")) then
 		takeWeapon(source,11)
@@ -348,6 +343,11 @@ function BombMatch_onPlayerRestored(row)
 	local restore = getRestoreData(row)
 	if (restore and restore.data.ID == playerPlanted) then
 		playerPlanted = getElementID(source)
+	end
+end
+function BombMatch_onPlayerGameStatusChange(status)
+	if (status == "Play" and getPlayerGameStatus(source) ~= "Die") then
+		if (getPedWeapon(source,10) == 11) then dropWeapon(source,10) end
 	end
 end
 addEvent("onPlayerBombPlanted",true)
