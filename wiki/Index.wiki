@@ -1,0 +1,18 @@
+*Добро пожаловать в Wiki игрового мода Tactics.* Здесь вы найдёте информацию по установке и настройке мода, по собственной разработке игровых режимов и карт для Tactics.
+
+Есть много способов помочь сделать Tactics лучше: создать карту, игровой режим, придумать нововведение, руководство, или просто играть на моде Tactics и сообщать о найденных багах на [http://code.google.com/p/mtasa-tactics/issues/entry баг-трекер].
+
+«Game On»
+
+= Введение =
+
+||[http://code.google.com/p/mtasa-tactics/downloads/list?q=label:Latest http://bpb-team.ru/lex128/tactics-wiki/Go-down.png][http://code.google.com/p/mtasa-tactics/downloads/list?q=label:Latest Скачать последнюю версию Tactics 1.2]||
+
+ * Установка игрового мода
+ * Ручная настройка мода
+ * Команды управления
+ * Настройки движка
+
+= Редактор карт =
+
+ * Руководство
