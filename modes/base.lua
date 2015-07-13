@@ -229,6 +229,23 @@ function AttackDefend_onPlayerDamage(attacker,weapon,bodypart,loss)
 			setElementData(attacker,"Damage",math.floor(getElementData(attacker,"Damage") + loss),false)
 		end
 	end
+	if (not isRoundPaused() and getTacticsData("timecapture") and getPlayerGameStatus(source) == "Play") then
+		local colshape = getElementByID("CaptureFlag")
+		if (isElementWithinColShape(source,colshape)) then
+			local histeam = getPlayerTeam(source)
+			local teamsides = getTacticsData("Teamsides")
+			if (teamsides[histeam]%2 == 1) then
+				local capturing = TimeToSec(getRoundModeSettings("capturing") or "0:20")
+				if (isTimer(captureTimer)) then killTimer(captureTimer) end
+				captureTimer = setTimer(function(team)
+					local r,g,b = getTeamColor(team)
+					endRound({r,g,b,'team_win_round',getTeamName(team)},'base_captured',{[team]=1})
+				end,capturing*1000,1,histeam)
+				setTacticsData(histeam,"teamcapture")
+				return setTacticsData(getTickCount() + capturing*1000,"timecapture")
+			end
+		end
+	end
 end
 function AttackDefend_onPlayerWasted(ammo,killer,killerweapon,bodypart,stealth)
 	local loss = getElementHealth(source)
