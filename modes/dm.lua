@@ -126,7 +126,7 @@ function DeathMatch_onCheckRound(killer,frags)
 	local fraglimit = tonumber(getRoundModeSettings("fraglimit") or 50)
 	local players = {}
 	for i,player in ipairs(getElementsByType("player")) do
-		if getPlayerGameStatus(player) == "Play" then
+		if getPlayerGameStatus(player) == "Play" or getPlayerGameStatus(player) == "Die" then
 			local frags = getElementData(player,"Frags") or 0
 			table.insert(players,{player,frags})
 		end
@@ -156,7 +156,7 @@ end
 function DeathMatch_onRoundTimesup()
 	local players = {}
 	for i,player in ipairs(getElementsByType("player")) do
-		if getPlayerGameStatus(player) == "Play" then
+		if getPlayerGameStatus(player) == "Play" or getPlayerGameStatus(player) == "Die" then
 			local frags = getElementData(player,"Frags") or 0
 			table.insert(players,{player,frags})
 		end
