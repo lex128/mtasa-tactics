@@ -12,7 +12,7 @@ local playerVehicle = {}
 local startTick = 0
 local pauseTick = 0
 local replaceModels = {nitro = 2221,repair = 2222,vehiclechange = 2223}
-finishCounter = {}
+local finishCounter = {}
 function DestructionDerby_onResourceStart(resource)
 	createTacticsMode("derby",{timelimit="30:00",type_play="individual|individual,teamplay",disable_weapons="false",player_radarblip="all|none,team,all",firewater="false"})
 end

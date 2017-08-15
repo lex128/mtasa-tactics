@@ -5,10 +5,10 @@
 *  РАЗРАБОТЧИКИ:  Александр Романов <lexr128@gmail.com>
 *
 ****************************************************************************]]
-captureTimer = {}
-captureBase = {}
-captureTeam = {}
-spawnCounter = {}
+local captureTimer = {}
+local captureBase = {}
+local captureTeam = {}
+local spawnCounter = {}
 function ControlPoints_onResourceStart(resource)
 	createTacticsMode("cp",{timelimit="7:30",capturing_1="0:15",capturing_2="0:12",capturing_more="0:10",spawnprotect="0:03"})
 end

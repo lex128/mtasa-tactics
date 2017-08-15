@@ -5,7 +5,7 @@
 *  РАЗРАБОТЧИКИ:  Александр Романов <lexr128@gmail.com>
 *
 ****************************************************************************]]
-infectionTimer = false
+local infectionTimer = false
 function ZombieMod_onResourceStart(resource)
 	createTacticsMode("zombie",{timelimit="10:00",zombie_speed="1.2",zombie_regenerate="5",night="true",spawnprotect="0:15"})
 end

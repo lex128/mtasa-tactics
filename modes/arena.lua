@@ -5,7 +5,7 @@
 *  РАЗРАБОТЧИКИ:  Александр Романов <lexr128@gmail.com>
 *
 ****************************************************************************]]
-spawnCounter = {}
+local spawnCounter = {}
 function TeamDeathMatch_onResourceStart (resource)
 	createTacticsMode ("arena", {timelimit="10:00", spawnprotect="0:05"})
 end

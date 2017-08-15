@@ -5,8 +5,8 @@
 *  РАЗРАБОТЧИКИ:  Александр Романов <lexr128@gmail.com>
 *
 ****************************************************************************]]
-spawnCounter = {}
-playerVIP = nil
+local spawnCounter = {}
+local playerVIP = nil
 function VeryImportantPerson_onResourceStart(resource)
 	createTacticsMode("vip",{timelimit="10:00", spawnprotect="0:05"})
 end

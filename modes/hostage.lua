@@ -5,7 +5,7 @@
 *  РАЗРАБОТЧИКИ:  Александр Романов <lexr128@gmail.com>
 *
 ****************************************************************************]]
-spawnCounter = {}
+local spawnCounter = {}
 function Hostage_onResourceStart(resource)
 	createTacticsMode("hostage",{timelimit="30:00",hostagekill="false", spawnprotect="0:05"})
 end

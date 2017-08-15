@@ -5,8 +5,8 @@
 *  РАЗРАБОТЧИКИ:  Александр Романов <lexr128@gmail.com>
 *
 ****************************************************************************]]
-ProjectBang_vehicles = {}
-spawnCounter = {}
+local ProjectBang_vehicles = {}
+local spawnCounter = {}
 function ProjectBang_onResourceStart(resource)
 	createTacticsMode("bang",{timelimit="10:00",player_radarblip="all|none,team,all"})
 end

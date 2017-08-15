@@ -5,8 +5,8 @@
 *  РАЗРАБОТЧИКИ:  Александр Романов <lexr128@gmail.com>
 *
 ****************************************************************************]]
-spawnCounter = {}
-playerPlane = {}
+local spawnCounter = {}
+local playerPlane = {}
 function FlyMatch_onResourceStart(resource)
 	createTacticsMode("fly",{timelimit="10:00",player_radarblip="all|none,team,all",spawn_into_plane="none|none,rustler,hydra,hunter,seasparrow,rc baron"})
 end

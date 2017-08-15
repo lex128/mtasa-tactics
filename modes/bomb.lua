@@ -5,9 +5,9 @@
 *  РАЗРАБОТЧИКИ:  Александр Романов <lexr128@gmail.com>
 *
 ****************************************************************************]]
-spawnCounter = {}
-teamPlanted = false
-playerPlanted = false
+local spawnCounter = {}
+local teamPlanted = false
+local playerPlanted = false
 function BombMatch_onResourceStart(resource)
 	createTacticsMode("bomb",{timelimit="15:00",bombtimer="1:50",planting="0:05",defusing="0:10",spawnprotect="0:05"})
 end

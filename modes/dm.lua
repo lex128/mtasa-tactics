@@ -49,7 +49,7 @@ function DeathMatch_onRoundStart()
 	local spawnprotect = TimeToSec(getRoundModeSettings("spawnprotect"))
 	local teamsides = getTacticsData("Teamsides")
 	for i,player in ipairs(getElementsByType("player")) do
-		if (getPlayerGameStatus(player,"Status") == "Play" or getElementData(player) == "Loading") then
+		if getPlayerGameStatus(player) == "Play" or getPlayerGameStatus(player) == "Loading" then
 			givePlayerProperty(player,"invulnerable",true,spawnprotect*1000)
 			local team = getPlayerTeam(player)
 			if (teamsides[team]) then
@@ -126,8 +126,10 @@ function DeathMatch_onCheckRound(killer,frags)
 	local fraglimit = tonumber(getRoundModeSettings("fraglimit") or 50)
 	local players = {}
 	for i,player in ipairs(getElementsByType("player")) do
-		local frags = getElementData(player,"Frags") or 0
-		table.insert(players,{player,frags})
+		if getPlayerGameStatus(player) == "Play" then
+			local frags = getElementData(player,"Frags") or 0
+			table.insert(players,{player,frags})
+		end
 	end
 	table.sort(players,function(a,b) return a[2] > b[2] end)
 	if (players[1][2] >= fraglimit) then
@@ -154,8 +156,10 @@ end
 function DeathMatch_onRoundTimesup()
 	local players = {}
 	for i,player in ipairs(getElementsByType("player")) do
-		local frags = getElementData(player,"Frags") or 0
-		table.insert(players,{player,frags})
+		if getPlayerGameStatus(player) == "Play" then
+			local frags = getElementData(player,"Frags") or 0
+			table.insert(players,{player,frags})
+		end
 	end
 	if (#players > 0) then table.sort(players,function(a,b) return a[2] > b[2] end) end
 	if (#players > 0 and players[1][2] > players[2][2]) then

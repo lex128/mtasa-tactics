@@ -5,8 +5,8 @@
 *  РАЗРАБОТЧИКИ:  Александр Романов <lexr128@gmail.com>
 *
 ****************************************************************************]]
-captureTimer = false
-spawnCounter = {}
+local captureTimer = false
+local spawnCounter = {}
 function AttackDefend_onResourceStart(resource)
 	createTacticsMode("base",{timelimit="15:00",capturing="0:20",def_veh_jacking="false",spawnprotect="0:15"})
 end

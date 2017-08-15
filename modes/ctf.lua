@@ -5,7 +5,7 @@
 *  РАЗРАБОТЧИКИ:  Александр Романов <lexr128@gmail.com>
 *
 ****************************************************************************]]
-spawnCounter = {}
+local spawnCounter = {}
 local flagRespawn = {}
 local teamFlag = {}
 local playerFlag = {}
