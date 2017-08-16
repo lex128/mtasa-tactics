@@ -161,8 +161,8 @@ function DeathMatch_onRoundTimesup()
 			table.insert(players,{player,frags})
 		end
 	end
-	if (#players > 0) then table.sort(players,function(a,b) return a[2] > b[2] end) end
-	if (#players > 0 and players[1][2] > players[2][2]) then
+	if (#players > 1) then table.sort(players,function(a,b) return a[2] > b[2] end) end
+	if (#players > 1 and players[1][2] > players[2][2]) then
 		local reason = ""
 		for i,data in ipairs(players) do
 			if (i > 1) then
